@@ -1,0 +1,24 @@
+@import '../../styles/mixins.scss';
+
+.wine-item {
+  margin: 0 1em 1em;
+}
+
+.wine-image {
+  height: 7em;
+  width: 7em;
+}
+
+.wine-info-text {
+  font-size: 1.3em;
+  @include for-phone-only {    
+    font-size: 1em; 
+ }
+}
+
+.second-card-row {
+  margin-top: -4em;
+  @include for-phone-only {    
+    margin-top: 0; 
+ }
+}
