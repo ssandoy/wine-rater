@@ -22,16 +22,9 @@ class AddWineForm extends Component {
 
   onSubmit = event => {
     const { wineName, wineType, wineYear } = this.state;
-    // TODO: TEST ME.
-    console.log(this.props.firebase)
     this.props.firebase
       .storeWineToFirebase("1",wineName, wineType, wineYear);
-//      .then(() => {
-   //     this.setState({ ...INITIAL_STATE });
-    //  })
-     // .catch(error => {
-      //  this.setState({ error });
-      //});
+      // TODO: SET STATE BASED ON RESPONSE. 
 
     event.preventDefault();
   };

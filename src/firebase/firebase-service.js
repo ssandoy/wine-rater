@@ -24,21 +24,18 @@ class FirebaseService {
         year: year
       },
       function(error) {
-        console.log("HERE2")
         if (error) {
-          console.log("HERE3");
           alert("WRITE FAILED")
           // The write failed...
         } else {
           // Data saved successfully!
-          console.log("HERE4");
           alert("WRITE SUCCESSFUL. CHECK FIREBASE.")
         }
       }
     );
-    console.log("HERE5");
   }
   wine = uid => this.database.ref('wines/${uid}');
+  // TODO: APPLY?
   wines = () => this.database.ref('wines');
 }
 
