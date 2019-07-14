@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "./wineitem.scss";
-import Wine from '../../models/wine'
-import no_icon_red from '../../images/no_icon_red.png'
-import no_icon_white from '../../images/no_icon_white.png'
+import Wine from '../../../../models/wine'
+import no_icon_red from '../../../../images/no_icon_red.png'
+import no_icon_white from '../../../../images/no_icon_white.png'
 
 // TODO: ADD LINK TO CARD OR NAME
 // TODO: MIXINS FOR MOBILE.. 
@@ -12,7 +12,6 @@ class WineItem extends Component<Wine, {}> {
     return (
       <div className="wine-item">
         <div className="card bg-light">
-
           <div className="card-header"><h4>{this.props.name}</h4></div>
           <div className="card-body">
             <div className="row">

@@ -1,5 +1,5 @@
-import firebase from "@firebase/app";
-import "@firebase/database";
+import firebase from '@firebase/app';
+import '@firebase/database';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -15,58 +15,50 @@ class FirebaseService {
   constructor() {
     firebase.initializeApp(firebaseConfig);
     this.database = firebase.database();
+    this.storeWineToFirebase = this.storeWineToFirebase.bind(this);
+    this.all_wines = this.all_wines.bind(this);
+    this.snapshotToArray = this.snapshotToArray.bind(this);
   }
 
-  storeWineToFirebase = (id, name, type, year) => {
-    this.database.ref("wines/" + id).set({
+  storeWineToFirebase(name, type, year) {
+    // TODO: GET LAST ID
+    this.database.ref('wines/').push({
         name: name,
         type: type,
         year: year
       },
       function(error) {
         if (error) {
-          alert("WRITE FAILED")
+          alert('WRITE FAILED')
           // The write failed...
         } else {
           // Data saved successfully!
-          alert("WRITE SUCCESSFUL. CHECK FIREBASE.")
+          alert('WRITE SUCCESSFUL. CHECK FIREBASE.')
         }
       }
     );
   }
+
+  // TODO: FIXME. 
+  all_wines() {
+    return this.database.ref('wines');
+  }
+
   wine = uid => this.database.ref('wines/${uid}');
   // TODO: APPLY?
-  wines = () => this.database.ref('wines');
+
+  snapshotToArray(snapshot) {
+    var returnArr = [];
+
+    snapshot.forEach(function(childSnapshot) {
+        var item = childSnapshot.val();
+        item.key = childSnapshot.key;
+
+        returnArr.push(item);
+    });
+
+    return returnArr;
+};
 }
 
 export default FirebaseService;
-
-// TODO: IMPLEMENT.
-
-/*
-  firebase.firestore().collection('restaurants').doc(id).get();
-  
-  FriendlyEats.prototype.getAllRestaurants = function(renderer) {
-  var query = firebase.firestore()
-      .collection('restaurants')
-      .orderBy('avgRating', 'desc')
-      .limit(50);
-
-  this.getDocumentsInQuery(query, renderer);
-};
-
-  getDocumentsInQuery = function(query, renderer) {
-  query.onSnapshot(function(snapshot) {
-    if (!snapshot.size) return renderer.empty(); // Display "There are no restaurants".
-
-    snapshot.docChanges().forEach(function(change) {
-      if (change.type === 'removed') {
-        renderer.remove(change.doc);
-      } else {
-        renderer.display(change.doc);
-      }
-    });
-  });
-};
-
-  */

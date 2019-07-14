@@ -1,44 +1,41 @@
 import React, { Component } from "react";
-import "./add-wine.scss";
-import { withFirebase } from '../../firebase';
-// TODO: VALIDATOR
+import "./winesearch.scss";
+import { withFirebase } from "../../../firebase";
 
 const INITIAL_STATE = {
   wineName: "",
-  wineType: "RED",
-  wineYear: "2002",
+  wineType: "", // TODO []
+  wineYear: "", // TODO INTERVAL
   error: null
 };
 
-class AddWineForm extends Component {
+class WineSearchComponent extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
-    this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onChange(event) {
+
+  onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
   onSubmit(event) {
     event.preventDefault();
-    const { wineName, wineType, wineYear } = this.state;
-    this.props.firebase
-      .storeWineToFirebase(wineName, wineType, wineYear);
-      // TODO: SET STATE BASED ON RESPONSE. 
-
-    
-  };
+    this.props.firebase.database.ref('wines').once('value')
+      .then(wineItemsSnapshot => {
+        this.props.onClick(this.props.firebase.snapshotToArray(wineItemsSnapshot));
+      });
+  }
 
   render() {
     const { wineName, wineType, wineYear, error } = this.state;
     return (
-      <div className="addWineForm">
-        <form onSubmit={this.onSubmit}>
+      <div className="searchWineForm">
+        <form onSubmit={e => this.onSubmit(e)}>
           <div className="form-group">
-            <label htmlFor="wineName">Name</label>
+            <label htmlFor="wineName">Filter by name</label>
             <input
               type="text"
               name="wineName"
@@ -48,9 +45,12 @@ class AddWineForm extends Component {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="wineType">Type</label>
+            {
+              // TODO: DROPDOWN AND MULTIPLE OPTIONS.
+            }
+            <label htmlFor="wineType">Filter by type</label>
             <select
-              className="custom-select"
+              className="custom-select custom-select-xl-1 mb-1"
               name="wineType"
               onChange={this.onChange}
             >
@@ -60,7 +60,10 @@ class AddWineForm extends Component {
             </select>
           </div>
           <div className="form-group">
-            <label htmlFor="wineYear">Year</label>
+            <label htmlFor="wineYear">Filter by year</label>
+            {
+              // TODO: MAKE IT INTERVAL.
+            }
             <input
               pattern="[0-9]{4}"
               title="Year"
@@ -70,11 +73,8 @@ class AddWineForm extends Component {
               onChange={this.onChange}
             />
           </div>
-          <button
-            type="submit"
-            className="addWineButton btn btn-primary"
-          >
-            Add wine
+          <button type="submit" className="addWineButton btn btn-primary">
+            Filter wines
           </button>
           {error && <p>{error.message}</p>}
         </form>
@@ -83,7 +83,6 @@ class AddWineForm extends Component {
   }
 }
 
-export default withFirebase(AddWineForm);
+export default withFirebase(WineSearchComponent);
 
-// TODO: ADD VALIDATION FOR NUMBERS ETC.
-// TODO: UPDATE WINEITEM-DATA IN PARENT
+// TODO: IMPLEMENT FIREBASE-LISTENER. 

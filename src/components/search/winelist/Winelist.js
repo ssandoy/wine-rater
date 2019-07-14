@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import "./Winelist.scss";
-import WineItem from "../wineitem/wineitem";
+import WineItem from "./wineitem/wineitem";
 
-class WineList extends Component {
+class WineListComponent extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    // TODO: START HERE AND LIST FIREBASE DATA. Pass it down with items in top compontent.  
     return (
       <div>
         {this.props.items.map((item, index) => (
@@ -20,4 +26,4 @@ class WineList extends Component {
   }
 }
 
-export default WineList;
+export default WineListComponent;
