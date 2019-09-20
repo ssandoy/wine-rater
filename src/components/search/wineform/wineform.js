@@ -1,36 +1,45 @@
 import React, { Component } from "react";
-import "./winesearch.scss";
+import store from '../../../store';
 import { withFirebase } from "../../../firebase";
+import {setWines, clearWines} from '../../../actions/action';
+
+// FIXME: Apply dispatcher instead of store.
 
 const INITIAL_STATE = {
   wineName: "",
-  wineType: "", // TODO []
-  wineYear: "", // TODO INTERVAL
-  error: null
+  wineType: "", 
+  wineFromYear: "",
+  wineToYear: ""
 };
 
-class WineSearchComponent extends Component {
+class WineFormComponent extends Component {
+
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  // TODO: HOOK UP WITH FORM AND QUERY FIREBASE. 
+  onSubmit(event) {
+    event.preventDefault();
+    this.props.firebase.database.ref('wines').once('value')
+      .then(wineItemsSnapshot => {
+        store.dispatch(setWines(this.props.firebase.snapshotToArray(wineItemsSnapshot)));
+      });
+  }
 
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  onSubmit(event) {
+  onClear = event => {
     event.preventDefault();
-    this.props.firebase.database.ref('wines').once('value')
-      .then(wineItemsSnapshot => {
-        this.props.onClick(this.props.firebase.snapshotToArray(wineItemsSnapshot));
-      });
+    store.dispatch(clearWines());
   }
 
   render() {
-    const { wineName, wineType, wineYear, error } = this.state;
+    const { wineName, wineType, wineFromYear, wineToYear } = this.state;
     return (
       <div className="searchWineForm">
         <form onSubmit={e => this.onSubmit(e)}>
@@ -45,9 +54,6 @@ class WineSearchComponent extends Component {
             />
           </div>
           <div className="form-group">
-            {
-              // TODO: DROPDOWN AND MULTIPLE OPTIONS.
-            }
             <label htmlFor="wineType">Filter by type</label>
             <select
               className="custom-select custom-select-xl-1 mb-1"
@@ -61,28 +67,39 @@ class WineSearchComponent extends Component {
           </div>
           <div className="form-group">
             <label htmlFor="wineYear">Filter by year</label>
-            {
-              // TODO: MAKE IT INTERVAL.
-            }
             <input
               pattern="[0-9]{4}"
-              title="Year"
+              title="fromYear"
               className="form-control"
-              name="wineYear"
-              value={wineYear}
+              name="wineFromYear"
+              placeholder="From"
+              value={wineFromYear}
+              onChange={this.onChange}
+            />
+            <input
+              pattern="[0-9]{4}"
+              title="toYear"
+              className="form-control"
+              name="wineToYear"
+              placeholder="To"
+              value={wineToYear}
               onChange={this.onChange}
             />
           </div>
           <button type="submit" className="addWineButton btn btn-primary">
-            Filter wines
+            List wines
           </button>
-          {error && <p>{error.message}</p>}
+          <button
+            type="submit"
+            onClick={e => this.onClear(e)}
+            className="addWineButton btn btn-danger"
+          >
+            Clear search
+          </button>
         </form>
       </div>
     );
   }
 }
 
-export default withFirebase(WineSearchComponent);
-
-// TODO: IMPLEMENT FIREBASE-LISTENER. 
+export default withFirebase(WineFormComponent);

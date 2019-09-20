@@ -20,23 +20,20 @@ class FirebaseService {
     this.snapshotToArray = this.snapshotToArray.bind(this);
   }
 
-  storeWineToFirebase(name, type, year) {
+  storeWineToFirebase(name, type, year, sanderRating, ineRating) {
     // TODO: GET LAST ID
     this.database.ref('wines/').push({
         name: name,
         type: type,
-        year: year
-      },
-      function(error) {
-        if (error) {
-          alert('WRITE FAILED')
-          // The write failed...
-        } else {
-          // Data saved successfully!
-          alert('WRITE SUCCESSFUL. CHECK FIREBASE.')
-        }
-      }
-    );
+        year: year,
+        sanderRating: sanderRating,
+        ineRating: ineRating,
+      })
+      .then(response => {
+        console.log(response);
+        alert('WRITE SUCCSESSFUL')
+      })
+      .catch(error => alert('Write failed' + error));
   }
 
   // TODO: FIXME. 

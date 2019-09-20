@@ -1,18 +1,27 @@
 import React, { Component } from "react";
+import {Link} from 'react-router-dom';
+
 import "./wineitem.scss";
-import Wine from '../../../../models/wine'
 import no_icon_red from '../../../../images/no_icon_red.png'
 import no_icon_white from '../../../../images/no_icon_white.png'
 
 // TODO: ADD LINK TO CARD OR NAME
 // TODO: MIXINS FOR MOBILE.. 
-class WineItem extends Component<Wine, {}> {
+class WineItem extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  navigateToWine() {
+    
+  }
 
   render() {
     return (
       <div className="wine-item">
         <div className="card bg-light">
-          <div className="card-header"><h4>{this.props.name}</h4></div>
+          <div className="card-header"><h4><Link to={'/wines/' + this.props.id}>{this.props.name}</Link></h4></div>
           <div className="card-body">
             <div className="row">
               <div className="col-md-4 col-xs-12"><p className="wine-info-text">{this.props.type}</p></div>
@@ -42,3 +51,4 @@ class WineItem extends Component<Wine, {}> {
 }
 
 export default WineItem;
+// TODO: PROPTYPES. 

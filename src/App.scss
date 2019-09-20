@@ -22,13 +22,3 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
-.container {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-}
-
-.searchComponent {
-  margin: 0 auto;
-}
