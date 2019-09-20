@@ -10,7 +10,6 @@ import WineListComponent from './winelist/winelist'
 class WineSearchComponent extends Component {
 
 
-
   render() {
     const { wineItems } = this.props;
     return (

@@ -1,5 +1,5 @@
-import firebase from '@firebase/app';
-import '@firebase/database';
+import firebase from "@firebase/app";
+import "@firebase/database";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -22,40 +22,49 @@ class FirebaseService {
 
   storeWineToFirebase(name, type, year, sanderRating, ineRating) {
     // TODO: GET LAST ID
-    this.database.ref('wines/').push({
+    this.database
+      .ref("wines/")
+      .push({
         name: name,
         type: type,
         year: year,
         sanderRating: sanderRating,
-        ineRating: ineRating,
+        ineRating: ineRating
       })
       .then(response => {
         console.log(response);
-        alert('WRITE SUCCSESSFUL')
+        alert("WRITE SUCCSESSFUL");
       })
-      .catch(error => alert('Write failed' + error));
+      .catch(error => alert("Write failed" + error));
   }
 
-  // TODO: FIXME. 
   all_wines() {
-    return this.database.ref('wines');
+    return this.database.ref("wines").once("value");
   }
 
-  wine = uid => this.database.ref('wines/${uid}');
+  wine = uid => {
+    let wine;
+    this.database.ref(`wines`).once("value", snapshot => {
+      console.log(snapshot.val()[uid]);
+      wine = snapshot.val()[uid];
+    });
+    return wine;
+  };
+
   // TODO: APPLY?
 
   snapshotToArray(snapshot) {
     var returnArr = [];
 
     snapshot.forEach(function(childSnapshot) {
-        var item = childSnapshot.val();
-        item.key = childSnapshot.key;
+      var item = childSnapshot.val();
+      item.key = childSnapshot.key;
 
-        returnArr.push(item);
+      returnArr.push(item);
     });
 
     return returnArr;
-};
+  }
 }
 
 export default FirebaseService;
