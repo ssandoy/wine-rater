@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import './mainpage.scss'
+import "./mainpage.scss";
 
 import AddWineForm from "../add-wine/add-wine";
-import WineSearchComponent from '../search/winesearch';
+import WineSearchComponent from "../search/winesearch";
 
 class MainPageComponent extends Component {
   render() {
@@ -11,7 +11,7 @@ class MainPageComponent extends Component {
       <div className="container">
         <AddWineForm />
         <div className="searchComponent">
-        <WineSearchComponent />
+          <WineSearchComponent />
         </div>
       </div>
     );
