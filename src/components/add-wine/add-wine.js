@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ImageCheckbox from "./image-checkbox/image-checkbox";
 import "./add-wine.scss";
 import store from "../../store";
 import { withFirebase } from "../../firebase";
@@ -20,6 +21,7 @@ const INITIAL_STATE = {
   wineYear: "2002",
   sanderRating: 6.0,
   ineRating: 5.0,
+  fitsTo: [],
   error: null,
 };
 
@@ -35,6 +37,12 @@ class AddWineForm extends Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  // TODO: FIX STATE OF CHECKBOXFORM.
+  handleCheckBoxChange(event) {
+    if (this.state[event.target.name] instanceof Array) {
+    }
+  }
+
   onSubmit(event) {
     event.preventDefault();
     const {
@@ -43,17 +51,19 @@ class AddWineForm extends Component {
       wineYear,
       ineRating,
       sanderRating,
+      fitsTo,
     } = this.state;
     // TODO: HOOK UP WITH DISPATCH AND ACTION.
-    this.props.firebase.storeWineToFirebase(
+    /* this.props.firebase.storeWineToFirebase(
       wineName,
       wineType,
       wineYear,
       sanderRating,
       ineRating
-    );
+    );*/
+    console.log(fitsTo);
   }
-  // TODO: ADD BOOTSTRAP-COLS.
+
   render() {
     const {
       wineName,
@@ -141,115 +151,79 @@ class AddWineForm extends Component {
           </div>
           <div className="form-group">
             <label>Passer til</label>
-            <div className="row">
-              <div className="col-sm-4">
-                <label htmlFor="chicken">
-                  <img src={chicken} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="chicken"
-                  className="form-control"
-                  value="chicken"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="col-sm-4">
-                <label htmlFor="seafood">
-                  <img src={crab} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="seafood"
-                  className="form-control"
-                  value="seafood"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="col-sm-4">
-                <label htmlFor="pasta">
-                  <img src={pasta} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="pasta"
-                  className="form-control"
-                  value="pasta"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="col-sm-4">
-                <label htmlFor="pizza">
-                  <img src={pizza} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="pizza"
-                  className="form-control"
-                  value="pizza"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="col-sm-4">
-                <label htmlFor="apetirif">
-                  <img src={apetirif} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="apetirif"
-                  className="form-control"
-                  value="apetirif"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="col-sm-4">
-                <label htmlFor="deer">
-                  <img src={deer} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="deer"
-                  className="form-control"
-                  value="deer"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="col-sm-4">
-                <label htmlFor="bull">
-                  <img src={bull} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="bull"
-                  className="form-control"
-                  value="bull"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="col-sm-4">
-                <label htmlFor="pig">
-                  <img src={pig} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="pig"
-                  className="form-control"
-                  value="pig"
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="col-sm-4">
-                <label htmlFor="cheese">
-                  <img src={cheese} className="image" />
-                </label>
-                <input
-                  type="checkbox"
-                  id="cheese"
-                  className="form-control"
-                  value="cheese"
-                  onChange={this.onChange}
-                />
-              </div>
+            <div className="row fits-to-row">
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={chicken}
+                htmlFor="chicken"
+                value="chicken"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={crab}
+                htmlFor="seafood"
+                value="seafood"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={pasta}
+                htmlFor="pasta"
+                value="pasta"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={pizza}
+                htmlFor="pizza"
+                value="pizza"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={apetirif}
+                htmlFor="apetirif"
+                value="apetirif"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={deer}
+                htmlFor="deer"
+                value="deer"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={bull}
+                htmlFor="bull"
+                value="bull"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={pig}
+                htmlFor="pig"
+                value="pig"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
+              <ImageCheckbox
+                columnProps="col-sm-4"
+                image={cheese}
+                htmlFor="cheese"
+                value="cheese"
+                name="fitsTo"
+                onChange={this.onChange}
+              />
             </div>
           </div>
           <button type="submit" className="add-wine-button btn btn-primary">
@@ -266,4 +240,5 @@ export default withFirebase(AddWineForm);
 
 // TODO: ADD VALIDATION FOR NUMBERS ETC.
 // TODO: UPDATE WINEITEM-DATA IN PARENT
-// TODO: SEPARATE OUT IMAGE-CHECKBOXES INTO COMPONENT.
+// TODO: ADD ALT-PROP TO IMAGES.
+// TODO: ADD IMAGEUPLOADER.
