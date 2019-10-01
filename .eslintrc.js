@@ -20,5 +20,9 @@ module.exports = {
         "react"
     ],
     "rules": {
+        "import/no-unresolved": [2, { "ignore": ["^[~$#]"] }],
+        "import/no-named-as-default": [0],
+        "react/jsx-sort-props": [0],
+        "no-confusing-arrow": "off"
     }
 };
