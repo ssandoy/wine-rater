@@ -8,7 +8,7 @@ const firebaseConfig = {
   projectId: process.env.REACT_APP_PROJECT_ID,
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID
+  appId: process.env.REACT_APP_APP_ID,
 };
 
 class FirebaseService {
@@ -20,7 +20,17 @@ class FirebaseService {
     this.snapshotToArray = this.snapshotToArray.bind(this);
   }
 
-  storeWineToFirebase(name, type, year, sanderRating, ineRating) {
+  storeWineToFirebase(
+    name,
+    type,
+    year,
+    wineCountry,
+    wineGrape,
+    wineRegion,
+    sanderRating,
+    ineRating,
+    fitsTo
+  ) {
     // TODO: GET LAST ID
     this.database
       .ref("wines/")
@@ -28,8 +38,12 @@ class FirebaseService {
         name: name,
         type: type,
         year: year,
+        wineCountry: wineCountry,
+        wineGrape: wineGrape,
+        wineRegion: wineRegion,
         sanderRating: sanderRating,
-        ineRating: ineRating
+        ineRating: ineRating,
+        fitsTo: fitsTo,
       })
       .then(response => {
         console.log(response);

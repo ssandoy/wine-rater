@@ -1,3 +1,5 @@
+@import '../../../styles/variables.scss';
+
 /* HIDE CHECKBOX */ 
 [type=checkbox] { 
   position: absolute;
@@ -15,11 +17,11 @@
 // TODO: SET NICE COLOR. 
 /* CHECKED STYLES */
 [type=checkbox]:checked + img {
-  background-color: aquamarine;
-  border: none;
+  background-color: $base-background-color;
+  border-radius: 10%;
 }
 
 .image  {
-  width: 60px;
+  width: 50px;
 }
 

@@ -2,12 +2,16 @@
   margin-bottom: 1em;
 }
 
-.add-wine-form {
-  background-color: #a5cfd6;
+.fits-to-row {
+  justify-content: space-around;
 }
 
-.fits-to-row {
-  padding-left: 30px;
+.form-control {
+  background-color: #e8eeef!important;
+}
+
+.custom-select {
+  background-color: #e8eeef!important;
 }
 
 // TODO: FIX ALIGNMENT OF FITS-TO-ROW.

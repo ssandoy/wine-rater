@@ -4,12 +4,24 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Futura Medium';
 }
 
 form {
-    color: #db8963;
+    color: $form-text-color;
     font-size: 1.2em;
     padding: 0.5em;
     margin: 1em 0;
 }
+
+.wine-form {
+  box-shadow: 1.5px 1.5px lightgray;
+  background-color: $form-background-color;
+}
+
+@font-face {
+  font-family: "Futura Medium";
+  src: url("./fonts/futura\ medium\ bt.ttf");
+  }
+  
+  

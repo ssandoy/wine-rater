@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./Winelist.scss";
-import WineItem from "./wineitem/wineitem";
+import WineItemCard from "./wine-item-card/wine-item-card";
 
 class WineListComponent extends Component {
   constructor(props) {
@@ -9,31 +9,24 @@ class WineListComponent extends Component {
   }
 
   // TODO: SORT BY VALUE FROM SELECT. SO MUCH STATE
-  onChange() {
-  }
+  onChange() {}
 
   render() {
     return (
       <div>
-        <div className="selectSort">
-          <select
-            className="custom-select"
-            name="wineType"
-            onChange={this.onChange}
-          >
-            <option value="">Name</option>
-            <option value="WHITE">Type</option>
-            <option value="ROSÉ">Year</option>
-          </select>
-        </div>
         {this.props.items.map((item, index) => (
-          // TODO: NOT ENTIRELY HAPPY WITH THIS SOLUTION. Fix when input is from firebase.
-          <WineItem
+          <WineItemCard
             key={item.key}
             id={item.key}
             name={item.name}
             type={item.type}
             year={item.year}
+            ineRating={item.ineRating}
+            sanderRating={item.sanderRating}
+            wineGrape={item.wineGrape}
+            wineRegion={item.wineRegion}
+            wineCountry={item.wineCountry}
+            fitsTo={item.fitsTo}
           />
         ))}
       </div>

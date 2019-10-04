@@ -1,7 +1,7 @@
 @import '../../../../styles/mixins.scss';
 
 .wine-item {
-  margin: 0 1em 1em;
+  margin: 1em 0;
 }
 
 .wine-image {
@@ -16,7 +16,7 @@
  }
 }
 
-.second-card-row {
+.card-body.row:not(:first-child) {
   margin-top: -4em;
   @include for-phone-only {    
     margin-top: 0; 

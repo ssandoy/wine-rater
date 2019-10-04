@@ -11,19 +11,20 @@ import WineDetailsComponent from "./components/wine-details/winedetails";
 class App extends Component {
   render() {
     return (
-        <Router>
-          <div className="App">
-            <div className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
-              <h2>Wine Rater</h2>
-            </div>
+      <Router>
+        <div className="App">
+          <div className="App-header">
+            <h2 className="app-header-text">Vinolini</h2>
+            <img src={logo} className="App-logo" alt="logo" />
           </div>
+
           <Switch>
             <Route exact path={["/wines", "/"]} component={MainPageComponent} />
             <Route path="/wines/:id" component={WineDetailsComponent} />.
             <Route component={NotFoundComponent} />
           </Switch>
-        </Router>
+        </div>
+      </Router>
     );
   }
 }
