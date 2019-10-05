@@ -14,50 +14,40 @@ import ImageCheckbox from "./image-checkbox/image-checkbox";
 // TODO: VALIDATOR
 
 const AddWineForm = props => {
-  const INITIAL_STATE = {
-    wineName: "",
-    wineType: "RED",
-    wineYear: "2002",
-    wineRegion: "Bordeaux",
-    wineCountry: "Frankrike",
-    wineGrape: "Pinot Noir",
-    sanderRating: 6.0,
-    ineRating: 5.0,
-    fitsTo: [],
-    error: null,
-  };
-  const [state, setState] = useState(INITIAL_STATE)
-
-  const onChange = (event) => {
-    setState(state => ({ ...state, [event.target.name]: event.target.value }));
-  }
+  const [wineName, setWineName] = useState("")
+  const [wineType, setWineType] = useState("RED")
+  const [wineYear, setWineYear] = useState("2002")
+  const [wineRegion, setWineRegion] = useState("Bordeaux")
+  const [wineCountry, setWineCountry] = useState("Frankrike")
+  const [wineGrape, setWineGrape] = useState("Pinot Noir")
+  const [sanderRating, setSanderRating] = useState(6.0)
+  const [wineRating, setWineRating] = useState(5.0)
+  const [fitsTo, setFitsTo] = useState([])
+  const [error, setError] = useState(null)
 
   const handleCheckBoxChange = (event) => {
     // TODO: PRETTIFY AND USE SETSTATE.
-    if (state[event.target.name] instanceof Array) {
-      if (state[event.target.name].includes(event.target.value)) {
-        state[event.target.name] = state[event.target.name].filter(
-          value => value !== event.target.value
-        );
-      } else {
-        state[event.target.name].push(event.target.value);
-      }
+    // if (state[event.target.name] instanceof Array) {
+    //   if (state[event.target.name].includes(event.target.value)) {
+    //     state[event.target.name] = state[event.target.name].filter(
+    //       value => value !== event.target.value
+    //     );
+    //   } else {
+    //     state[event.target.name].push(event.target.value);
+    //   }
+    // }
+    let fitsToArray = [...fitsTo]
+    if(fitsToArray.includes(event.target.value)){
+      const index = fitsToArray.findIndex(value => value === event.target.value)
+      fitsToArray.splice(index, 1)
+    } else {
+      fitsToArray.push(event.target.value)
     }
+    setFitsTo(fitsToArray)
   }
 
   const onSubmit = (event) => {
     event.preventDefault();
-    const {
-      wineName,
-      wineType,
-      wineYear,
-      wineCountry,
-      wineGrape,
-      wineRegion,
-      ineRating,
-      sanderRating,
-      fitsTo,
-    } = state;
     // TODO: HOOK UP WITH DISPATCH AND ACTION.
     props.firebase.storeWineToFirebase(
       wineName,
@@ -67,11 +57,11 @@ const AddWineForm = props => {
       wineGrape,
       wineRegion,
       sanderRating,
-      ineRating,
+      wineRating,
       fitsTo
     );
   }
-  const { wineName, wineYear, wineCountry, wineRegion, sanderRating, ineRating, error, wineGrape } = state
+
     return (
       <div>
         <form onSubmit={onSubmit} className="wine-form">
@@ -83,7 +73,7 @@ const AddWineForm = props => {
                 name="wineName"
                 className="form-control"
                 value={wineName}
-                onChange={onChange}
+                onChange={e => {setWineName(e.target.value)}}
               />
             </div>
             <div className="form-group col-sm-10 col-md-4">
@@ -91,7 +81,7 @@ const AddWineForm = props => {
               <select
                 className="custom-select"
                 name="wineType"
-                onChange={onChange}
+                onChange={e => {setWineType(e.target.value)}}
               >
                 <option value="RED">Rød</option>
                 <option value="WHITE">Hvit</option>
@@ -109,7 +99,7 @@ const AddWineForm = props => {
                 className="form-control"
                 name="wineYear"
                 value={wineYear}
-                onChange={onChange}
+                onChange={e => {setWineYear(e.target.value)}}
               />
             </div>
             <div className="form-group col-sm-10 col-md-6">
@@ -119,7 +109,7 @@ const AddWineForm = props => {
                 className="form-control"
                 name="wineCountry"
                 value={wineCountry}
-                onChange={onChange}
+                onChange={e => {setWineCountry(e.target.value)}}
               />
             </div>
             <div className="form-group col-sm-10 col-md-6">
@@ -129,7 +119,7 @@ const AddWineForm = props => {
                 className="form-control"
                 name="wineRegion"
                 value={wineRegion}
-                onChange={onChange}
+                onChange={e => {setWineRegion(e.target.value)}}
               />
             </div>
             <div className="form-group col-sm-10 col-md-6">
@@ -139,7 +129,7 @@ const AddWineForm = props => {
                 className="form-control"
                 name="wineGrape"
                 value={wineGrape}
-                onChange={onChange}
+                onChange={e => {setWineGrape(e.target.value)}}
               />
             </div>
           </div>
@@ -152,18 +142,18 @@ const AddWineForm = props => {
                 className="form-control"
                 name="sanderRating"
                 value={sanderRating}
-                onChange={onChange}
+                onChange={e => {setSanderRating(e.target.value) }}
               />
             </div>
             <div className="form-group col-sm-10 col-md-6">
-              <label htmlFor="ineRating">Rating Ine</label>
+              <label htmlFor="wineRating">Rating Ine</label>
               <input
                 pattern="[0-9]"
                 title="Rating"
                 className="form-control"
-                name="ineRating"
-                value={ineRating}
-                onChange={onChange}
+                name="wineRating"
+                value={wineRating}
+                onChange={e => {setWineRating(e.target.value)}}
               />
             </div>
           </div>
