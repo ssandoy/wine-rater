@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { withFirebase } from "../../firebase";
 import apetirif from "../../images/apetirif.png";
 import bull from "../../images/bull.png";
@@ -13,46 +13,39 @@ import "./add-wine.scss";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 // TODO: VALIDATOR
 
-const INITIAL_STATE = {
-  wineName: "",
-  wineType: "RED",
-  wineYear: "2002",
-  wineRegion: "Bordeaux",
-  wineCountry: "Frankrike",
-  wineGrape: "Pinot Noir",
-  sanderRating: 6.0,
-  ineRating: 5.0,
-  fitsTo: [],
-  error: null,
-};
+const AddWineForm = props => {
+  const INITIAL_STATE = {
+    wineName: "",
+    wineType: "RED",
+    wineYear: "2002",
+    wineRegion: "Bordeaux",
+    wineCountry: "Frankrike",
+    wineGrape: "Pinot Noir",
+    sanderRating: 6.0,
+    ineRating: 5.0,
+    fitsTo: [],
+    error: null,
+  };
+  const [state, setState] = useState(INITIAL_STATE)
 
-class AddWineForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ...INITIAL_STATE };
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
+  const onChange = (event) => {
+    setState(state => ({ ...state, [event.target.name]: event.target.value }));
   }
 
-  onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
-  }
-
-  handleCheckBoxChange(event) {
+  const handleCheckBoxChange = (event) => {
     // TODO: PRETTIFY AND USE SETSTATE.
-    if (this.state[event.target.name] instanceof Array) {
-      if (this.state[event.target.name].includes(event.target.value)) {
-        this.state[event.target.name] = this.state[event.target.name].filter(
+    if (state[event.target.name] instanceof Array) {
+      if (state[event.target.name].includes(event.target.value)) {
+        state[event.target.name] = state[event.target.name].filter(
           value => value !== event.target.value
         );
       } else {
-        this.state[event.target.name].push(event.target.value);
+        state[event.target.name].push(event.target.value);
       }
     }
   }
 
-  onSubmit(event) {
+  const onSubmit = (event) => {
     event.preventDefault();
     const {
       wineName,
@@ -64,9 +57,9 @@ class AddWineForm extends Component {
       ineRating,
       sanderRating,
       fitsTo,
-    } = this.state;
+    } = state;
     // TODO: HOOK UP WITH DISPATCH AND ACTION.
-    this.props.firebase.storeWineToFirebase(
+    props.firebase.storeWineToFirebase(
       wineName,
       wineType,
       wineYear,
@@ -78,22 +71,10 @@ class AddWineForm extends Component {
       fitsTo
     );
   }
-
-  render() {
-    const {
-      wineName,
-      wineYear,
-      wineCountry,
-      wineGrape,
-      wineRegion,
-      sanderRating,
-      ineRating,
-      error,
-    } = this.state;
-
+  const { wineName, wineYear, wineCountry, wineRegion, sanderRating, ineRating, error, wineGrape } = state
     return (
       <div>
-        <form onSubmit={this.onSubmit} className="wine-form">
+        <form onSubmit={onSubmit} className="wine-form">
           <div className="row">
             <div className="form-group col-sm-10 col-md-8">
               <label htmlFor="wineName">Navn</label>
@@ -102,7 +83,7 @@ class AddWineForm extends Component {
                 name="wineName"
                 className="form-control"
                 value={wineName}
-                onChange={this.onChange}
+                onChange={onChange}
               />
             </div>
             <div className="form-group col-sm-10 col-md-4">
@@ -110,7 +91,7 @@ class AddWineForm extends Component {
               <select
                 className="custom-select"
                 name="wineType"
-                onChange={this.onChange}
+                onChange={onChange}
               >
                 <option value="RED">Rød</option>
                 <option value="WHITE">Hvit</option>
@@ -128,7 +109,7 @@ class AddWineForm extends Component {
                 className="form-control"
                 name="wineYear"
                 value={wineYear}
-                onChange={this.onChange}
+                onChange={onChange}
               />
             </div>
             <div className="form-group col-sm-10 col-md-6">
@@ -138,7 +119,7 @@ class AddWineForm extends Component {
                 className="form-control"
                 name="wineCountry"
                 value={wineCountry}
-                onChange={this.onChange}
+                onChange={onChange}
               />
             </div>
             <div className="form-group col-sm-10 col-md-6">
@@ -148,7 +129,7 @@ class AddWineForm extends Component {
                 className="form-control"
                 name="wineRegion"
                 value={wineRegion}
-                onChange={this.onChange}
+                onChange={onChange}
               />
             </div>
             <div className="form-group col-sm-10 col-md-6">
@@ -158,7 +139,7 @@ class AddWineForm extends Component {
                 className="form-control"
                 name="wineGrape"
                 value={wineGrape}
-                onChange={this.onChange}
+                onChange={onChange}
               />
             </div>
           </div>
@@ -171,7 +152,7 @@ class AddWineForm extends Component {
                 className="form-control"
                 name="sanderRating"
                 value={sanderRating}
-                onChange={this.onChange}
+                onChange={onChange}
               />
             </div>
             <div className="form-group col-sm-10 col-md-6">
@@ -182,7 +163,7 @@ class AddWineForm extends Component {
                 className="form-control"
                 name="ineRating"
                 value={ineRating}
-                onChange={this.onChange}
+                onChange={onChange}
               />
             </div>
           </div>
@@ -195,7 +176,7 @@ class AddWineForm extends Component {
                 htmlFor="chicken"
                 value="chicken"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
               <ImageCheckbox
                 columnProps="col-sm-4 col-md-1"
@@ -203,7 +184,7 @@ class AddWineForm extends Component {
                 htmlFor="seafood"
                 value="seafood"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
               <ImageCheckbox
                 columnProps="col-sm-4 col-md-1"
@@ -211,7 +192,7 @@ class AddWineForm extends Component {
                 htmlFor="pasta"
                 value="pasta"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
               <ImageCheckbox
                 columnProps="col-sm-4 col-md-1"
@@ -219,7 +200,7 @@ class AddWineForm extends Component {
                 htmlFor="pizza"
                 value="pizza"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
               <ImageCheckbox
                 columnProps="col-sm-4 col-md-1"
@@ -227,7 +208,7 @@ class AddWineForm extends Component {
                 htmlFor="apetirif"
                 value="apetirif"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
               <ImageCheckbox
                 columnProps="col-sm-4 col-md-1"
@@ -235,7 +216,7 @@ class AddWineForm extends Component {
                 htmlFor="deer"
                 value="deer"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
               <ImageCheckbox
                 columnProps="col-sm-4 col-md-1"
@@ -243,7 +224,7 @@ class AddWineForm extends Component {
                 htmlFor="bull"
                 value="bull"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
               <ImageCheckbox
                 columnProps="col-sm-4 col-md-1"
@@ -251,7 +232,7 @@ class AddWineForm extends Component {
                 htmlFor="pig"
                 value="pig"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
               <ImageCheckbox
                 columnProps="col-sm-4 col-md-1"
@@ -259,7 +240,7 @@ class AddWineForm extends Component {
                 htmlFor="cheese"
                 value="cheese"
                 name="fitsTo"
-                onChange={this.handleCheckBoxChange}
+                onChange={handleCheckBoxChange}
               />
             </div>
           </div>
@@ -269,8 +250,7 @@ class AddWineForm extends Component {
           {error && <p>{error.message}</p>}
         </form>
       </div>
-    );
-  }
+    )
 }
 
 export default withFirebase(AddWineForm);
