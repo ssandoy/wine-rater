@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import "./Winelist.scss";
+import React from "react";
 import WineItemCard from "./wine-item-card/wine-item-card";
+import "./Winelist.scss";
 
 const WineListComponent = props => {
   // TODO: SORT BY VALUE FROM SELECT. SO MUCH STATE

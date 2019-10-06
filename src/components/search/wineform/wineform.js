@@ -13,12 +13,12 @@ const WineSearchFormComponent = props => {
 
   const onSubmit = event => {
     event.preventDefault();
-    this.props.firebase.database
+    props.firebase.database
       .ref("wines")
       .once("value")
       .then(wineItemsSnapshot => {
         store.dispatch(
-          setWines(this.props.firebase.snapshotToArray(wineItemsSnapshot))
+          setWines(props.firebase.snapshotToArray(wineItemsSnapshot))
         );
       });
   };

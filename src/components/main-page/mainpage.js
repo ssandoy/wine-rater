@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-
-import "./mainpage.scss";
+import React from "react";
 import AddWineForm from "../add-wine/AddWineForm";
 import WineSearchComponent from "../search/winesearch";
+import "./mainpage.scss";
 
 const MainPageComponent = props => {
   return (
