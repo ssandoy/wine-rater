@@ -12,7 +12,7 @@ const WineListComponent = props => {
         <WineItemCard
           key={item.key}
           id={item.key}
-          name={item.name}
+          name={item.wineName}
           type={item.type}
           year={item.year}
           ineRating={item.ineRating}

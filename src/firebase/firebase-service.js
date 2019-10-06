@@ -21,46 +21,25 @@ class FirebaseService {
     this.snapshotToArray = this.snapshotToArray.bind(this);
   }
 
-  storeWineToFirebase(
-    name,
-    type,
-    year,
-    wineCountry,
-    wineGrape,
-    wineRegion,
-    sanderRating,
-    ineRating,
-    fitsTo
-  ) {
+  // TODO ASYNC AWAIT?
+  async storeWineToFirebase(wineItem) {
     // TODO: GET LAST ID
-    this.database
-      .ref("wines/")
-      .push({
-        name: name,
-        type: type,
-        year: year,
-        wineCountry: wineCountry,
-        wineGrape: wineGrape,
-        wineRegion: wineRegion,
-        sanderRating: sanderRating,
-        ineRating: ineRating,
-        fitsTo: fitsTo,
-      })
-      .then(response => {
-        this.wine(response.key);
-        alert("WRITE SUCCSESSFUL");
-      })
-      .catch(error => alert("Write failed" + error));
+    try {
+      let response = await this.database.ref("wines/").push(wineItem);
+      console.log(response.key);
+      return response.key;
+    } catch {
+      return -1;
+    }
   }
 
   all_wines() {
     return this.database.ref("wines").once("value");
   }
 
-  wine(uid) {
+  async wine(uid) {
     let wine;
-    this.database.ref(`wines`).once("value", snapshot => {
-      console.log(snapshot.val()[uid]);
+    await this.database.ref(`wines`).once("value", snapshot => {
       wine = snapshot.val()[uid];
     });
     return wine;

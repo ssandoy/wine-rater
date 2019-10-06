@@ -12,6 +12,7 @@ import pizza from "../../images/pizza.png";
 import "./styles.scss";
 import * as dispatchers from "../../dispatchers";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
+import { withFirebase } from "../../firebase/index";
 // TODO: VALIDATOR
 
 const AddWineForm = props => {
@@ -42,18 +43,20 @@ const AddWineForm = props => {
 
   const onSubmit = event => {
     event.preventDefault();
-    // TODO: HOOK UP WITH PUT TO FIREBASE
-    props.addWineToWineList({
-      wineName,
-      wineType,
-      wineYear,
-      wineCountry,
-      wineGrape,
-      wineRegion,
-      sanderRating,
-      ineRating,
-      fitsTo,
-    });
+    props.addWineToWineList(
+      {
+        wineName,
+        wineType,
+        wineYear,
+        wineCountry,
+        wineGrape,
+        wineRegion,
+        sanderRating,
+        ineRating,
+        fitsTo,
+      },
+      props.firebase
+    );
   };
 
   return (
@@ -257,12 +260,14 @@ const mapStateToProps = state => ({
   wineItems: state.wineItems,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    addWineToWineList: dispatchers.addWineToWineList,
-  }
-)(AddWineForm);
+export default withFirebase(
+  connect(
+    mapStateToProps,
+    {
+      addWineToWineList: dispatchers.addWineToWineList,
+    }
+  )(AddWineForm)
+);
 
 // TODO: ADD VALIDATION FOR NUMBERS ETC.
 // TODO: UPDATE WINEITEM-DATA IN PARENT

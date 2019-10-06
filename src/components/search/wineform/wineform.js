@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { clearWines, setWines } from "../../../actions/action";
 import { withFirebase } from "../../../firebase";
-import store from "../../../store";
+import * as dispatchers from "../../../dispatchers";
 
 const WineSearchFormComponent = props => {
   // TODO: SET UP DISPATCHER INSTEAD OF IMPORTING STORE.
@@ -17,9 +18,7 @@ const WineSearchFormComponent = props => {
       .ref("wines")
       .once("value")
       .then(wineItemsSnapshot => {
-        store.dispatch(
-          setWines(props.firebase.snapshotToArray(wineItemsSnapshot))
-        );
+        props.setWines(props.firebase.snapshotToArray(wineItemsSnapshot));
       });
   };
 
@@ -38,9 +37,9 @@ const WineSearchFormComponent = props => {
 
   const onClear = event => {
     event.preventDefault();
-    store.dispatch(clearWines());
+    props.clearWines();
   };
-  console.log(wineName);
+
   return (
     <div className="wine-form">
       <form onSubmit={e => onSubmit(e)}>
@@ -114,4 +113,12 @@ const WineSearchFormComponent = props => {
   );
 };
 
-export default withFirebase(WineSearchFormComponent);
+export default withFirebase(
+  connect(
+    null,
+    {
+      setWines: dispatchers.setWines,
+      clearWines: dispatchers.clearWines,
+    }
+  )(WineSearchFormComponent)
+);
