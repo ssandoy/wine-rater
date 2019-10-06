@@ -4,19 +4,15 @@ import WineFormComponent from "./wineform/wineform";
 import WineListComponent from "./winelist/winelist";
 import "./winesearch.scss";
 
-class WineSearchComponent extends Component {
-  render() {
-    const { wineItems } = this.props;
-    return (
-      <div>
-        <WineFormComponent />
-        {wineItems && (
-          <WineListComponent onSubmit={this.onSubmit} items={wineItems} />
-        )}
-      </div>
-    );
-  }
-}
+const WineSearchComponent = props => {
+  const { wineItems } = props;
+  return (
+    <div>
+      <WineFormComponent />
+      {wineItems && <WineListComponent items={wineItems} />}
+    </div>
+  );
+};
 
 function mapStateToProps(state) {
   return {
