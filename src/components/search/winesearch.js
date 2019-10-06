@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import WineFormComponent from "./wineform/wineform";
+import WineSearchFormComponent from "./wineform/wineform";
 import WineListComponent from "./winelist/winelist";
 import "./winesearch.scss";
 
@@ -8,7 +8,7 @@ const WineSearchComponent = props => {
   const { wineItems } = props;
   return (
     <div>
-      <WineFormComponent />
+      <WineSearchFormComponent />
       {wineItems && <WineListComponent items={wineItems} />}
     </div>
   );

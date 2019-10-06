@@ -15,7 +15,6 @@ import ImageCheckbox from "./image-checkbox/image-checkbox";
 // TODO: VALIDATOR
 
 const AddWineForm = props => {
-  // TODO: USECONTEXT??
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("RED");
   const [wineYear, setWineYear] = useState("2002");
@@ -27,17 +26,8 @@ const AddWineForm = props => {
   const [fitsTo, setFitsTo] = useState([]);
   const [error, setError] = useState(null);
 
+  // TODO: CONSIDER SET INSTEAD WITH PUSH AND POP.
   const handleCheckBoxChange = event => {
-    // TODO: PRETTIFY AND USE SETSTATE.
-    // if (state[event.target.name] instanceof Array) {
-    //   if (state[event.target.name].includes(event.target.value)) {
-    //     state[event.target.name] = state[event.target.name].filter(
-    //       value => value !== event.target.value
-    //     );
-    //   } else {
-    //     state[event.target.name].push(event.target.value);
-    //   }
-    // }
     let fitsToArray = [...fitsTo];
     if (fitsToArray.includes(event.target.value)) {
       const index = fitsToArray.findIndex(
@@ -52,8 +42,7 @@ const AddWineForm = props => {
 
   const onSubmit = event => {
     event.preventDefault();
-    // TODO: HOOK UP WITH DISPATCH AND ACTION.
-    console.log(props);
+    // TODO: HOOK UP WITH PUT TO FIREBASE
     props.addWineToWineList({
       wineName,
       wineType,
