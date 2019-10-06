@@ -17,6 +17,7 @@ class FirebaseService {
     this.database = firebase.database();
     this.storeWineToFirebase = this.storeWineToFirebase.bind(this);
     this.all_wines = this.all_wines.bind(this);
+    this.wine = this.wine.bind(this);
     this.snapshotToArray = this.snapshotToArray.bind(this);
   }
 
@@ -46,7 +47,7 @@ class FirebaseService {
         fitsTo: fitsTo,
       })
       .then(response => {
-        console.log(response);
+        this.wine(response.key);
         alert("WRITE SUCCSESSFUL");
       })
       .catch(error => alert("Write failed" + error));
@@ -56,14 +57,14 @@ class FirebaseService {
     return this.database.ref("wines").once("value");
   }
 
-  wine = uid => {
+  wine(uid) {
     let wine;
     this.database.ref(`wines`).once("value", snapshot => {
       console.log(snapshot.val()[uid]);
       wine = snapshot.val()[uid];
     });
     return wine;
-  };
+  }
 
   // TODO: APPLY?
 

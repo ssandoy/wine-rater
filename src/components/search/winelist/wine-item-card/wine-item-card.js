@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
-import "./wine-item-card.scss";
 import no_icon_red from "../../../../images/no_icon_red.png";
-import no_icon_white from "../../../../images/no_icon_white.png";
-
+import "./wine-item-card.scss";
+import * as images from "../../../../images";
 // TODO: ADD LINK TO CARD OR NAME
 // TODO: MIXINS FOR MOBILE..
 
@@ -14,13 +12,8 @@ const wineMap = {
   ROSÈ: "ROSÈ",
 };
 class WineItemCard extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  navigateToWine() {}
-
   render() {
+    console.log(this.props.fitsTo);
     const image = this.props.image_url ? this.props.image_url : no_icon_red;
     return (
       <div className="wine-item">
@@ -48,22 +41,22 @@ class WineItemCard extends Component {
                   Sander: {this.props.sanderRating}
                 </p>
               </div>
-              {this.props.image_url ? (
-                <div className="wineImage">
-                  <image src={this.props.image_url}></image>
-                </div>
-              ) : (
-                <div className="col-md-3 col-xs-12">
-                  <img className="wine-image" alt="" src={no_icon_red}></img>
-                </div>
-              )}
+              <div className="col-md-3 col-xs-12">
+                <img className="wine-image" alt="wine" src={image}></img>
+              </div>
             </div>
             <div className="row">
               <div className="col-xs-12">
-                {
-                  // TODO: CONVERT THIS TO ICONS.
-                }
-                <p className="wine-info-text">{this.props.fitsTo}</p>
+                {this.props.fitsTo &&
+                  this.props.fitsTo.map(item => {
+                    return (
+                      <img
+                        className="fits-to-image"
+                        src={images[item]}
+                        alt="wine"
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>

@@ -1,14 +1,7 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import { devToolsEnhancer } from 'redux-devtools-extension';
+import { applyMiddleware, createStore } from "redux";
+import thunkMiddleWare from "redux-thunk";
+import rootReducer from "../reducers";
 
-// Logger with default options
-import {createLogger} from "redux-logger";
-
-import wineReducer from "../reducers";
-
-const store = createStore(wineReducer, devToolsEnhancer(
-  createLogger
-  // other store enhancers if any
-));
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleWare));
 
 export default store;

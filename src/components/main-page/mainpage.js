@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 
 import "./mainpage.scss";
-
-import AddWineForm from "../add-wine/add-wine";
+import AddWineForm from "../add-wine/AddWineForm";
 import WineSearchComponent from "../search/winesearch";
 
 class MainPageComponent extends Component {

@@ -1,21 +1,18 @@
 import React, { Component } from "react";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
+import WineFormComponent from "./wineform/wineform";
+import WineListComponent from "./winelist/winelist";
 import "./winesearch.scss";
-import { withFirebase } from "../../firebase";
-import { compose } from 'recompose';
-import WineFormComponent from './wineform/wineform'
-import WineListComponent from './winelist/winelist'
-
 
 class WineSearchComponent extends Component {
-
-
   render() {
-    const { wineItems } = this.props;
+    const { wineItems } = this.props;
     return (
       <div>
-        <WineFormComponent/>
-       {wineItems && <WineListComponent onSubmit={this.onSubmit} items={wineItems} />}
+        <WineFormComponent />
+        {wineItems && (
+          <WineListComponent onSubmit={this.onSubmit} items={wineItems} />
+        )}
       </div>
     );
   }
@@ -23,9 +20,8 @@ class WineSearchComponent extends Component {
 
 function mapStateToProps(state) {
   return {
-    wineItems: state.wineItems
-  }
+    wineItems: state.wineItems,
+  };
 }
 
-
-export default compose(withFirebase, connect(mapStateToProps))(WineSearchComponent);
+export default connect(mapStateToProps)(WineSearchComponent);
