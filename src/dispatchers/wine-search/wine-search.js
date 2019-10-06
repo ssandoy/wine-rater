@@ -1,4 +1,4 @@
-import TYPES from "../../actions/action";
+import actions from "../../actions/action";
 
 export const setWineItems = wineItems => dispatch =>
-  dispatch(TYPES.getWines(wineItems));
+  dispatch(actions.setWines(wineItems));
