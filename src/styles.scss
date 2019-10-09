@@ -19,6 +19,11 @@ form {
   background-color: $form-background-color;
 }
 
+.error{
+  color: $form-error-color;
+  font-size: 0.8em;
+}
+
 @font-face {
   font-family: "Futura Medium";
   src: url("./fonts/futura\ medium\ bt.ttf");
