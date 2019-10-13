@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import * as images from "../../images";
-import "./styles.scss";
+import { debouncedSearchProductsByName } from "../../api";
 import * as dispatchers from "../../dispatchers";
-import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { withFirebase } from "../../firebase/index";
-import { debouncedSearchProductsByName, searchProductsByName } from "../../api";
+import * as images from "../../images";
+import ImageCheckbox from "./image-checkbox/image-checkbox";
+import { SearchDropDown } from "./search-dropdown/search-dropdown";
+import "./styles.scss";
 // TODO: VALIDATOR
 
 const AddWineForm = props => {
@@ -19,8 +20,8 @@ const AddWineForm = props => {
   const [ineRating, setIneRating] = useState(5.0);
   const [fitsTo, setFitsTo] = useState([]);
   const [error, setError] = useState(null);
+  const [wineSearchItems, setWineSearchItems] = useState([]);
 
-  // TODO: CONSIDER SET INSTEAD WITH PUSH AND POP.
   const handleCheckBoxChange = event => {
     let fitsToArray = [...fitsTo];
     if (fitsToArray.includes(event.target.value)) {
@@ -34,10 +35,10 @@ const AddWineForm = props => {
     setFitsTo(fitsToArray);
   };
 
+  // TODO: HANDLE ONCLICK ON SEARCHDROPDOWN
   const handleNameSearchOnChange = async value => {
-    const result = await debouncedSearchProductsByName(value);
-    // TODO: DROPDOWN WITH SELECT AND ITEMS BASED ON RESULTS.
-    console.log(result);
+    const wineSearchResult = await debouncedSearchProductsByName(value);
+    setWineSearchItems(wineSearchResult.products);
   };
 
   const onSubmit = event => {
@@ -74,6 +75,9 @@ const AddWineForm = props => {
                 handleNameSearchOnChange(e.target.value);
               }}
             />
+            {wineSearchItems && wineSearchItems.length > 0 && (
+              <SearchDropDown searchItems={wineSearchItems} />
+            )}
           </div>
           <div className="form-group col-sm-10 col-md-4">
             <label htmlFor="wineType">Type</label>
