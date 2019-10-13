@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import apetirif from "../../images/apetirif.png";
-import bull from "../../images/bull.png";
-import cheese from "../../images/cheese.png";
-import chicken from "../../images/chicken.png";
-import crab from "../../images/crab.png";
-import deer from "../../images/deer.svg";
-import pasta from "../../images/pasta.png";
-import pig from "../../images/pig.png";
-import pizza from "../../images/pizza.png";
+import * as images from "../../images";
 import "./styles.scss";
 import * as dispatchers from "../../dispatchers";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { withFirebase } from "../../firebase/index";
+import { debouncedSearchProductsByName, searchProductsByName } from "../../api";
 // TODO: VALIDATOR
 
 const AddWineForm = props => {
@@ -39,6 +32,12 @@ const AddWineForm = props => {
       fitsToArray.push(event.target.value);
     }
     setFitsTo(fitsToArray);
+  };
+
+  const handleNameSearchOnChange = async value => {
+    const result = await debouncedSearchProductsByName(value);
+    // TODO: DROPDOWN WITH SELECT AND ITEMS BASED ON RESULTS.
+    console.log(result);
   };
 
   const onSubmit = event => {
@@ -72,6 +71,7 @@ const AddWineForm = props => {
               value={wineName}
               onChange={e => {
                 setWineName(e.target.value);
+                handleNameSearchOnChange(e.target.value);
               }}
             />
           </div>
@@ -175,7 +175,7 @@ const AddWineForm = props => {
           <div className="row fits-to-row">
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={chicken}
+              image={images.chicken}
               htmlFor="chicken"
               value="chicken"
               name="fitsTo"
@@ -183,7 +183,7 @@ const AddWineForm = props => {
             />
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={crab}
+              image={images.seafood}
               htmlFor="seafood"
               value="seafood"
               name="fitsTo"
@@ -191,7 +191,7 @@ const AddWineForm = props => {
             />
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={pasta}
+              image={images.pasta}
               htmlFor="pasta"
               value="pasta"
               name="fitsTo"
@@ -199,7 +199,7 @@ const AddWineForm = props => {
             />
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={pizza}
+              image={images.pizza}
               htmlFor="pizza"
               value="pizza"
               name="fitsTo"
@@ -207,7 +207,7 @@ const AddWineForm = props => {
             />
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={apetirif}
+              image={images.apetirif}
               htmlFor="apetirif"
               value="apetirif"
               name="fitsTo"
@@ -215,7 +215,7 @@ const AddWineForm = props => {
             />
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={deer}
+              image={images.deer}
               htmlFor="deer"
               value="deer"
               name="fitsTo"
@@ -223,7 +223,7 @@ const AddWineForm = props => {
             />
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={bull}
+              image={images.bull}
               htmlFor="bull"
               value="bull"
               name="fitsTo"
@@ -231,7 +231,7 @@ const AddWineForm = props => {
             />
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={pig}
+              image={images.pig}
               htmlFor="pig"
               value="pig"
               name="fitsTo"
@@ -239,7 +239,7 @@ const AddWineForm = props => {
             />
             <ImageCheckbox
               columnProps="col-sm-4 col-md-1"
-              image={cheese}
+              image={images.cheese}
               htmlFor="cheese"
               value="cheese"
               name="fitsTo"
@@ -271,5 +271,4 @@ export default withFirebase(
 
 // TODO: ADD VALIDATION FOR NUMBERS ETC.
 // TODO: UPDATE WINEITEM-DATA IN PARENT
-// TODO: ADD ALT-PROP TO IMAGES.
 // TODO: ADD IMAGEUPLOADER.
