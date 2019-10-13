@@ -7,6 +7,7 @@ import * as images from "../../images";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { SearchDropDown } from "./search-dropdown/search-dropdown";
 import "./styles.scss";
+import { checkPropTypes } from "prop-types";
 // TODO: VALIDATOR
 
 const AddWineForm = props => {
@@ -18,6 +19,8 @@ const AddWineForm = props => {
   const [wineGrape, setWineGrape] = useState("Pinot Noir");
   const [sanderRating, setSanderRating] = useState(6.0);
   const [ineRating, setIneRating] = useState(5.0);
+  const [choosenWine, setChoosenWine] = useState(false);
+  const [winePicture, setWinePicture] = useState(null);
   const [fitsTo, setFitsTo] = useState([]);
   const [error, setError] = useState(null);
   const [wineSearchItems, setWineSearchItems] = useState([]);
@@ -37,8 +40,26 @@ const AddWineForm = props => {
 
   // TODO: HANDLE ONCLICK ON SEARCHDROPDOWN
   const handleNameSearchOnChange = async value => {
+    setChoosenWine(false);
     const wineSearchResult = await debouncedSearchProductsByName(value);
     setWineSearchItems(wineSearchResult.products);
+  };
+
+  const handlSelectedWine = wine => {
+    console.log(wine);
+    fillFormFromWine(wine);
+    setChoosenWine(true);
+
+    // TODO: MOAR
+  };
+
+  const fillFormFromWine = wine => {
+    setWineName(wine.name);
+    // TODO: NULLCHEKS AND PRETTFY.
+    setWineType(wine.main_category.name);
+    setWineCountry(wine.main_country.name);
+    setWineRegion(wine.district);
+    setWinePicture(wine.images[0].url);
   };
 
   const onSubmit = event => {
@@ -60,10 +81,11 @@ const AddWineForm = props => {
   };
 
   return (
+    // TODO: SEPARATE OUT SOME OF THIS AS SEPARATE COMPONENTS. TMI.
     <div>
       <form onSubmit={onSubmit} className="wine-form">
         <div className="row">
-          <div className="form-group col-sm-10 col-md-8">
+          <div className="form-group col-sm-12 col-md-8">
             <label htmlFor="wineName">Navn</label>
             <input
               type="text"
@@ -75,8 +97,11 @@ const AddWineForm = props => {
                 handleNameSearchOnChange(e.target.value);
               }}
             />
-            {wineSearchItems && wineSearchItems.length > 0 && (
-              <SearchDropDown searchItems={wineSearchItems} />
+            {wineSearchItems && wineSearchItems.length > 0 && !choosenWine && (
+              <SearchDropDown
+                searchItems={wineSearchItems}
+                onClick={handlSelectedWine}
+              />
             )}
           </div>
           <div className="form-group col-sm-10 col-md-4">
@@ -249,6 +274,13 @@ const AddWineForm = props => {
               name="fitsTo"
               onChange={handleCheckBoxChange}
             />
+          </div>
+        </div>
+        <div className="row">
+          <div className="form-group col-sm-10 col-md-6">
+            <label htmlFor="sanderRating">Bilde</label>
+            <br />
+            <img src={winePicture} className="wine-picture" />
           </div>
         </div>
         <button type="submit" className="add-wine-button btn btn-primary">
