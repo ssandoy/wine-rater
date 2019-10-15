@@ -1,15 +1,15 @@
-import {useState, useEffect, useCallback} from 'react';
+import { useState, useEffect, useCallback } from "react";
 
-function useForm(stateSchema, validationSchema = {}, callback){
+function useForm(stateSchema, validationSchema = {}, callback) {
   const [state, setState] = useState(stateSchema);
   const [disable, setDisable] = useState(true);
   const [isInvalid, setIsInvalid] = useState(true);
 
   useEffect(() => {
-    setDisable(true)
+    setDisable(true);
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     setDisable(validateState());
   }, [state, isInvalid]);
 
@@ -18,44 +18,55 @@ function useForm(stateSchema, validationSchema = {}, callback){
       const isInputFieldRequired = validationSchema[key].required;
       const stateValue = state[key].value;
       const stateError = state[key].error;
-       return (isInputFieldRequired && !stateValue) || stateError;
-    })
+      return (isInputFieldRequired && !stateValue) || stateError;
+    });
     return hasErrorInState;
   }, [state, validationSchema]);
 
-  const handleOnChange = useCallback(event=>{
-    setIsInvalid(true);
-    const name = event.target.name;
-    const value = event.target.value;
+  const handleOnChange = useCallback(
+    event => {
+      setIsInvalid(true);
+      const name = event.target.name;
+      const value = event.target.value;
 
-    let error = '';
-    if(validationSchema[name].required){
-      if(!value){
-        error = 'This is required field'
+      let error = checkError(validationSchema[name], value);
+
+      setState(prevState => ({
+        ...prevState,
+        [name]: { value, error }
+      }));
+    },
+    [validationSchema]
+  );
+
+  const checkError = (field, value) => {
+    let error;
+    if (field.required) {
+      if (!value) {
+        error = "This is a required field";
       }
     }
 
-    if(validationSchema[name].validator !== null && typeof validationSchema[name].validator === 'object'){
-      if(value && !validationSchema[name].validator.regEx.test(value)){
-        error = validationSchema[name].validator.error;
+    if (field.validator !== null && field.validator !== undefined) {
+      if (value && !field.validator.regEx.test(value)) {
+        error = field.validator.error;
       }
     }
 
-    setState(prevState => ({
-      ...prevState,
-      [name]: {value, error}
-    }));
-  }, [validationSchema]);
+    return error;
+  };
 
-  const handleOnSubmit = useCallback(event => {
-    event.preventDefault();
-    if(!validateState()){
-      callback(state);
-    }
-  }, [state])
+  const handleOnSubmit = useCallback(
+    event => {
+      event.preventDefault();
+      if (!validateState()) {
+        callback(state);
+      }
+    },
+    [state]
+  );
 
-  return {state, disable, handleOnChange, handleOnSubmit};
-
+  return { state, disable, handleOnChange, handleOnSubmit };
 }
 
 export default useForm;
