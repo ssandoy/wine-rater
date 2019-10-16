@@ -2,16 +2,16 @@ import { useState, useEffect, useCallback } from "react";
 
 function useForm(stateSchema, validationSchema = {}, callback) {
   const [state, setState] = useState(stateSchema);
-  const [disable, setDisable] = useState(true);
+  const [isFormSubmitted, setIsFormSubmit] = useState(false);
   const [isInvalid, setIsInvalid] = useState(true);
 
-  useEffect(() => {
-    setDisable(true);
-  }, []);
+  // useEffect(() => {
+  //   setDisable(true);
+  // }, []);
 
-  useEffect(() => {
-    setDisable(validateState());
-  }, [state, isInvalid]);
+  // useEffect(() => {
+  //   setDisable(validateState());
+  // }, [state, isInvalid]);
 
   const validateState = useCallback(() => {
     const hasErrorInState = Object.keys(validationSchema).some(key => {
@@ -20,17 +20,20 @@ function useForm(stateSchema, validationSchema = {}, callback) {
       const stateError = state[key].error;
       return (isInputFieldRequired && !stateValue) || stateError;
     });
+
     return hasErrorInState;
   }, [state, validationSchema]);
 
   const handleOnChange = useCallback(
     event => {
+      validateState();
+      setIsFormSubmit(false);
       setIsInvalid(true);
       const name = event.target.name;
       const value = event.target.value;
 
       let error = checkError(validationSchema[name], value);
-
+      console.log("error", error);
       setState(prevState => ({
         ...prevState,
         [name]: { value, error }
@@ -40,7 +43,7 @@ function useForm(stateSchema, validationSchema = {}, callback) {
   );
 
   const checkError = (field, value) => {
-    let error;
+    let error = "";
     if (field.required) {
       if (!value) {
         error = "This is a required field";
@@ -58,7 +61,9 @@ function useForm(stateSchema, validationSchema = {}, callback) {
 
   const handleOnSubmit = useCallback(
     event => {
+      setIsFormSubmit(true);
       event.preventDefault();
+      console.log(validateState());
       if (!validateState()) {
         callback(state);
       }
@@ -66,7 +71,7 @@ function useForm(stateSchema, validationSchema = {}, callback) {
     [state]
   );
 
-  return { state, disable, handleOnChange, handleOnSubmit };
+  return { state, isFormSubmitted, handleOnChange, handleOnSubmit };
 }
 
 export default useForm;

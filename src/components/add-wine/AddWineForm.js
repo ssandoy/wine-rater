@@ -36,8 +36,8 @@ const AddWineForm = props => {
     wineCountry: { value: "Bordeaux", error: "" },
     wineGrape: { value: "Frankrike", error: "" },
     wineRegion: { value: "Pinot Noir", error: "" },
-    sanderRating: { value: "6.0", error: "" },
-    ineRating: { value: "5.0", error: "" }
+    sanderRating: { value: "6", error: "" },
+    ineRating: { value: "5", error: "" }
   };
 
   const handleCheckBoxChange = event => {
@@ -71,7 +71,7 @@ const AddWineForm = props => {
     console.log(JSON.stringify(state, null, 2));
   }
 
-  const { state, handleOnChange, handleOnSubmit, disable } = useForm(
+  const { state, handleOnChange, handleOnSubmit, isFormSubmitted } = useForm(
     stateSchema,
     validationSchema,
     onSubmitForm
@@ -109,7 +109,7 @@ const AddWineForm = props => {
               value={state.wineName.value}
               onChange={handleOnChange}
             />
-            {state.wineName.error && (
+            {state.wineName.error && isFormSubmitted && (
               <p className="error">{state.wineName.error}</p>
             )}
           </div>
@@ -139,7 +139,7 @@ const AddWineForm = props => {
               value={state.wineYear.value}
               onChange={handleOnChange}
             />
-            {state.wineYear.error && (
+            {state.wineYear.error && isFormSubmitted && (
               <p className="error">{state.wineYear.error}</p>
             )}
           </div>
@@ -153,7 +153,7 @@ const AddWineForm = props => {
               value={state.wineCountry.value}
               onChange={handleOnChange}
             />
-            {state.wineCountry.error && (
+            {state.wineCountry.error && isFormSubmitted && (
               <p className="error">{state.wineCountry.error}</p>
             )}
           </div>
@@ -166,7 +166,7 @@ const AddWineForm = props => {
               value={state.wineRegion.value}
               onChange={handleOnChange}
             />
-            {state.wineRegion.error && (
+            {state.wineRegion.error && isFormSubmitted && (
               <p className="error">{state.wineRegion.error}</p>
             )}
           </div>
@@ -179,7 +179,7 @@ const AddWineForm = props => {
               value={state.wineGrape.value}
               onChange={handleOnChange}
             />
-            {state.wineGrape.error && (
+            {state.wineGrape.error && isFormSubmitted && (
               <p className="error">{state.wineGrape.error}</p>
             )}
           </div>
@@ -195,7 +195,7 @@ const AddWineForm = props => {
               value={state.sanderRating.value}
               onChange={handleOnChange}
             />
-            {state.sanderRating.error && (
+            {state.sanderRating.error && isFormSubmitted && (
               <p className="error">{state.sanderRating.error}</p>
             )}
           </div>
@@ -209,7 +209,7 @@ const AddWineForm = props => {
               value={state.ineRating.value}
               onChange={handleOnChange}
             />
-            {state.ineRating.error && (
+            {state.ineRating.error && isFormSubmitted && (
               <p className="error">{state.ineRating.error}</p>
             )}
           </div>
@@ -291,11 +291,7 @@ const AddWineForm = props => {
             />
           </div>
         </div>
-        <button
-          type="submit"
-          className="add-wine-button btn btn-primary"
-          disabled={disable}
-        >
+        <button type="submit" className="add-wine-button btn btn-primary">
           Registrer vin
         </button>
       </form>
