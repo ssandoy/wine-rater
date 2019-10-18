@@ -3,15 +3,6 @@ import { useState, useEffect, useCallback } from "react";
 function useForm(stateSchema, validationSchema = {}, callback) {
   const [state, setState] = useState(stateSchema);
   const [isFormSubmitted, setIsFormSubmit] = useState(false);
-  const [isInvalid, setIsInvalid] = useState(true);
-
-  // useEffect(() => {
-  //   setDisable(true);
-  // }, []);
-
-  // useEffect(() => {
-  //   setDisable(validateState());
-  // }, [state, isInvalid]);
 
   const validateState = useCallback(() => {
     const hasErrorInState = Object.keys(validationSchema).some(key => {
@@ -28,12 +19,11 @@ function useForm(stateSchema, validationSchema = {}, callback) {
     event => {
       validateState();
       setIsFormSubmit(false);
-      setIsInvalid(true);
+
       const name = event.target.name;
       const value = event.target.value;
 
       let error = checkError(validationSchema[name], value);
-      console.log("error", error);
       setState(prevState => ({
         ...prevState,
         [name]: { value, error }
@@ -63,7 +53,6 @@ function useForm(stateSchema, validationSchema = {}, callback) {
     event => {
       setIsFormSubmit(true);
       event.preventDefault();
-      console.log(validateState());
       if (!validateState()) {
         callback(state);
       }

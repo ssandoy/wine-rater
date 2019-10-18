@@ -36,14 +36,14 @@ module.exports = {
   sanderRating: {
     required: true,
     validator: {
-      regEx: /^([0-9]|10)$/,
+      regEx: /^([0-9]|10)(\.\d{1,2})$/,
       error: "Invalid Wine rating"
     }
   },
   ineRating: {
     required: true,
     validator: {
-      regEx: /^([0-9]|10)$/,
+      regEx: /^([0-9]|10)(\.\d{1,2})$/,
       error: "Invalid Wine rating"
     }
   }

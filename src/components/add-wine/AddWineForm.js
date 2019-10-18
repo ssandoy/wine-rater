@@ -188,7 +188,7 @@ const AddWineForm = props => {
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="sanderRating">Rating Sander</label>
             <input
-              pattern="[0-9]"
+              pattern="[0-9]*[.,]?[0-9]+"
               title="Rating"
               className="form-control"
               name="sanderRating"
@@ -202,7 +202,7 @@ const AddWineForm = props => {
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="ineRating">Rating Ine</label>
             <input
-              pattern="[0-9]"
+              pattern="[0-9]*[.,]?[0-9]+"
               title="Rating"
               className="form-control"
               name="ineRating"
