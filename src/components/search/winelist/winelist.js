@@ -5,7 +5,6 @@ import "./Winelist.scss";
 const WineListComponent = props => {
   // TODO: SORT BY VALUE FROM SELECT. SO MUCH STATE
   const onChange = p => p;
-
   return (
     <div>
       {props.items.map((item, index) => (
