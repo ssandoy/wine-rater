@@ -3,27 +3,32 @@ import { connect } from "react-redux";
 import { debouncedSearchProductsByName } from "../../api";
 import * as dispatchers from "../../dispatchers";
 import { withFirebase } from "../../firebase/index";
+import useForm from "./useForm";
+import validationSchema from "./validationSchema";
 import * as images from "../../images";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { SearchDropDown } from "./search-dropdown/search-dropdown";
 import "./styles.scss";
 import { checkPropTypes } from "prop-types";
-// TODO: VALIDATOR
 
 const AddWineForm = props => {
-  const [wineName, setWineName] = useState("");
-  const [wineType, setWineType] = useState("RED");
-  const [wineYear, setWineYear] = useState("2002");
-  const [wineRegion, setWineRegion] = useState("Bordeaux");
-  const [wineCountry, setWineCountry] = useState("Frankrike");
-  const [wineGrape, setWineGrape] = useState("Pinot Noir");
-  const [sanderRating, setSanderRating] = useState(6.0);
-  const [ineRating, setIneRating] = useState(5.0);
+
+  const [fitsTo, setFitsTo] = useState([]);
   const [choosenWine, setChoosenWine] = useState(false);
   const [winePicture, setWinePicture] = useState(null);
-  const [fitsTo, setFitsTo] = useState([]);
-  const [error, setError] = useState(null);
   const [wineSearchItems, setWineSearchItems] = useState([]);
+  
+  // TODO: CONSIDER SET INSTEAD WITH PUSH AND POP.
+  const stateSchema = {
+    wineName: { value: "", error: "" },
+    wineType: { value: "Red", error: "" },
+    wineYear: { value: "2002", error: "" },
+    wineCountry: { value: "Bordeaux", error: "" },
+    wineGrape: { value: "Frankrike", error: "" },
+    wineRegion: { value: "Pinot Noir", error: "" },
+    sanderRating: { value: "6", error: "" },
+    ineRating: { value: "5", error: "" }
+  };
 
   const handleCheckBoxChange = event => {
     let fitsToArray = [...fitsTo];
@@ -37,7 +42,7 @@ const AddWineForm = props => {
     }
     setFitsTo(fitsToArray);
   };
-
+  
   // TODO: HANDLE ONCLICK ON SEARCHDROPDOWN
   const handleNameSearchOnChange = async value => {
     setChoosenWine(false);
@@ -49,41 +54,40 @@ const AddWineForm = props => {
     console.log(wine);
     fillFormFromWine(wine);
     setChoosenWine(true);
-
-    // TODO: MOAR
   };
 
   const fillFormFromWine = wine => {
-    setWineName(wine.name);
-    // TODO: NULLCHEKS AND PRETTFY.
-    setWineType(wine.main_category.name);
-    setWineCountry(wine.main_country.name);
-    setWineRegion(wine.district);
-    setWinePicture(wine.images[0].url);
+   // TODO.
   };
 
-  const onSubmit = event => {
-    event.preventDefault();
+  function onSubmitForm(state) {
     props.addWineToWineList(
       {
-        wineName,
-        wineType,
-        wineYear,
-        wineCountry,
-        wineGrape,
-        wineRegion,
-        sanderRating,
-        ineRating,
-        fitsTo,
+        wineName: state.wineName.value,
+        wineType: state.wineType.value,
+        wineYear: state.wineYear.value,
+        wineCountry: state.wineCountry.value,
+        wineGrape: state.wineGrape.value,
+        wineRegion: state.wineRegion.value,
+        sanderRating: state.sanderRating.value,
+        ineRating: state.ineRating.value,
+        fitsTo
       },
       props.firebase
     );
-  };
+    console.log(JSON.stringify(state, null, 2));
+  }
+
+  const { state, handleOnChange, handleOnSubmit, isFormSubmitted } = useForm(
+    stateSchema,
+    validationSchema,
+    onSubmitForm
+  );
 
   return (
     // TODO: SEPARATE OUT SOME OF THIS AS SEPARATE COMPONENTS. TMI.
     <div>
-      <form onSubmit={onSubmit} className="wine-form">
+      <form onSubmit={handleOnSubmit} className="wine-form">
         <div className="row">
           <div className="form-group col-sm-12 col-md-8">
             <label htmlFor="wineName">Navn</label>
@@ -91,12 +95,12 @@ const AddWineForm = props => {
               type="text"
               name="wineName"
               className="form-control"
-              value={wineName}
-              onChange={e => {
-                setWineName(e.target.value);
-                handleNameSearchOnChange(e.target.value);
-              }}
+
+              value={state.wineName.value}
+              onChange={handleOnChange} //  onChange={e => setWineName(e.target.value); handleNameSearchOnChange(e.target.value);}
             />
+            {state.wineName.error && isFormSubmitted && (
+              <p className="error">{state.wineName.error}</p>
             {wineSearchItems && wineSearchItems.length > 0 && !choosenWine && (
               <SearchDropDown
                 searchItems={wineSearchItems}
@@ -104,14 +108,13 @@ const AddWineForm = props => {
               />
             )}
           </div>
+
           <div className="form-group col-sm-10 col-md-4">
             <label htmlFor="wineType">Type</label>
             <select
               className="custom-select"
               name="wineType"
-              onChange={e => {
-                setWineType(e.target.value);
-              }}
+              onChange={handleOnChange}
             >
               <option value="RED">Rød</option>
               <option value="WHITE">Hvit</option>
@@ -128,23 +131,26 @@ const AddWineForm = props => {
               title="Year"
               className="form-control"
               name="wineYear"
-              value={wineYear}
-              onChange={e => {
-                setWineYear(e.target.value);
-              }}
+              value={state.wineYear.value}
+              onChange={handleOnChange}
             />
+            {state.wineYear.error && isFormSubmitted && (
+              <p className="error">{state.wineYear.error}</p>
+            )}
           </div>
+
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="wineCountry">Land</label>
             <input
               title="Wine country"
               className="form-control"
               name="wineCountry"
-              value={wineCountry}
-              onChange={e => {
-                setWineCountry(e.target.value);
-              }}
+              value={state.wineCountry.value}
+              onChange={handleOnChange}
             />
+            {state.wineCountry.error && isFormSubmitted && (
+              <p className="error">{state.wineCountry.error}</p>
+            )}
           </div>
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="wineRegion">Region</label>
@@ -152,11 +158,12 @@ const AddWineForm = props => {
               title="Wine region"
               className="form-control"
               name="wineRegion"
-              value={wineRegion}
-              onChange={e => {
-                setWineRegion(e.target.value);
-              }}
+              value={state.wineRegion.value}
+              onChange={handleOnChange}
             />
+            {state.wineRegion.error && isFormSubmitted && (
+              <p className="error">{state.wineRegion.error}</p>
+            )}
           </div>
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="wineGrape">Drue</label>
@@ -164,39 +171,42 @@ const AddWineForm = props => {
               title="Wine grape"
               className="form-control"
               name="wineGrape"
-              value={wineGrape}
-              onChange={e => {
-                setWineGrape(e.target.value);
-              }}
+              value={state.wineGrape.value}
+              onChange={handleOnChange}
             />
+            {state.wineGrape.error && isFormSubmitted && (
+              <p className="error">{state.wineGrape.error}</p>
+            )}
           </div>
         </div>
         <div className="row">
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="sanderRating">Rating Sander</label>
             <input
-              pattern="[0-9]"
+              pattern="[0-9]*[.,]?[0-9]+"
               title="Rating"
               className="form-control"
               name="sanderRating"
-              value={sanderRating}
-              onChange={e => {
-                setSanderRating(e.target.value);
-              }}
+              value={state.sanderRating.value}
+              onChange={handleOnChange}
             />
+            {state.sanderRating.error && isFormSubmitted && (
+              <p className="error">{state.sanderRating.error}</p>
+            )}
           </div>
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="ineRating">Rating Ine</label>
             <input
-              pattern="[0-9]"
+              pattern="[0-9]*[.,]?[0-9]+"
               title="Rating"
               className="form-control"
               name="ineRating"
-              value={ineRating}
-              onChange={e => {
-                setIneRating(e.target.value);
-              }}
+              value={state.ineRating.value}
+              onChange={handleOnChange}
             />
+            {state.ineRating.error && isFormSubmitted && (
+              <p className="error">{state.ineRating.error}</p>
+            )}
           </div>
         </div>
         <div className="form-group">
@@ -286,25 +296,23 @@ const AddWineForm = props => {
         <button type="submit" className="add-wine-button btn btn-primary">
           Registrer vin
         </button>
-        {error && <p>{error.message}</p>}
       </form>
     </div>
   );
 };
 
 const mapStateToProps = state => ({
-  wineItems: state.wineItems,
+  wineItems: state.wineItems
 });
 
 export default withFirebase(
   connect(
     mapStateToProps,
     {
-      addWineToWineList: dispatchers.addWineToWineList,
+      addWineToWineList: dispatchers.addWineToWineList
     }
   )(AddWineForm)
 );
 
-// TODO: ADD VALIDATION FOR NUMBERS ETC.
 // TODO: UPDATE WINEITEM-DATA IN PARENT
 // TODO: ADD IMAGEUPLOADER.
