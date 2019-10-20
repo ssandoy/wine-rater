@@ -1,7 +1,5 @@
 import AwesomeDebouncePromise from "awesome-debounce-promise";
 
-//https://app.vinmonopolet.no/vmpws/v2/vmp/products/search?currentPage=35&fields=FULL&pageSize=50&query=:relevance:mainCategory:rødvin
-
 const vinmonopoletBaseUrl =
   "https://app.vinmonopolet.no/vmpws/v2/vmp/products/search";
 
@@ -25,3 +23,6 @@ export const debouncedSearchProductsByName = AwesomeDebouncePromise(
   searchProductsByName,
   500
 );
+
+// TODO: GET FACETS. Convert to Raastoff,MainCountry,  facets.code.raastoff.map...
+//  https://app.vinmonopolet.no/vmp/search/facets?q

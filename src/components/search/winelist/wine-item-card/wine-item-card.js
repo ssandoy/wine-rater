@@ -3,15 +3,13 @@ import { Link } from "react-router-dom";
 import * as images from "../../../../images";
 import no_icon_red from "../../../../images/no_icon_red.png";
 import "./wine-item-card.scss";
-// TODO: ADD LINK TO CARD OR NAME
-// TODO: MIXINS FOR MOBILE..
 
 const wineMap = {
   RED: "RØD",
   WHITE: "HVIT",
   ROSÈ: "ROSÈ",
 };
-// TODO: FUNCTION
+
 const WineItemCard = props => {
   console.log(props);
   const image = props.winePicture ? props.winePicture : no_icon_red;

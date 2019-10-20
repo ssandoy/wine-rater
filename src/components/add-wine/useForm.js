@@ -50,7 +50,6 @@ function useForm(stateSchema, validationSchema = {}, callback) {
     event => {
       setIsFormSubmit(true);
       event.preventDefault();
-      debugger;
       if (!validateState()) {
         callback(state);
       }
