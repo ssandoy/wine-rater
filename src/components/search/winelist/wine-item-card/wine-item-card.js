@@ -13,7 +13,8 @@ const wineMap = {
 };
 // TODO: FUNCTION
 const WineItemCard = props => {
-  const image = props.image_url ? props.image_url : no_icon_red;
+  console.log(props);
+  const image = props.winePicture ? props.winePicture : no_icon_red;
   return (
     <div className="wine-item">
       <div className="card bg-light">

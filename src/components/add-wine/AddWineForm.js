@@ -6,19 +6,19 @@ import { withFirebase } from "../../firebase/index";
 import useForm from "./useForm";
 import validationSchema from "./validationSchema";
 import * as images from "../../images";
+import { imageKeys } from "../../images";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
+import { FaImage } from "react-icons/fa";
 import { SearchDropDown } from "./search-dropdown/search-dropdown";
+import { convertVinmonopoletPictureSize } from "../../utils/string-utils";
 import "./styles.scss";
-import { checkPropTypes } from "prop-types";
 
 const AddWineForm = props => {
-
   const [fitsTo, setFitsTo] = useState([]);
   const [choosenWine, setChoosenWine] = useState(false);
   const [winePicture, setWinePicture] = useState(null);
   const [wineSearchItems, setWineSearchItems] = useState([]);
-  
-  // TODO: CONSIDER SET INSTEAD WITH PUSH AND POP.
+
   const stateSchema = {
     wineName: { value: "", error: "" },
     wineType: { value: "Red", error: "" },
@@ -27,7 +27,7 @@ const AddWineForm = props => {
     wineGrape: { value: "Frankrike", error: "" },
     wineRegion: { value: "Pinot Noir", error: "" },
     sanderRating: { value: "6", error: "" },
-    ineRating: { value: "5", error: "" }
+    ineRating: { value: "5", error: "" },
   };
 
   const handleCheckBoxChange = event => {
@@ -42,7 +42,18 @@ const AddWineForm = props => {
     }
     setFitsTo(fitsToArray);
   };
-  
+
+  const onImageUploadChange = event => {
+    let reader = new FileReader();
+    let file = event.target.files[0];
+    reader.onloadend = () => {
+      setWinePicture(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+    // TODO: HOW TO STORE? AS URL? AS IMG?
+  };
+
   // TODO: HANDLE ONCLICK ON SEARCHDROPDOWN
   const handleNameSearchOnChange = async value => {
     setChoosenWine(false);
@@ -50,17 +61,18 @@ const AddWineForm = props => {
     setWineSearchItems(wineSearchResult.products);
   };
 
-  const handlSelectedWine = wine => {
+  const handlSelectedWine = (wine, state) => {
     console.log(wine);
-    fillFormFromWine(wine);
+    fillFormFromWine(wine, state);
     setChoosenWine(true);
   };
 
-  const fillFormFromWine = wine => {
-   // TODO.
+  const fillFormFromWine = (wine, state) => {
+    // TODO UPDATE SOMEHOW.
+    setWinePicture(convertVinmonopoletPictureSize(wine.images[1].url, 800));
   };
 
-  function onSubmitForm(state) {
+  const onSubmitForm = state => {
     props.addWineToWineList(
       {
         wineName: state.wineName.value,
@@ -71,12 +83,13 @@ const AddWineForm = props => {
         wineRegion: state.wineRegion.value,
         sanderRating: state.sanderRating.value,
         ineRating: state.ineRating.value,
-        fitsTo
+        fitsTo,
+        winePicture,
       },
       props.firebase
     );
     console.log(JSON.stringify(state, null, 2));
-  }
+  };
 
   const { state, handleOnChange, handleOnSubmit, isFormSubmitted } = useForm(
     stateSchema,
@@ -93,18 +106,22 @@ const AddWineForm = props => {
             <label htmlFor="wineName">Navn</label>
             <input
               type="text"
+              autoComplete="off"
               name="wineName"
               className="form-control"
-
               value={state.wineName.value}
-              onChange={handleOnChange} //  onChange={e => setWineName(e.target.value); handleNameSearchOnChange(e.target.value);}
+              onChange={e => {
+                handleOnChange(e);
+                handleNameSearchOnChange(e.target.value);
+              }}
             />
             {state.wineName.error && isFormSubmitted && (
               <p className="error">{state.wineName.error}</p>
+            )}
             {wineSearchItems && wineSearchItems.length > 0 && !choosenWine && (
               <SearchDropDown
                 searchItems={wineSearchItems}
-                onClick={handlSelectedWine}
+                onClick={wine => handlSelectedWine(wine, state)}
               />
             )}
           </div>
@@ -127,7 +144,6 @@ const AddWineForm = props => {
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="wineYear">År</label>
             <input
-              pattern="[0-9]{4}"
               title="Year"
               className="form-control"
               name="wineYear"
@@ -183,7 +199,6 @@ const AddWineForm = props => {
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="sanderRating">Rating Sander</label>
             <input
-              pattern="[0-9]*[.,]?[0-9]+"
               title="Rating"
               className="form-control"
               name="sanderRating"
@@ -197,7 +212,6 @@ const AddWineForm = props => {
           <div className="form-group col-sm-10 col-md-6">
             <label htmlFor="ineRating">Rating Ine</label>
             <input
-              pattern="[0-9]*[.,]?[0-9]+"
               title="Rating"
               className="form-control"
               name="ineRating"
@@ -212,85 +226,32 @@ const AddWineForm = props => {
         <div className="form-group">
           <label>Passer til</label>
           <div className="row fits-to-row">
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.chicken}
-              htmlFor="chicken"
-              value="chicken"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.seafood}
-              htmlFor="seafood"
-              value="seafood"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.pasta}
-              htmlFor="pasta"
-              value="pasta"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.pizza}
-              htmlFor="pizza"
-              value="pizza"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.apetirif}
-              htmlFor="apetirif"
-              value="apetirif"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.deer}
-              htmlFor="deer"
-              value="deer"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.bull}
-              htmlFor="bull"
-              value="bull"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.pig}
-              htmlFor="pig"
-              value="pig"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
-            <ImageCheckbox
-              columnProps="col-sm-4 col-md-1"
-              image={images.cheese}
-              htmlFor="cheese"
-              value="cheese"
-              name="fitsTo"
-              onChange={handleCheckBoxChange}
-            />
+            {imageKeys.map(imageKey => (
+              <ImageCheckbox
+                columnProps="col-4 col-md-1"
+                image={images[imageKey]}
+                htmlFor={imageKey}
+                value={imageKey}
+                name="fitsTo"
+                onChange={handleCheckBoxChange}
+              />
+            ))}
           </div>
         </div>
         <div className="row">
-          <div className="form-group col-sm-10 col-md-6">
-            <label htmlFor="sanderRating">Bilde</label>
+          <div className="form-group col-12">
+            <label htmlFor="winePicture">Bilde</label>
             <br />
-            <img src={winePicture} className="wine-picture" />
+            {winePicture ? (
+              <img src={winePicture} className="wine-picture" />
+            ) : (
+              <div className="image-button">
+                <label htmlFor="single">
+                  <FaImage color="#6d84b4" size={60} />
+                </label>
+                <input type="file" id="single" onChange={onImageUploadChange} />
+              </div>
+            )}
           </div>
         </div>
         <button type="submit" className="add-wine-button btn btn-primary">
@@ -302,14 +263,14 @@ const AddWineForm = props => {
 };
 
 const mapStateToProps = state => ({
-  wineItems: state.wineItems
+  wineItems: state.wineItems,
 });
 
 export default withFirebase(
   connect(
     mapStateToProps,
     {
-      addWineToWineList: dispatchers.addWineToWineList
+      addWineToWineList: dispatchers.addWineToWineList,
     }
   )(AddWineForm)
 );

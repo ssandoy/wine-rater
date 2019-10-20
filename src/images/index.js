@@ -9,3 +9,15 @@ export { default as pasta } from "./pasta.png";
 export { default as pizza } from "./pizza.png";
 export { default as pig } from "./pig.png";
 export { default as bull } from "./bull.png";
+
+export const imageKeys = [
+  "chicken",
+  "seafood",
+  "pasta",
+  "pizza",
+  "chicken",
+  "apetirif",
+  "bull",
+  "deer",
+  "pig",
+];

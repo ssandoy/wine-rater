@@ -15,7 +15,11 @@
 }
 
 .wine-picture {
-  width: 70px;
+  width: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-// TODO: FIX ALIGNMENT OF FITS-TO-ROW.
+
+// TODO: ADD MIXIN TO MD SO THAT WINE-PICTURE ISNT CENTERED ON BIG SCREENS.

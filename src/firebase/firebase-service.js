@@ -21,12 +21,10 @@ class FirebaseService {
     this.snapshotToArray = this.snapshotToArray.bind(this);
   }
 
-  // TODO ASYNC AWAIT?
   async storeWineToFirebase(wineItem) {
-    // TODO: GET LAST ID
+    debugger;
     try {
       let response = await this.database.ref("wines/").push(wineItem);
-      console.log(response.key);
       return response.key;
     } catch {
       return -1;

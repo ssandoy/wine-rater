@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { clearWines, setWines } from "../../../actions/action";
 import { withFirebase } from "../../../firebase";
 import * as dispatchers from "../../../dispatchers";
 
 const WineSearchFormComponent = props => {
-  // TODO: SET UP DISPATCHER INSTEAD OF IMPORTING STORE.
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
   const [wineFromYear, setWineFromYear] = useState("");

@@ -1,50 +1,38 @@
 module.exports = {
   wineName: {
-    required: true
+    required: true,
   },
   wineType: {
-    required: true
+    required: true,
   },
   wineYear: {
     required: true,
     validator: {
       regEx: /^[0-9]{4}$/,
-      error: "Invalid Wine year"
-    }
+      error: "Årgangen må være et gyldig år.",
+    },
   },
   wineCountry: {
     required: true,
-    validator: {
-      regEx: /^[a-zA-Z\s]+$/,
-      error: "Invalid Wine country"
-    }
   },
   wineGrape: {
     required: true,
-    validator: {
-      regEx: /^[a-zA-Z\s]+$/,
-      error: "Invalid Wine grape"
-    }
   },
   wineRegion: {
     required: true,
-    validator: {
-      regEx: /^[a-zA-Z\s]+$/,
-      error: "Invalid Wine region"
-    }
   },
   sanderRating: {
     required: true,
     validator: {
-      regEx: /^([0-9]|10)(\.\d{1,2})$/,
-      error: "Invalid Wine rating"
-    }
+      regEx: /^[0-9]+([.][0-9]+)?$/,
+      error: "Ratingen må være et tall mellom 0-10.",
+    },
   },
   ineRating: {
     required: true,
     validator: {
-      regEx: /^([0-9]|10)(\.\d{1,2})$/,
-      error: "Invalid Wine rating"
-    }
-  }
+      regEx: /^[0-9]+([.][0-9]+)?$/,
+      error: "Ratingen må være et tall mellom 0-10.",
+    },
+  },
 };
