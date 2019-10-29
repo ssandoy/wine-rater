@@ -23,6 +23,3 @@ export const debouncedSearchProductsByName = AwesomeDebouncePromise(
   searchProductsByName,
   500
 );
-
-// TODO: GET FACETS. Convert to Raastoff,MainCountry,  facets.code.raastoff.map...
-//  https://app.vinmonopolet.no/vmp/search/facets?q

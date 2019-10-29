@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { withFirebase } from "../../../firebase";
 import * as dispatchers from "../../../dispatchers";
+import { getGrapes } from "../../../api/server";
 
 const WineSearchFormComponent = props => {
   const [wineName, setWineName] = useState("");

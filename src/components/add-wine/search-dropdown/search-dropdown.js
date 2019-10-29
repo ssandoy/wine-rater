@@ -2,19 +2,24 @@ import React from "react";
 import "./search-dropdown.scss";
 import Select from "react-select";
 
-export const SearchDropDown = ({ searchItems, onClick }) => {
+const colourStyles = {
+  control: styles => ({ ...styles, backgroundColor: "#e8eeef" }),
+};
+
+export const SearchDropDown = ({ searchItems, placeholder, onClick }) => {
   return (
-    <div class="dropdown_container">
+    <React.Fragment>
       <Select
-        className="search-dropdown__select"
+        placeholder={placeholder}
         options={searchItems.map(item => ({
-          label: item.name,
-          value: item.name,
+          label: item,
+          value: item,
         }))}
         onChange={opt =>
           onClick(searchItems.find(item => item.name === opt.value))
         }
+        styles={colourStyles}
       ></Select>
-    </div>
+    </React.Fragment>
   );
 };

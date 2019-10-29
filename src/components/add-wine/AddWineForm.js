@@ -6,6 +6,7 @@ import { withFirebase } from "../../firebase/index";
 import useForm from "./useForm";
 import validationSchema from "./validationSchema";
 import * as images from "../../images";
+import { Raastoff } from "../../data/raastoff";
 import { imageKeys } from "../../images";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { FaImage } from "react-icons/fa";
@@ -18,14 +19,17 @@ const AddWineForm = props => {
   const [choosenWine, setChoosenWine] = useState(false);
   const [winePicture, setWinePicture] = useState(null);
   const [wineSearchItems, setWineSearchItems] = useState([]);
+  const [wineGrape, setWineGrape] = useState(null);
+
+  const wineGrapeItems = Raastoff.values.map(value => value.code);
 
   const stateSchema = {
     wineName: { value: "", error: "" },
     wineType: { value: "Red", error: "" },
     wineYear: { value: "2002", error: "" },
-    wineCountry: { value: "Bordeaux", error: "" },
-    wineGrape: { value: "Frankrike", error: "" },
-    wineRegion: { value: "Pinot Noir", error: "" },
+    wineCountry: { value: "Frankrike", error: "" },
+    wineGrape: { value: "", error: "" },
+    wineRegion: { value: "Bordeaux", error: "" },
     sanderRating: { value: "6", error: "" },
     ineRating: { value: "5", error: "" },
   };
@@ -58,7 +62,8 @@ const AddWineForm = props => {
   const handleNameSearchOnChange = async value => {
     setChoosenWine(false);
     const wineSearchResult = await debouncedSearchProductsByName(value);
-    setWineSearchItems(wineSearchResult.products);
+    //FIXME. MAP TO NAME BROKE SEARCHDROPDOWN SINCE WE CANT ACCESS images etc ANYMORE.
+    setWineSearchItems(wineSearchResult.products.map(product => product.name));
   };
 
   const handlSelectedWine = (wine, state) => {
@@ -120,6 +125,7 @@ const AddWineForm = props => {
             )}
             {wineSearchItems && wineSearchItems.length > 0 && !choosenWine && (
               <SearchDropDown
+                placeholder="Velg vin"
                 searchItems={wineSearchItems}
                 onClick={wine => handlSelectedWine(wine, state)}
               />
@@ -182,16 +188,16 @@ const AddWineForm = props => {
             )}
           </div>
           <div className="form-group col-sm-10 col-md-6">
-            <label htmlFor="wineGrape">Drue</label>
-            <input
-              title="Wine grape"
-              className="form-control"
-              name="wineGrape"
-              value={state.wineGrape.value}
-              onChange={handleOnChange}
-            />
-            {state.wineGrape.error && isFormSubmitted && (
-              <p className="error">{state.wineGrape.error}</p>
+            <label>Drue</label>
+            {
+              <SearchDropDown
+                placeholder="Velg vindrue"
+                searchItems={wineGrapeItems}
+                onClick={grape => setWineGrape(grape)}
+              />
+            }
+            {!wineGrape && isFormSubmitted && (
+              <p className="error">Du må velge vindrue</p>
             )}
           </div>
         </div>
