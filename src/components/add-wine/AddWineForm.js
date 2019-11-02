@@ -20,7 +20,7 @@ const AddWineForm = props => {
   const [choosenWine, setChoosenWine] = useState(false);
   const [winePicture, setWinePicture] = useState(null);
   const [wineSearchItems, setWineSearchItems] = useState([]);
-  const [wineGrapes, setWineGrapes] = useState(null);
+  const [wineGrapes, setWineGrapes] = useState([]);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
