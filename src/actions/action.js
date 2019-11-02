@@ -1,12 +1,4 @@
-//  Types of action. TODO: SEPARATE OUT.
-const TYPES = {
-  CREATE_WINE: "CREATE_WINE",
-  EDIT_WINE: "EDIT_WINE",
-  APPEND_WINE: "APPEND_WINE",
-  DELETE_WINE: "DELETE_WINE",
-  SET_WINES: "SET_WINES",
-  CLEAR_WINES: "CLEAR_WINES",
-};
+import { TYPES } from "./action-types";
 
 // actions
 export function createWine(wine) {
@@ -32,6 +24,13 @@ export function setWines(wineItems) {
   };
 }
 
+export function setAllWines(wineItems) {
+  return {
+    type: TYPES.SET_ALL_WINES,
+    data: wineItems,
+  };
+}
+
 export function clearWines() {
   return {
     type: TYPES.CLEAR_WINES,
@@ -40,6 +39,7 @@ export function clearWines() {
 
 export default {
   createWine,
+  setAllWines,
   setWines,
   clearWines,
   appendWine,

@@ -13,13 +13,14 @@ import { FaImage } from "react-icons/fa";
 import { SearchDropDown } from "./search-dropdown/search-dropdown";
 import { convertVinmonopoletPictureSize } from "../../utils/string-utils";
 import "./styles.scss";
+import PropTypes from "prop-types";
 
 const AddWineForm = props => {
   const [fitsTo, setFitsTo] = useState([]);
   const [choosenWine, setChoosenWine] = useState(false);
   const [winePicture, setWinePicture] = useState(null);
   const [wineSearchItems, setWineSearchItems] = useState([]);
-  const [wineGrape, setWineGrape] = useState(null);
+  const [wineGrapes, setWineGrapes] = useState(null);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
@@ -28,12 +29,13 @@ const AddWineForm = props => {
     wineType: { value: "Red", error: "" },
     wineYear: { value: "2002", error: "" },
     wineCountry: { value: "Frankrike", error: "" },
-    wineGrape: { value: "", error: "" },
+    wineGrapes: { value: [], error: "" },
     wineRegion: { value: "Bordeaux", error: "" },
     sanderRating: { value: "6", error: "" },
     ineRating: { value: "5", error: "" },
   };
 
+  // TODO REPLACE WITH ARRAY-utils.
   const handleCheckBoxChange = event => {
     let fitsToArray = [...fitsTo];
     if (fitsToArray.includes(event.target.value)) {
@@ -67,12 +69,11 @@ const AddWineForm = props => {
   };
 
   const handlSelectedWine = (wine, state) => {
-    console.log(wine);
     fillFormFromWine(wine, state);
     setChoosenWine(true);
   };
 
-  const fillFormFromWine = (wine, state) => {
+  const fillFormFromWine = (wine, state_) => {
     // TODO UPDATE SOMEHOW.
     setWinePicture(convertVinmonopoletPictureSize(wine.images[1].url, 800));
   };
@@ -84,7 +85,7 @@ const AddWineForm = props => {
         wineType: state.wineType.value,
         wineYear: state.wineYear.value,
         wineCountry: state.wineCountry.value,
-        wineGrape: state.wineGrape.value,
+        wineGrapes: state.wineGrapes.value,
         wineRegion: state.wineRegion.value,
         sanderRating: state.sanderRating.value,
         ineRating: state.ineRating.value,
@@ -93,7 +94,6 @@ const AddWineForm = props => {
       },
       props.firebase
     );
-    console.log(JSON.stringify(state, null, 2));
   };
 
   const { state, handleOnChange, handleOnSubmit, isFormSubmitted } = useForm(
@@ -189,14 +189,12 @@ const AddWineForm = props => {
           </div>
           <div className="form-group col-sm-10 col-md-6">
             <label>Drue</label>
-            {
               <SearchDropDown
                 placeholder="Velg vindrue"
                 searchItems={wineGrapeItems}
-                onClick={grape => setWineGrape(grape)}
+                onClick={grapeArray => setWineGrapes(grapeArray)}
               />
-            }
-            {!wineGrape && isFormSubmitted && (
+            {!wineGrapes.length && isFormSubmitted && (
               <p className="error">Du må velge vindrue</p>
             )}
           </div>
@@ -266,6 +264,11 @@ const AddWineForm = props => {
       </form>
     </div>
   );
+};
+
+AddWineForm.propTypes = {
+  addWineToWineList: PropTypes.func,
+  firebase: PropTypes.isRequired,
 };
 
 const mapStateToProps = state => ({

@@ -14,10 +14,9 @@
   cursor: pointer;
 }
 
-// TODO: SET NICE COLOR. 
 /* CHECKED STYLES */
 [type=checkbox]:checked + img {
-  background-color: $base-background-color;
+  background-color: #efd08c;
   border-radius: 10%;
 }
 

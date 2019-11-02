@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   fetching: false,
   fetched: false,
   wineItems: [],
+  allWines: [],
   error: null,
 };
 
@@ -20,7 +21,7 @@ export default function wineReducer(state = INITIAL_STATE, action) {
       };
       return {
         ...state,
-        wineItems: state.wineItems.concat(newItem),
+        allWines: state.allWines.concat(newItem),
       };
     }
     case ACTIONS.TYPES.APPEND_WINE: {
@@ -36,6 +37,13 @@ export default function wineReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         wineItems: wineItems,
+      };
+    }
+    case ACTIONS.TYPES.SET_ALL_WINES: {
+      const wineItems = action.data;
+      return {
+        ...state,
+        allWines: wineItems,
       };
     }
     case ACTIONS.TYPES.CLEAR_WINES: {
