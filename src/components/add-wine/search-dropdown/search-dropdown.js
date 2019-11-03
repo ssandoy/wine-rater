@@ -16,7 +16,7 @@ const colourStyles = {
 	}
 };
 
-export const SearchDropDown = ({ searchItems, placeholder, onClick }) => {
+export const SearchDropDown = ({ searchItems, selectedItems,placeholder, onClick }) => {
 	return (
 			<React.Fragment>
 				<Select
@@ -25,9 +25,13 @@ export const SearchDropDown = ({ searchItems, placeholder, onClick }) => {
 							label: item,
 							value: item,
 						}))}
-						onChange={opt =>
-								onClick(opt.map(opt => opt.value))
-						}
+						onChange={opt => {
+								onClick(opt ? opt.map(opt => opt.value) : [])
+						}}
+						value={selectedItems && selectedItems.map(item => ({
+							label: item,
+							value: item,
+						}))}
 						styles={colourStyles}
 						isMulti
 				/>

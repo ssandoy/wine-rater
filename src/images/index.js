@@ -15,7 +15,7 @@ export const imageKeys = [
   "seafood",
   "pasta",
   "pizza",
-  "chicken",
+  "cheese",
   "apetirif",
   "bull",
   "deer",

@@ -4,6 +4,7 @@ import WineSearchComponent from "../search/winesearch";
 import "./mainpage.scss";
 import * as dispatchers from "../../dispatchers";
 import { withFirebase } from "../../firebase";
+import Wine from "../../models/wine";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -14,7 +15,7 @@ const MainPageComponent = props => {
 			.ref("wines")
 			.once("value")
 			.then(wineItemsSnapshot => {
-				props.setAllWines(props.firebase.snapshotToArray(wineItemsSnapshot));
+				props.setAllWines(props.firebase.snapshotToArray(wineItemsSnapshot).map(item => new Wine({ wineJson: item })));
 			});
 	}, []);
 
@@ -31,7 +32,7 @@ const MainPageComponent = props => {
 MainPageComponent.propTypes = {
 	allWines: PropTypes.array,
 	setAllWines: PropTypes.func,
-	firebase: PropTypes.isRequired,
+	firebase: PropTypes.object,
 };
 
 const mapStateToProps = state => ({

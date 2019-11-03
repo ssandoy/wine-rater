@@ -22,11 +22,10 @@ class FirebaseService {
   }
 
   async storeWineToFirebase(wineItem) {
-    debugger;
     try {
       let response = await this.database.ref("wines/").push(wineItem);
       return response.key;
-    } catch {
+    } catch (error) {
       return -1;
     }
   }
@@ -42,8 +41,6 @@ class FirebaseService {
     });
     return wine;
   }
-
-  // TODO: APPLY?
 
   snapshotToArray(snapshot) {
     var returnArr = [];

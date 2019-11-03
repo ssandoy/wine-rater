@@ -3,24 +3,12 @@ import WineItemCard from "./wine-item-card/wine-item-card";
 import "./Winelist.scss";
 
 const WineListComponent = props => {
-  // TODO: SORT BY VALUE FROM SELECT. SO MUCH STATE
-  const onChange = p => p;
   return (
     <div>
-      {props.items.map((item, index) => (
+      {props.items.map(wine => (
         <WineItemCard
-          key={item.key}
-          id={item.key}
-          name={item.wineName}
-          type={item.wineType}
-          year={item.wineYear}
-          winePicture={item.winePicture}
-          ineRating={item.ineRating}
-          sanderRating={item.sanderRating}
-          wineGrape={item.wineGrape}
-          wineRegion={item.wineRegion}
-          wineCountry={item.wineCountry}
-          fitsTo={item.fitsTo}
+          key={wine.key}
+          wine={wine}
         />
       ))}
     </div>

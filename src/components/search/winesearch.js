@@ -15,8 +15,9 @@ const WineSearchComponent = props => {
   );
 };
 
+// TODO: PRINT MESSAGE WHEN NO HITS.
 WineSearchComponent.propTypes = {
-  wineItems: [PropTypes.array, PropTypes.required]
+  wineItems: PropTypes.array
 }
 
 function mapStateToProps(state) {

@@ -3,3 +3,11 @@
 .searchWineForm {
   background-color: $form-background-color;
 }
+
+ .wine-search-buttons {
+   display: flex;
+ }
+
+ .wine-search-button {
+   margin: 0 10px 0 0;
+ }

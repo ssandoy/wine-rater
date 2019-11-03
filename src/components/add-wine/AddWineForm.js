@@ -103,7 +103,6 @@ const AddWineForm = props => {
   );
 
   return (
-    // TODO: SEPARATE OUT SOME OF THIS AS SEPARATE COMPONENTS. TMI.
     <div>
       <form onSubmit={handleOnSubmit} className="wine-form">
         <div className="row">
@@ -232,6 +231,7 @@ const AddWineForm = props => {
           <div className="row fits-to-row">
             {imageKeys.map(imageKey => (
               <ImageCheckbox
+                key={imageKey}
                 columnProps="col-4 col-md-1"
                 image={images[imageKey]}
                 htmlFor={imageKey}
@@ -268,7 +268,7 @@ const AddWineForm = props => {
 
 AddWineForm.propTypes = {
   addWineToWineList: PropTypes.func,
-  firebase: PropTypes.isRequired,
+  firebase: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -285,4 +285,3 @@ export default withFirebase(
 );
 
 // TODO: UPDATE WINEITEM-DATA IN PARENT
-// TODO: ADD IMAGEUPLOADER.
