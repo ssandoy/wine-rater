@@ -19,5 +19,17 @@ export const imageKeys = [
   "apetirif",
   "bull",
   "deer",
-  "pig",
+  "pig"
 ];
+
+export const imageKeyValues = {
+  chicken: "Kylling",
+  seafood: "Sjømat",
+  pasta: "Pasta",
+  pizza: "Pizza",
+  cheese: "Ost",
+  apetirif: "Apetirif",
+  bull: "Biff",
+  deer: "Vilt",
+  pig: "Gris"
+};
