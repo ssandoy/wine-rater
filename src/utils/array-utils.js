@@ -21,11 +21,6 @@ export const isObjectInArray = (object, array) => {
       );
     }
   } else {
-    return object;
+    return true;
   }
-};
-
-// TODO consider to move to object-utils..
-export const getKeyByValue = (object, value) => {
-  return Object.keys(object).find(key => object[key] === value);
 };
