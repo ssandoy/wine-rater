@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import "./wineform.scss";
-import * as dispatchers from "../../../dispatchers";
-import { SearchDropDown } from "../../../components/add-wine/search-dropdown/search-dropdown";
-import { Raastoff } from "../../../data/raastoff";
-import { imageKeys } from "../../../images";
-import { isObjectInArray } from "../../..//utils/array-utils";
-// FIXME: RELATIVE IMPORTS INSTEAD.
+import * as dispatchers from "dispatchers";
+import { SearchDropDown } from "components/search-dropdown/search-dropdown";
+import { Raastoff } from "data/raastoff";
+import { imageKeys } from "images";
+import { isObjectInArray } from "utils/array-utils";
 
-// TODO CHANGE TO TYPESCRIPT.
 const WineSearchFormComponent = props => {
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");

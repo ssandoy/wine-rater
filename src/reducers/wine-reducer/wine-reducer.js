@@ -1,4 +1,4 @@
-import ACTIONS from "../../actions/action";
+import ACTIONS from "actions/action";
 
 // TODO: LOAD WHEN FETCH ETC.
 const INITIAL_STATE = {
@@ -6,7 +6,7 @@ const INITIAL_STATE = {
   fetched: false,
   wineItems: [],
   allWines: [],
-  error: null,
+  error: null
 };
 
 export default function wineReducer(state = INITIAL_STATE, action) {
@@ -17,18 +17,18 @@ export default function wineReducer(state = INITIAL_STATE, action) {
 
       const newItem = {
         id: state.wineItems.length + 1,
-        description: item,
+        description: item
       };
       return {
         ...state,
-        allWines: state.allWines.concat(newItem),
+        allWines: state.allWines.concat(newItem)
       };
     }
     case ACTIONS.TYPES.APPEND_WINE: {
       const wineItem = action.data;
       return {
         ...state,
-        wineItems: state.wineItems.concat(wineItem),
+        wineItems: state.wineItems.concat(wineItem)
       };
       // TODO: SET FETCHING TO FALSE ETC.
     }
@@ -36,20 +36,20 @@ export default function wineReducer(state = INITIAL_STATE, action) {
       const wineItems = action.data;
       return {
         ...state,
-        wineItems: wineItems,
+        wineItems: wineItems
       };
     }
     case ACTIONS.TYPES.SET_ALL_WINES: {
       const wineItems = action.data;
       return {
         ...state,
-        allWines: wineItems,
+        allWines: wineItems
       };
     }
     case ACTIONS.TYPES.CLEAR_WINES: {
       return {
         ...state,
-        wineItems: [],
+        wineItems: []
       };
     }
     default:

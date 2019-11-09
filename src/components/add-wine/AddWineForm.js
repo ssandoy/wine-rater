@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { debouncedSearchProductsByName } from "../../api";
-import * as dispatchers from "../../dispatchers";
-import { withFirebase } from "../../firebase/index";
+import * as dispatchers from "dispatchers";
+import { withFirebase } from "firebase/index";
 import useForm from "./useForm";
 import validationSchema from "./validationSchema";
-import * as images from "../../images";
-import { Raastoff } from "../../data/raastoff";
-import { imageKeys } from "../../images";
+import * as images from "images";
+import { Raastoff } from "data/raastoff";
+import { imageKeys } from "images";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { FaImage } from "react-icons/fa";
-import { SearchDropDown } from "./search-dropdown/search-dropdown";
-import { convertVinmonopoletPictureSize } from "../../utils/string-utils";
+import { SearchDropDown } from "../search-dropdown/search-dropdown";
+import { convertVinmonopoletPictureSize } from "utils/string-utils";
 import "./styles.scss";
 import PropTypes from "prop-types";
+import { pushOrRemoveToArray } from "utils/array-utils";
+import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 
 const AddWineForm = props => {
+  // TODO UPDATE.
   const [fitsTo, setFitsTo] = useState([]);
   const [choosenWine, setChoosenWine] = useState(false);
   const [winePicture, setWinePicture] = useState(null);
@@ -32,21 +34,7 @@ const AddWineForm = props => {
     wineGrapes: { value: [], error: "" },
     wineRegion: { value: "Bordeaux", error: "" },
     sanderRating: { value: "6", error: "" },
-    ineRating: { value: "5", error: "" },
-  };
-
-  // TODO REPLACE WITH ARRAY-utils.
-  const handleCheckBoxChange = event => {
-    let fitsToArray = [...fitsTo];
-    if (fitsToArray.includes(event.target.value)) {
-      const index = fitsToArray.findIndex(
-        value => value === event.target.value
-      );
-      fitsToArray.splice(index, 1);
-    } else {
-      fitsToArray.push(event.target.value);
-    }
-    setFitsTo(fitsToArray);
+    ineRating: { value: "5", error: "" }
   };
 
   const onImageUploadChange = event => {
@@ -60,22 +48,16 @@ const AddWineForm = props => {
     // TODO: HOW TO STORE? AS URL? AS IMG?
   };
 
-  // TODO: HANDLE ONCLICK ON SEARCHDROPDOWN
-  const handleNameSearchOnChange = async value => {
-    setChoosenWine(false);
-    const wineSearchResult = await debouncedSearchProductsByName(value);
-    //FIXME. MAP TO NAME BROKE SEARCHDROPDOWN SINCE WE CANT ACCESS images etc ANYMORE.
-    setWineSearchItems(wineSearchResult.products.map(product => product.name));
-  };
-
-  const handlSelectedWine = (wine, state) => {
-    fillFormFromWine(wine, state);
+  const handleSelectedWine = (wineName, state) => {
+    const chosenWine = wineSearchItems.find(item => item.name === wineName);
+    fillFormFromWine(chosenWine, state);
     setChoosenWine(true);
   };
 
-  const fillFormFromWine = (wine, state_) => {
+  const fillFormFromWine = (wine, state) => {
     // TODO UPDATE SOMEHOW.
     setWinePicture(convertVinmonopoletPictureSize(wine.images[1].url, 800));
+    stateSchema.wineName = wine.name;
   };
 
   const onSubmitForm = state => {
@@ -90,7 +72,7 @@ const AddWineForm = props => {
         sanderRating: state.sanderRating.value,
         ineRating: state.ineRating.value,
         fitsTo,
-        winePicture,
+        winePicture
       },
       props.firebase
     );
@@ -108,26 +90,13 @@ const AddWineForm = props => {
         <div className="row">
           <div className="form-group col-sm-12 col-md-8">
             <label htmlFor="wineName">Navn</label>
-            <input
-              type="text"
-              autoComplete="off"
-              name="wineName"
-              className="form-control"
-              value={state.wineName.value}
-              onChange={e => {
-                handleOnChange(e);
-                handleNameSearchOnChange(e.target.value);
-              }}
+            <AsyncSearchDropdown
+              placeholder="Velg vin"
+              onClick={value => handleSelectedWine(value)}
+              noOptionPlaceholder="Tast inn navnet på vinen"
             />
             {state.wineName.error && isFormSubmitted && (
               <p className="error">{state.wineName.error}</p>
-            )}
-            {wineSearchItems && wineSearchItems.length > 0 && !choosenWine && (
-              <SearchDropDown
-                placeholder="Velg vin"
-                searchItems={wineSearchItems}
-                onClick={wine => handlSelectedWine(wine, state)}
-              />
             )}
           </div>
 
@@ -188,11 +157,11 @@ const AddWineForm = props => {
           </div>
           <div className="form-group col-sm-10 col-md-6">
             <label>Drue</label>
-              <SearchDropDown
-                placeholder="Velg vindrue"
-                searchItems={wineGrapeItems}
-                onClick={grapeArray => setWineGrapes(grapeArray)}
-              />
+            <SearchDropDown
+              placeholder="Velg vindrue"
+              searchItems={wineGrapeItems}
+              onClick={grapeArray => setWineGrapes(grapeArray)}
+            />
             {!wineGrapes.length && isFormSubmitted && (
               <p className="error">Du må velge vindrue</p>
             )}
@@ -237,7 +206,9 @@ const AddWineForm = props => {
                 htmlFor={imageKey}
                 value={imageKey}
                 name="fitsTo"
-                onChange={handleCheckBoxChange}
+                onChange={event =>
+                  pushOrRemoveToArray(fitsTo, event.target.value)
+                }
               />
             ))}
           </div>
@@ -268,18 +239,14 @@ const AddWineForm = props => {
 
 AddWineForm.propTypes = {
   addWineToWineList: PropTypes.func,
-  firebase: PropTypes.object,
+  firebase: PropTypes.object
 };
-
-const mapStateToProps = state => ({
-  wineItems: state.wineItems,
-});
 
 export default withFirebase(
   connect(
-    mapStateToProps,
+    null,
     {
-      addWineToWineList: dispatchers.addWineToWineList,
+      addWineToWineList: dispatchers.addWineToWineList
     }
   )(AddWineForm)
 );

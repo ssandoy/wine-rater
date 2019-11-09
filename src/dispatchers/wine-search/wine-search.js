@@ -1,10 +1,9 @@
-import actions from "../../actions/action";
+import actions from "actions/action";
 
 export const setWines = wineItems => dispatch =>
   dispatch(actions.setWines(wineItems));
 
 export const setAllWines = wineItems => dispatch =>
-		dispatch(actions.setAllWines(wineItems));
+  dispatch(actions.setAllWines(wineItems));
 
-export const clearWines = () => dispatch =>
-  dispatch(actions.clearWines());
+export const clearWines = () => dispatch => dispatch(actions.clearWines());

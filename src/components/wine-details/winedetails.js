@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { withFirebase } from "../../firebase/index";
+import { withFirebase } from "firebase/index";
 
 const WineDetailsComponent = props => {
   useEffect(() => {

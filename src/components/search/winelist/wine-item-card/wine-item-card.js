@@ -1,17 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import * as images from "../../../../images";
-import no_icon_red from "../../../../images/no_icon_red.png";
+import * as images from "images";
+import no_icon_red from "images/no_icon_red.png";
 import "./wine-item-card.scss";
 
 const wineMap = {
   RED: "RØD",
   WHITE: "HVIT",
-  ROSÈ: "ROSÈ",
+  ROSÈ: "ROSÈ"
 };
 
-const WineItemCard = ({wine})=> {
-  const image = wine.image_url ? wine.image_url: no_icon_red;
+const WineItemCard = ({ wine }) => {
+  const image = wine.image_url ? wine.image_url : no_icon_red;
   return (
     <div className="wine-item">
       <div className="card bg-light">
@@ -27,9 +27,7 @@ const WineItemCard = ({wine})=> {
               <p className="wine-info-text">{wine.year}</p>
             </div>
             <div className="col-md-3 col-xs-12">
-              <p className="wine-info-text">
-                {wine.country+ wine.region}
-              </p>
+              <p className="wine-info-text">{wine.country + wine.region}</p>
               <p className="wine-info-text">{wine.grapes}</p>
             </div>
             <div className="col-md-3 col-xs-12">

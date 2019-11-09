@@ -1,4 +1,4 @@
-import ACTIONS from "../../actions/action";
+import ACTIONS from "actions/action";
 
 // TODO: THIS IS HACKY AND I WANT TO REMOVE IT.
 export const addWineToWineList = (wineItem, firebase) => async dispatch => {
