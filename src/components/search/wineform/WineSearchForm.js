@@ -8,6 +8,7 @@ import { Raastoff } from "data/raastoff";
 import { imageKeys } from "images";
 import { isObjectInArray } from "utils/array-utils";
 
+// TODO: ADD RATING-FILTER
 const WineSearchFormComponent = props => {
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");

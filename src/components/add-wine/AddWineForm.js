@@ -19,20 +19,26 @@ import { validateForm } from "components/add-wine/form-util";
 
 const stateSchema = {
   wineName: null,
-  wineType: "Red",
+  wineType: null,
   wineYear: "2002",
   wineCountry: "Frankrike",
-  wineGrapes: [],
+  wineGrapes: null,
   wineRegion: "",
   sanderRating: "6",
   ineRating: "5"
 };
 
+const wineTypes = [
+  { label: "Rødvin", value: "RED" },
+  { label: "Hvitvin", value: "WHITE" },
+  { label: "Rosé", value: "ROSÉ" },
+  { label: "Musserende", value: "SPARKLING" }
+];
+
 const AddWineForm = props => {
   // TODO UPDATE.
   const [fitsTo, setFitsTo] = useState([]);
   const [winePicture, setWinePicture] = useState(null);
-  const [wineGrapes, setWineGrapes] = useState([]);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
@@ -47,15 +53,17 @@ const AddWineForm = props => {
     // TODO: HOW TO STORE? AS URL? AS IMG?
   };
 
-  const handleSelectedWine = (wine, state) => {
-    fillFormFromWine(wine, state);
+  const handleSelectedWine = wine => {
+    fillFormFromWine(wine);
   };
 
-  const fillFormFromWine = (wine, state) => {
-    // TODO UPDATE SOMEHOW.
-    setWinePicture(convertVinmonopoletPictureSize(wine.images[1].url, 800));
-    // TODO: SET YEAR BASED ON REGEX IF MATCH.
+  const fillFormFromWine = wine => {
     stateSchema.wineName = wine.name;
+    setWinePicture(convertVinmonopoletPictureSize(wine.images[1].url, 800));
+    stateSchema.wineCountry = wine.main_country.name;
+    stateSchema.wineRegion =
+      wine.district && wine.district.name ? wine.district.name : "";
+    // TODO: SET YEAR BASED ON REGEX IF MATCH.
   };
 
   const onSubmitForm = state => {
@@ -76,9 +84,18 @@ const AddWineForm = props => {
     );
   };
 
+  const setWineType = wineType => {
+    stateSchema.wineType = wineType;
+  };
+
+  const setWineGrapes = wineGrapes => {
+    stateSchema.wineGrapes = wineGrapes;
+  };
+
   return (
     <div>
       <Formik
+        enableReinitialize
         initialValues={stateSchema}
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(false);
@@ -94,8 +111,8 @@ const AddWineForm = props => {
                 <AsyncSearchDropdown
                   placeholder="Velg vin"
                   onClick={value => {
-                    handleChange(value.name);
                     handleSelectedWine(value);
+                    handleChange(value.name);
                   }}
                   noOptionPlaceholder="Tast inn navnet på vinen"
                 />
@@ -103,17 +120,13 @@ const AddWineForm = props => {
               </div>
 
               <div className="form-group col-sm-10 col-md-4">
-                <label htmlFor="wineType">Type</label>
-                <select
-                  className="custom-select"
-                  name="wineType"
-                  onChange={handleChange}
-                >
-                  <option value="RED">Rød</option>
-                  <option value="WHITE">Hvit</option>
-                  <option value="ROSÉ">Rosé</option>
-                  <option value="SPARKLING">Musserende</option>
-                </select>
+                <label>Type</label>
+                <SearchDropDown
+                  placeholder="Velg vintype"
+                  searchItems={wineTypes}
+                  isMulti={false}
+                  onClick={wineType => setWineType(wineType)}
+                />
               </div>
             </div>
             <div className="row">
@@ -160,7 +173,10 @@ const AddWineForm = props => {
                 <SearchDropDown
                   placeholder="Velg vindrue"
                   searchItems={wineGrapeItems}
-                  onClick={grapeArray => setWineGrapes(grapeArray)}
+                  onClick={grapeArray => {
+                    setWineGrapes(grapeArray);
+                    handleChange("grapeArray");
+                  }}
                 />
               </div>
             </div>
@@ -253,5 +269,3 @@ export default withFirebase(
     }
   )(AddWineForm)
 );
-
-// TODO: UPDATE WINEITEM-DATA IN PARENT

@@ -20,18 +20,28 @@ export const SearchDropDown = ({
   searchItems,
   selectedItems,
   placeholder,
-  onClick
+  onClick,
+  isMulti = true
 }) => {
   return (
     <>
       <Select
         placeholder={placeholder}
-        options={searchItems.map(item => ({
-          label: item,
-          value: item
-        }))}
+        options={searchItems.map(item =>
+          item.label && item.value
+            ? {
+                label: item.label,
+                value: item.value
+              }
+            : {
+                label: item,
+                value: item
+              }
+        )}
         onChange={opt => {
-          onClick(opt ? opt.map(opt => opt.value) : []);
+          isMulti
+            ? onClick(opt ? opt.map(opt => opt.value) : [])
+            : onClick(opt.value);
         }}
         value={
           selectedItems &&
@@ -41,7 +51,7 @@ export const SearchDropDown = ({
           }))
         }
         styles={colourStyles}
-        isMulti
+        isMulti={isMulti}
       />
     </>
   );

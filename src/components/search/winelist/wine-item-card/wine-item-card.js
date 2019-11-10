@@ -22,24 +22,46 @@ const WineItemCard = ({ wine }) => {
         </div>
         <div className="card-body">
           <div className="row">
-            <div className="col-md-3 col-xs-12">
-              <p className="wine-info-text">{wineMap[wine.type]}</p>
-              <p className="wine-info-text">{wine.year}</p>
-            </div>
-            <div className="col-md-3 col-xs-12">
-              <p className="wine-info-text">{wine.country + wine.region}</p>
-              <p className="wine-info-text">{wine.grapes}</p>
-            </div>
-            <div className="col-md-3 col-xs-12">
-              <p className="wine-info-text">Ine: {wine.ineRating}</p>
-              <p className="wine-info-text">Sander: {wine.sanderRating}</p>
-            </div>
-            <div className="col-md-3 col-xs-12">
+            <div className="col-md-3 col-xs-12 wine-row">
               <img className="wine-image" alt="wine" src={image}></img>
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-12">
+            <div className="col-md-3 col-xs-12 wine-row">
+              <p className="card-label">Type</p>
+              <p className="wine-info-text">{wineMap[wine.type]}</p>
+              <p className="card-label">Årgang</p>
+              <p className="wine-info-text">{wine.year}</p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3 col-xs-12 wine-row">
+              <p className="card-label">Land</p>
+              <p className="wine-info-text">{wine.country}</p>
+              <p className="card-label">Region</p>
+              <p className="wine-info-text">{wine.region}</p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3 col-xs-12 wine-row">
+              <p className="centered-label">Ratinger</p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3 col-xs-12 wine-row">
+              <p className="card-label">Ine</p>
+              <p className="wine-info-text">{wine.ineRating}</p>
+              <p className="card-label">Sander</p>
+              <p className="wine-info-text">{wine.sanderRating}</p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3 col-xs-12 wine-row">
+              <p className="centered-label">Passer til</p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3 col-xs-12 wine-row">
               {wine.fitsTo &&
                 wine.fitsTo.map(item => {
                   return (

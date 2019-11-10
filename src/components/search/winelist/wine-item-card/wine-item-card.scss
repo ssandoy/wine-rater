@@ -4,8 +4,29 @@
   margin: 1em 0;
 }
 
+.wine-row {
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.wine-info-text {
+  font-weight: bold;
+}
+
 .wine-image {
-  height: 7em;
+  height: 10em;
+  margin: 0 auto;
+}
+
+.centered-label {
+  font-style: italic;
+  margin: 0 auto;
+}
+
+.card-label {
+  font-style: italic;
+  margin-right: 0.5em;
 }
 
 .wine-info-text {
@@ -23,5 +44,6 @@
 }
 
 .fits-to-image {
+  height: 3em;
   width: 3em;
 }

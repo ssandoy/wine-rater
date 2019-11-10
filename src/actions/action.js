@@ -4,7 +4,7 @@ import { TYPES } from "./action-types";
 export function createWine(wine) {
   const action = {
     type: TYPES.CREATE_WINE,
-    data: wine,
+    data: wine
   };
   return action;
 }
@@ -12,28 +12,29 @@ export function createWine(wine) {
 export function appendWine(wineItem) {
   const action = {
     type: TYPES.APPEND_WINE,
-    data: wineItem,
+    data: wineItem
   };
+  debugger;
   return action;
 }
 
 export function setWines(wineItems) {
   return {
     type: TYPES.SET_WINES,
-    data: wineItems,
+    data: wineItems
   };
 }
 
 export function setAllWines(wineItems) {
   return {
     type: TYPES.SET_ALL_WINES,
-    data: wineItems,
+    data: wineItems
   };
 }
 
 export function clearWines() {
   return {
-    type: TYPES.CLEAR_WINES,
+    type: TYPES.CLEAR_WINES
   };
 }
 
@@ -43,5 +44,5 @@ export default {
   setWines,
   clearWines,
   appendWine,
-  TYPES,
+  TYPES
 };
