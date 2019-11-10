@@ -17,7 +17,7 @@ export const searchProductsByNameMapToSelect = async query => {
   return response.json().then(result =>
     result.products.map(item => {
       return {
-        value: item.name,
+        value: item,
         label: item.name
       };
     })

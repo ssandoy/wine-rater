@@ -15,9 +15,6 @@ module.exports = {
   wineCountry: {
     required: true
   },
-  wineGrape: {
-    required: true
-  },
   wineRegion: {
     required: true
   },
