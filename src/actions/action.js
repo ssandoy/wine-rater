@@ -14,7 +14,6 @@ export function appendWine(wineItem) {
     type: TYPES.APPEND_WINE,
     data: wineItem
   };
-  debugger;
   return action;
 }
 

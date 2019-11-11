@@ -7,16 +7,16 @@
 .wine-row {
   margin-top: 1em;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 .wine-info-text {
-  font-weight: bold;
+  font-style: italic;
 }
 
 .wine-image {
-  height: 10em;
-  margin: 0 auto;
+  height: 22em;
+  margin: auto 15px;
 }
 
 .centered-label {
@@ -25,8 +25,9 @@
 }
 
 .card-label {
-  font-style: italic;
-  margin-right: 0.5em;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 4px 0;
 }
 
 .wine-info-text {

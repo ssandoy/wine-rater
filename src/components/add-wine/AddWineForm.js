@@ -66,6 +66,7 @@ const AddWineForm = props => {
     // TODO: SET YEAR BASED ON REGEX IF MATCH.
   };
 
+  // FIXME ISSUE WITH GRAPES NOT BEING STORED.
   const onSubmitForm = state => {
     props.addWineToWineList(
       {
