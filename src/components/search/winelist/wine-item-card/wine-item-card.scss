@@ -2,6 +2,15 @@
 
 .wine-item {
   margin: 1em 0;
+  max-width: 300px;
+}
+
+.wine-item-card {
+  min-height: 730px;
+}
+
+.info-text-item {
+  min-height: 45px;
 }
 
 .wine-row {
@@ -24,6 +33,11 @@
   margin: 0 auto;
 }
 
+.card-header {
+  font-size: 18px;
+  min-height: 95px;
+}
+
 .card-label {
   font-size: 18px;
   font-weight: bold;
@@ -31,18 +45,9 @@
 }
 
 .wine-info-text {
-  font-size: 1.3em;
-  @include for-phone-only {    
-    font-size: 1em; 
- }
+  font-size: 1em;
 }
 
-.card-body.row:not(:first-child) {
-  margin-top: -4em;
-  @include for-phone-only {    
-    margin-top: 0; 
- }
-}
 
 .fits-to-image {
   height: 3em;
