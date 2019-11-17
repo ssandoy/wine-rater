@@ -6,7 +6,7 @@ const WineListComponent = props => {
   return (
     <div className="wine-item-list">
       {props.items.map(wine => (
-        <WineItemCard key={wine.key} wine={wine} />
+        <WineItemCard key={wine.id} wine={wine} />
       ))}
     </div>
   );

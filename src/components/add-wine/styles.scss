@@ -3,6 +3,7 @@
 }
 
 .fits-to-row {
+  margin-left: 10px !important;
   justify-content: space-around;
 }
 
@@ -21,5 +22,7 @@
   margin-right: auto;
 }
 
+.textfield-label {
+  margin-bottom: 0;
+}
 
-// TODO: ADD MIXIN TO MD SO THAT WINE-PICTURE ISNT CENTERED ON BIG SCREENS.

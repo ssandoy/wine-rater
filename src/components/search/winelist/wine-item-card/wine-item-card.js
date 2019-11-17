@@ -2,6 +2,7 @@ import React from "react";
 import * as images from "images";
 import no_icon_red from "images/no_icon_red.png";
 import "./wine-item-card.scss";
+import WineItemCardInfoTextItem from "./wine-item-card-info-text-item";
 
 const wineMap = {
   RED: "RØD",
@@ -23,29 +24,18 @@ const WineItemCard = ({ wine }) => {
             <div className="col-6">
               <img className="wine-image" alt="wine" src={image}></img>
             </div>
-            <div className="col-6">
-              <div className="info-text-item">
-                <p className="card-label">Type</p>
-                <p className="wine-info-text">{wineMap[wine.type]}</p>
-              </div>
-              <div className="info-text-item">
-                <p className="card-label">Årgang</p>
-                <p className="wine-info-text">{wine.year}</p>
-              </div>
-              <div className="info-text-item">
-                <p className="card-label">Land</p>
-                <p className="wine-info-text">{wine.country}</p>
-              </div>
-              <div className="info-text-item">
-                <p className="card-label">Region</p>
-                <p className="wine-info-text">
-                  {wine.region ? wine.region : ""}
-                </p>
-              </div>
-              <div className="info-text-item">
-                <p className="card-label">Druer</p>
-                <p className="wine-info-text">Nebbiolo, Sangiovese</p>
-              </div>
+            <div className="col-5 offset-1">
+              <WineItemCardInfoTextItem
+                label="Type"
+                value={wineMap[wine.type]}
+              />
+              <WineItemCardInfoTextItem label="Årgang" value={wine.year} />
+              <WineItemCardInfoTextItem label="Land" value={wine.country} />
+              <WineItemCardInfoTextItem label="Region" value={wine.region} />
+              <WineItemCardInfoTextItem
+                label="Druer"
+                value={wine.grapes && wine.grapes.join(", ")}
+              />
             </div>
           </div>
           <div className="row">

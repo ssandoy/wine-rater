@@ -13,11 +13,7 @@ const ImageCheckbox = props => {
           value={`${props.value}`}
           onChange={props.onChange}
         />
-        <img
-          src={props.image}
-          className="image"
-          alt={`${props.htmlFor}` + "-image"}
-        />
+        <img src={props.image} className="image" alt={`${props.htmlFor}`} />
       </label>
     </div>
   );

@@ -14,7 +14,7 @@ export const pushOrRemoveToArray = (array, item) => {
 export const isObjectInArray = (object, array) => {
   if (array.length) {
     if (object instanceof Array) {
-      return array.some(data => object && object.includes(data.toLowerCase()));
+      return array.some(data => object && object.includes(data));
     } else {
       return array.some(
         data => object && object.toLowerCase().includes(data.toLowerCase())

@@ -6,7 +6,8 @@ export const validateForm = (validationSchema, values) => {
       errors[key] = error[1];
     }
   });
-  return errors;
+  // Return null if empty.
+  return Object.entries(errors).length === 0 ? null : errors;
 };
 
 export const checkError = (validationSchema, key, value) => {
