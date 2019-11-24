@@ -1,22 +1,6 @@
 import { TYPES } from "./action-types";
 
 // actions
-export function createWine(wine) {
-  const action = {
-    type: TYPES.CREATE_WINE,
-    data: wine
-  };
-  return action;
-}
-
-export function appendWine(wineItem) {
-  const action = {
-    type: TYPES.APPEND_WINE,
-    data: wineItem
-  };
-  return action;
-}
-
 export function setWines(wineItems) {
   return {
     type: TYPES.SET_WINES,
@@ -38,10 +22,8 @@ export function clearWines() {
 }
 
 export default {
-  createWine,
   setAllWines,
   setWines,
   clearWines,
-  appendWine,
   TYPES
 };

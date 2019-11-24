@@ -4,12 +4,12 @@ import * as dispatchers from "dispatchers";
 import { withFirebase } from "firebase/index";
 import TextField from "@material-ui/core/TextField";
 
+import { debouncedSearchProductsByNameItem } from "api/api";
 import validationSchema from "./validationSchema";
 import * as images from "images";
 import { imageKeys } from "images";
 import { Raastoff } from "data/raastoff";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
-import { FaImage } from "react-icons/fa";
 import { SearchDropDown } from "../search-dropdown/search-dropdown";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
 import "./styles.scss";
@@ -58,16 +58,9 @@ const AddWineForm = props => {
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
-  const onImageUploadChange = event => {
-    let reader = new FileReader();
-    let file = event.target.files[0];
-    reader.onloadend = () => {
-      setWinePicture(reader.result);
-    };
+  // TODO ADD POSSIBILITY TO ADD WINE NON-EXISTING IN POLET.
 
-    reader.readAsDataURL(file);
-    // TODO: HOW TO STORE? AS URL? AS IMG?
-  };
+  // FIXME I HATE VALIDATION.
 
   const classes = useStyles();
 
@@ -82,7 +75,7 @@ const AddWineForm = props => {
     setWineRegion(
       wine.district && wine.district.name ? wine.district.name : ""
     );
-    setWineYear(wine.name.match(/\d{4}/)[0]);
+    setWineYear(!wine.name.match(/\d{4}/) ? "" : wine.name.match(/\d{4}/)[0]);
   };
 
   const onSubmitForm = event => {
@@ -113,6 +106,7 @@ const AddWineForm = props => {
             <label htmlFor="wineName">Navn</label>
             <AsyncSearchDropdown
               placeholder="Velg vin"
+              debouncedPromise={debouncedSearchProductsByNameItem}
               onClick={value => {
                 handleSelectedWine(value);
               }}
@@ -240,15 +234,8 @@ const AddWineForm = props => {
           <div className="form-group col-12">
             <label htmlFor="winePicture">Bilde</label>
             <br />
-            {winePicture ? (
+            {winePicture && (
               <img src={winePicture} className="wine-picture" alt="wine" />
-            ) : (
-              <div className="image-button">
-                <label htmlFor="single">
-                  <FaImage color="#6d84b4" size={60} />
-                </label>
-                <input type="file" id="single" onChange={onImageUploadChange} />
-              </div>
             )}
           </div>
         </div>

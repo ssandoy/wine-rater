@@ -10,18 +10,17 @@ import { Raastoff } from "data/raastoff";
 import { imageKeys } from "images";
 import { isObjectInArray } from "utils/array-utils";
 
-// TODO: ADD RATING-FILTER
 const WineSearchFormComponent = props => {
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
   // TODO FIX DEFAULT VALUES SO THAT PLACEHOLDER IS SHOWN.
-  const [wineFromYear, setWineFromYear] = useState(1990);
+  const [wineFromYear, setWineFromYear] = useState(1980);
   const [selectedWineGrapes, setSelectedWineGrapes] = useState([]);
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [selectedRegions, setSelectedRegions] = useState([]);
   const [selectedFitsTo, setSelectedFitsTo] = useState([]);
-  const [sanderRating, setSanderRating] = useState(4);
-  const [ineRating, setIneRating] = useState(4);
+  const [sanderRating, setSanderRating] = useState(0);
+  const [ineRating, setIneRating] = useState(0);
 
   const wineTypes = [
     { label: "Rødvin", value: "RED" },
@@ -32,7 +31,7 @@ const WineSearchFormComponent = props => {
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
-  // TODO prettify?
+  // TODO prettify to one filter-function
   const filterWines = () => {
     console.log(selectedWineGrapes);
     props.setWines(
@@ -84,13 +83,13 @@ const WineSearchFormComponent = props => {
     filterWines();
   };
 
+  // FIXME SET SLIDER VALUES AND ALSO RENDERUPDATE THESE.
   const onClear = event => {
     event.preventDefault();
     setSelectedFitsTo([]);
     setSelectedRegions([]);
     setSelectedWineGrapes([]);
     setSelectedCountries([]);
-    setWineFromYear(1990);
     setWineName("");
     props.clearWines();
   };
@@ -122,7 +121,7 @@ const WineSearchFormComponent = props => {
           <div className="col-12">
             <label htmlFor="wineYear">Årgang</label>
           </div>
-          <div className="col-10 offset-1">
+          <div className="col-12 wine-search-form__slider">
             <Slider
               defaultValue={wineFromYear}
               getAriaValueText={value => value}
@@ -183,41 +182,48 @@ const WineSearchFormComponent = props => {
           </div>
           <div className="col-6">
             <label>Rating Sander</label>
-            <Slider
-              defaultValue={sanderRating}
-              getAriaValueText={value => value}
-              aria-labelledby="discrete-slider-always"
-              valueLabelDisplay="auto"
-              onChange={(event, value) => setSanderRating(value)}
-              step={0.1}
-              marks={marks}
-              min={0}
-              max={10}
-            />
+            <div className="col-12 wine-search-form__slider-rating">
+              <Slider
+                defaultValue={sanderRating}
+                getAriaValueText={value => value}
+                aria-labelledby="discrete-slider-always"
+                valueLabelDisplay="auto"
+                onChange={(event, value) => setSanderRating(value)}
+                step={0.1}
+                marks={marks}
+                min={0}
+                max={10}
+              />
+            </div>
           </div>
           <div className="col-6">
             <label>Rating Ine</label>
-            <Slider
-              defaultValue={ineRating}
-              getAriaValueText={value => value}
-              aria-labelledby="range-slider"
-              onChange={(event, value) => setIneRating(value)}
-              valueLabelDisplay="auto"
-              step={0.1}
-              marks={marks}
-              min={0}
-              max={10}
-            />
+            <div className="col-12 wine-search-form__slider-rating">
+              <Slider
+                defaultValue={ineRating}
+                getAriaValueText={value => value}
+                aria-labelledby="range-slider"
+                onChange={(event, value) => setIneRating(value)}
+                valueLabelDisplay="auto"
+                step={0.1}
+                marks={marks}
+                min={0}
+                max={10}
+              />
+            </div>
           </div>
         </div>
-        <div className="wine-search-buttons">
-          <button type="submit" className="wine-search-button btn btn-primary">
+        <div className="wine-search-form__buttons">
+          <button
+            type="submit"
+            className="wine-search-form__button btn btn-primary"
+          >
             Filtrer viner
           </button>
           <button
             type="submit"
             onClick={e => onClear(e)}
-            className="wine-search-button btn btn-danger"
+            className="wine-search-form__button btn btn-danger"
           >
             Tøm søk
           </button>

@@ -10,7 +10,7 @@ const wineMap = {
   ROSÈ: "ROSÈ",
   SPARKLING: "Musserende"
 };
-// TODO COMPONENT LABEL VALUE
+
 const WineItemCard = ({ wine }) => {
   const image = wine.image_url ? wine.image_url : no_icon_red;
   return (

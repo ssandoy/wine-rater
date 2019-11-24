@@ -5,24 +5,35 @@ import WineListComponent from "./winelist/winelist";
 import PropTypes from "prop-types";
 import "./winesearch.scss";
 
+// TODO CONSISTENT FILENAMING PLEASE.
 const WineSearchComponent = props => {
-  const { wineItems } = props;
+  const { wineItems, hasSearched } = props;
+  console.log(hasSearched);
   return (
     <div>
       <WineSearchFormComponent />
-      {wineItems && <WineListComponent items={wineItems} />}
+      {hasSearched ? (
+        wineItems.length ? (
+          <WineListComponent items={wineItems} />
+        ) : (
+          <h3 className="wine-search__no-hits">
+            Ingen viner matcher søket... Vi må drikke mer 🍷
+          </h3>
+        )
+      ) : null}
     </div>
   );
 };
 
-// TODO: PRINT MESSAGE WHEN NO HITS.
 WineSearchComponent.propTypes = {
+  hasSearched: PropTypes.bool,
   wineItems: PropTypes.array
 };
 
 function mapStateToProps(state) {
   return {
-    wineItems: state.wineItems
+    wineItems: state.wineItems,
+    hasSearched: state.hasSearched
   };
 }
 

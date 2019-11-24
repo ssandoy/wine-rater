@@ -1,7 +1,6 @@
 import React from "react";
 import "./search-dropdown.scss";
 import AsyncSelect from "react-select/async";
-import { debouncedSearchProductsByNameItem } from "api/api";
 
 const colourStyles = {
   option: (provided, state) => ({
@@ -16,9 +15,8 @@ const colourStyles = {
     return { ...provided, backgroundColor: "#add8e6", transition };
   }
 };
-// TODO IMPLEMENT PROMISE.
 export const AsyncSearchDropdown = ({
-  promiseOptions,
+  debouncedPromise,
   placeholder,
   noOptionPlaceholder,
   onClick
@@ -30,9 +28,7 @@ export const AsyncSearchDropdown = ({
         onChange={opt => {
           onClick(opt.value);
         }}
-        loadOptions={inputvalue =>
-          debouncedSearchProductsByNameItem(inputvalue)
-        }
+        loadOptions={inputvalue => debouncedPromise(inputvalue)}
         styles={colourStyles}
         noOptionsMessage={() => noOptionPlaceholder}
       />

@@ -1,13 +1,19 @@
  @import '../../../styles/variables.scss';
 
-.searchWineForm {
-  background-color: $form-background-color;
-}
+ .wine-search-form {
+   &__buttons {
+     display: flex;
+   }
 
- .wine-search-buttons {
-   display: flex;
- }
+   &__button {
+     margin: 0 10px 0 0;
+   }
 
- .wine-search-button {
-   margin: 0 10px 0 0;
+   &__slider {
+     padding: 0 30px !important;
+     &-rating {
+       padding: 0 10px !important;
+     }
+   }
+
  }

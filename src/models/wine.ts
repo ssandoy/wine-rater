@@ -22,7 +22,6 @@ export default class Wine {
     this.grapes = wineJson.wineGrapes;
     this.region = wineJson.wineRegion;
     this.country = wineJson.wineCountry;
-    // TODO: UPDATE THIS AS IMAGE IS IMPLEMENTED.
     this.image_url = wineJson.winePicture;
   }
 }
