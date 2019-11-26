@@ -10,6 +10,7 @@ import { Raastoff } from "data/raastoff";
 import { imageKeys } from "images";
 import { isObjectInArray } from "utils/array-utils";
 
+// TODO TYPESCRIPT.
 const WineSearchFormComponent = props => {
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
@@ -37,16 +38,16 @@ const WineSearchFormComponent = props => {
     props.setWines(
       props.allWines
         .filter(wine =>
-          wine.name.toLowerCase().includes(wineName.toLowerCase())
+          wine.wineName.toLowerCase().includes(wineName.toLowerCase())
         )
         .filter(wine =>
-          wine.type.toLowerCase().includes(wineType.toLowerCase())
+          wine.wineName.toLowerCase().includes(wineType.toLowerCase())
         )
         .filter(wine => wine.year >= wineFromYear)
         .filter(wine => isObjectInArray(wine.fitsTo, selectedFitsTo))
-        .filter(wine => isObjectInArray(wine.grapes, selectedWineGrapes))
-        .filter(wine => isObjectInArray(wine.country, selectedCountries))
-        .filter(wine => isObjectInArray(wine.region, selectedRegions))
+        .filter(wine => isObjectInArray(wine.wineGrapes, selectedWineGrapes))
+        .filter(wine => isObjectInArray(wine.wineCountry, selectedCountries))
+        .filter(wine => isObjectInArray(wine.wineRegion, selectedRegions))
         .filter(
           wine =>
             wine.sanderRating >= sanderRating && wine.ineRating >= ineRating
@@ -160,7 +161,7 @@ const WineSearchFormComponent = props => {
               placeholder="Land"
               selectedItems={selectedCountries}
               searchItems={[
-                ...new Set(props.allWines.map(wine => wine.country))
+                ...new Set(props.allWines.map(wine => wine.wineCountry))
               ]}
               onClick={countryArray => setSelectedCountries(countryArray)}
             />
@@ -173,7 +174,7 @@ const WineSearchFormComponent = props => {
               searchItems={[
                 ...new Set(
                   props.allWines
-                    .map(wine => wine.region)
+                    .map(wine => wine.wineRegion)
                     .filter(region => region !== null)
                 )
               ]}

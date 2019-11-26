@@ -8,16 +8,16 @@ import Wine from "models/wine";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const MainPageComponent = props => {
+const MainPageComponent = (props: any) => {
   useEffect(() => {
     props.firebase.database
       .ref("wines")
       .once("value")
-      .then(wineItemsSnapshot => {
+      .then((wineItemsSnapshot: any) => {
         props.setAllWines(
           props.firebase
             .snapshotToArray(wineItemsSnapshot)
-            .map(item => new Wine({ wineJson: item }))
+            .map((item: Wine) => item)
         );
       });
   }, [props]);
@@ -38,7 +38,7 @@ MainPageComponent.propTypes = {
   firebase: PropTypes.object
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: any) => ({
   allWines: state.allWines
 });
 
