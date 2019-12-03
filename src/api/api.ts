@@ -3,34 +3,22 @@ import WineProduct from "models/product";
 const vinmonopoletBaseUrl = "https://apis.vinmonopolet.no/";
 
 const productsUri = vinmonopoletBaseUrl + "products/v0/details-normal";
+const MAX_RESULTS = 20;
+const DEBOUCE_TIME = 500;
 
 const apiSubscriptionKey = process.env.REACT_APP_OCP_APIM_SUBSCRIPTION_KEY;
 
 const vinmonopoletBaseUrlV1 =
-  "https://app.vinmonopolet.no/vmpws/v2/vmp/products/search";
+  "https://app.vinmonopolet.no/vmpws/v2/vmp/products";
 
 // TODO: CONSIDER EXPRESS APP IN FRONT TO SERVE AND HIDE HEADERS.
-// TODO: MERGE THESE FUNCTIONS.. THIS IS CURRENTLY NOT USED.
-// TODO SET SIZE.
-export const searchProductsByName = async (query: string) => {
-  const response = await fetch(
-    productsUri + `?productShortNameContains=${query}&start=100`,
-    {
-      method: "GET",
-      headers: {
-        // TODO: ENV BEFORE PUSH.
-        Accept: "application/json",
-        "Ocp-Apim-Subscription-Key": <string>apiSubscriptionKey
-      }
-    }
-  );
-  return response.json();
-};
 // TODO: RENAME
 export const searchProductsByNameMapToSelect = async (query: string) => {
-  console.log(apiSubscriptionKey);
+  // The api consumes _ instead of spaces
+  const trimmedQuery = query.replace(/ /g, "_");
   const response = await fetch(
-    productsUri + `?productShortNameContains=${query}&start=100`,
+    productsUri +
+      `?productShortNameContains=${trimmedQuery}&maxResults=${MAX_RESULTS}`,
     {
       method: "GET",
       headers: {
@@ -50,12 +38,12 @@ export const searchProductsByNameMapToSelect = async (query: string) => {
   );
 };
 
-export const debouncedSearchProductsByName = AwesomeDebouncePromise(
-  searchProductsByName,
-  500
-);
+export const getWine = async (id: string) => {
+  const response = await fetch(vinmonopoletBaseUrlV1 + `/${id}`);
+  return response.json();
+};
 
 export const debouncedSearchProductsByNameItem = AwesomeDebouncePromise(
   searchProductsByNameMapToSelect,
-  500
+  DEBOUCE_TIME
 );

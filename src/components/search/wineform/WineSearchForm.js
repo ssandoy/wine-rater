@@ -7,7 +7,7 @@ import "./wineform.scss";
 import * as dispatchers from "dispatchers";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
-import { imageKeys } from "images";
+import { imageKeyValues } from "images";
 import { isObjectInArray } from "utils/array-utils";
 
 // TODO TYPESCRIPT.
@@ -34,16 +34,12 @@ const WineSearchFormComponent = props => {
 
   // TODO prettify to one filter-function
   const filterWines = () => {
-    console.log(selectedWineGrapes);
     props.setWines(
       props.allWines
         .filter(wine =>
           wine.wineName.toLowerCase().includes(wineName.toLowerCase())
         )
-        .filter(wine =>
-          wine.wineName.toLowerCase().includes(wineType.toLowerCase())
-        )
-        .filter(wine => wine.year >= wineFromYear)
+        .filter(wine => wine.wineYear >= wineFromYear)
         .filter(wine => isObjectInArray(wine.fitsTo, selectedFitsTo))
         .filter(wine => isObjectInArray(wine.wineGrapes, selectedWineGrapes))
         .filter(wine => isObjectInArray(wine.wineCountry, selectedCountries))
@@ -77,6 +73,10 @@ const WineSearchFormComponent = props => {
       value: number,
       label: number.toString()
     };
+  });
+  const imageValues = [];
+  Object.entries(imageKeyValues).map(item => {
+    imageValues.push({ label: item[1], value: item[0] });
   });
 
   const onSubmit = event => {
@@ -124,6 +124,7 @@ const WineSearchFormComponent = props => {
           </div>
           <div className="col-12 wine-search-form__slider">
             <Slider
+              className="react-slider"
               defaultValue={wineFromYear}
               getAriaValueText={value => value}
               aria-labelledby="discrete-slider-always"
@@ -139,7 +140,7 @@ const WineSearchFormComponent = props => {
             <label htmlFor="fitsTo">Passer til</label>
             <SearchDropDown
               placeholder="Type rett"
-              searchItems={imageKeys}
+              searchItems={imageValues}
               selectedItems={selectedFitsTo}
               onClick={fitsToArray => {
                 setSelectedFitsTo(fitsToArray);
@@ -181,10 +182,11 @@ const WineSearchFormComponent = props => {
               onClick={regionArray => setSelectedRegions(regionArray)}
             />
           </div>
-          <div className="col-6">
+          <div className="col-sm-12 col-md-6">
             <label>Rating Sander</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
+                className="react-slider"
                 defaultValue={sanderRating}
                 getAriaValueText={value => value}
                 aria-labelledby="discrete-slider-always"
@@ -197,10 +199,11 @@ const WineSearchFormComponent = props => {
               />
             </div>
           </div>
-          <div className="col-6">
+          <div className="col-sm-12 col-md-6">
             <label>Rating Ine</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
+                className="react-slider"
                 defaultValue={ineRating}
                 getAriaValueText={value => value}
                 aria-labelledby="range-slider"

@@ -1,14 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import WineSearchFormComponent from "./wineform/WineSearchForm";
-import WineListComponent from "./winelist/winelist";
+import WineListComponent from "components/search/winelist/winelist";
 import PropTypes from "prop-types";
 import "./winesearch.scss";
 
 // TODO CONSISTENT FILENAMING PLEASE.
 const WineSearchComponent = props => {
   const { wineItems, hasSearched } = props;
-  console.log(hasSearched);
   return (
     <div>
       <WineSearchFormComponent />

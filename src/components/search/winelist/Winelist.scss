@@ -1,5 +1,21 @@
+@import '../../../styles/mixins.scss';
+
 .wine-item-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+
+.wine-list__container {
+  position: relative;
+}
+
+.wine-list__hits-container {
+  position: absolute;
+  left: 6px;
+  top: -10px;
+  @include for-tablet-portrait-up {
+    left: 4px;
+  }
+
 }

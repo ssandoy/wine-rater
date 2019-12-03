@@ -1,23 +1,21 @@
 import React from "react";
 import * as images from "images";
 import no_icon_red from "images/no_icon_red.png";
+import Wine from "models/wine";
 import "./wine-item-card.scss";
 import WineItemCardInfoTextItem from "./wine-item-card-info-text-item";
 
-const wineMap = {
-  RED: "RØD",
-  WHITE: "HVIT",
-  ROSÈ: "ROSÈ",
-  SPARKLING: "Musserende"
-};
+interface WineItemCardProps {
+  wine: Wine;
+}
 
-const WineItemCard = ({ wine }) => {
-  const image = wine.image_url ? wine.image_url : no_icon_red;
+const WineItemCard = ({ wine }: WineItemCardProps) => {
+  const image = wine.winePicture ? wine.winePicture : no_icon_red;
   return (
     <div className="wine-item">
       <div className="card wine-item-card bg-white">
         <div className="card-header">
-          <p>{wine.name}</p>
+          <p>{wine.wineName}</p>
         </div>
         <div className="card-body">
           <div className="row">
@@ -25,16 +23,16 @@ const WineItemCard = ({ wine }) => {
               <img className="wine-image" alt="wine" src={image}></img>
             </div>
             <div className="col-5 offset-1">
+              <WineItemCardInfoTextItem label="Type" value={wine.wineType} />
+              <WineItemCardInfoTextItem label="Årgang" value={wine.wineYear} />
+              <WineItemCardInfoTextItem label="Land" value={wine.wineCountry} />
               <WineItemCardInfoTextItem
-                label="Type"
-                value={wineMap[wine.type]}
+                label="Region"
+                value={wine.wineRegion}
               />
-              <WineItemCardInfoTextItem label="Årgang" value={wine.year} />
-              <WineItemCardInfoTextItem label="Land" value={wine.country} />
-              <WineItemCardInfoTextItem label="Region" value={wine.region} />
               <WineItemCardInfoTextItem
                 label="Druer"
-                value={wine.grapes && wine.grapes.join(", ")}
+                value={wine.wineGrapes && wine.wineGrapes.join(", ")}
               />
             </div>
           </div>

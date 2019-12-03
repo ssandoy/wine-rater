@@ -1,4 +1,4 @@
-module.exports = {
+export const validationSchema = {
   wineName: {
     required: true
   },
@@ -13,9 +13,6 @@ module.exports = {
     }
   },
   wineCountry: {
-    required: true
-  },
-  wineRegion: {
     required: true
   },
   sanderRating: {
@@ -33,3 +30,15 @@ module.exports = {
     }
   }
 };
+
+export interface iErrors {
+  wineName: string;
+  wineType: string;
+  wineRegion: string;
+  wineCountry: string;
+  wineYear: string;
+  sanderRating: string;
+  ineRating;
+}
+
+export default validationSchema;
