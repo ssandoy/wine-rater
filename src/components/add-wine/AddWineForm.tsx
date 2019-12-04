@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import * as dispatchers from "dispatchers";
 import { withFirebase } from "firebase/index";
-import TextField from "@material-ui/core/TextField";
 
-import { debouncedSearchProductsByNameItem } from "api/api";
-import validationSchema from "./validationSchema";
+import { debouncedSearchProductsByNameItem, getWine } from "api/api";
+import validationSchema, { iErrors } from "./validationSchema";
 import * as images from "images";
 import { imageKeys } from "images";
 import { Raastoff } from "data/raastoff";
@@ -17,24 +16,7 @@ import PropTypes from "prop-types";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { validateForm } from "components/add-wine/form-util";
-
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles(theme => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  textField: {
-    backgroundColor: "#e8eeef",
-    // border: "1px solid grey",
-    borderRadius: "4%",
-    fontSize: "1.2em",
-    marginTop: 0,
-    marginRight: theme.spacing(1)
-    // TODO FIX PADDING.
-  }
-}));
+import WineProduct from "../../models/product";
 
 const wineTypes = [
   { label: "Rødvin", value: "RED" },
@@ -46,36 +28,36 @@ const wineTypes = [
 const AddWineForm = props => {
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
-  const [wineYear, setWineYear] = useState(null);
-  const [wineCountry, setWineCountry] = useState(null);
-  const [wineGrapes, setWineGrapes] = useState([]);
+  const [wineYear, setWineYear] = useState("");
+  const [wineCountry, setWineCountry] = useState("");
+  const [wineGrapes, setWineGrapes] = useState<string[]>([]);
   const [wineRegion, setWineRegion] = useState("");
-  const [ineRating, setIneRating] = useState(null);
-  const [sanderRating, setSanderRating] = useState(null);
-  const [fitsTo, setFitsTo] = useState([]);
-  const [winePicture, setWinePicture] = useState(null);
-  const [errors, setErrors] = useState(null);
+  const [ineRating, setIneRating] = useState<string | null>(null);
+  const [sanderRating, setSanderRating] = useState<string | null>(null);
+  const [fitsTo, setFitsTo] = useState<string[]>([]);
+  const [winePicture, setWinePicture] = useState<string | null>(null);
+  const [errors, setErrors] = useState<iErrors | null>(null);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
   // TODO ADD POSSIBILITY TO ADD WINE NON-EXISTING IN POLET.
 
-  // FIXME I HATE VALIDATION.
-
-  const classes = useStyles();
-
   const handleSelectedWine = wine => {
     fillFormFromWine(wine);
   };
 
-  const fillFormFromWine = wine => {
-    setWineName(wine.name);
-    setWinePicture(convertVinmonopoletPictureSize(wine.images[1].url, 800));
-    setWineCountry(wine.main_country.name);
-    setWineRegion(
-      wine.district && wine.district.name ? wine.district.name : ""
+  const fillFormFromWine = async (wine: WineProduct) => {
+    const wineDetails = await getWine(wine.basic.productId);
+    setWineName(wine.basic.productShortName);
+    setWinePicture(
+      convertVinmonopoletPictureSize(wineDetails.images[1].url, 800)
     );
-    setWineYear(!wine.name.match(/\d{4}/) ? "" : wine.name.match(/\d{4}/)[0]);
+    const { country, region } = wine.origins.origin;
+    setWineCountry(country);
+    setWineRegion(region);
+    setWineYear(wine.basic.vintage);
+    setWineType(wine.classification.productTypeName);
+    setWineGrapes(wine.ingredients.grapes.map(grape => grape.grapeDesc));
   };
 
   const onSubmitForm = event => {
@@ -92,8 +74,14 @@ const AddWineForm = props => {
       fitsTo,
       winePicture
     };
-    setErrors(validateForm(validationSchema, values));
-    if (!!errors) {
+    console.log(values);
+    const validatedErrors: iErrors | null = validateForm(
+      validationSchema,
+      values
+    );
+    setErrors(validatedErrors);
+    debugger;
+    if (validatedErrors == null) {
       props.addWineToWineList(values, props.firebase);
     }
   };
@@ -112,66 +100,35 @@ const AddWineForm = props => {
               }}
               noOptionPlaceholder="Tast inn navnet på vinen"
             />
+            {!!errors && errors.wineName && (
+              <p className="add-wine-error-validation">{errors.wineName}</p>
+            )}
           </div>
           <div className="form-group col-sm-6 col-md-4">
             <label>Type</label>
             <SearchDropDown
               placeholder="Velg vintype"
               searchItems={wineTypes}
+              selectedItems={{ label: wineType, value: wineType }}
               isMulti={false}
               onClick={wineType => setWineType(wineType)}
             />
+            {!!errors && errors.wineType && (
+              <p className="add-wine-error-validation">{errors.wineType}</p>
+            )}
           </div>
           <div className="form-group col-sm-6 col-md-6">
             <div className="textfield-label">
               <label htmlFor="sanderRating">Årgang</label>
             </div>
-            <TextField
-              fullWidth
-              id="standard-uncontrolled"
-              label="Årgang"
+            <input
               value={wineYear}
-              InputLabelProps={{
-                shrink: true
-              }}
               onChange={event => setWineYear(event.target.value)}
-              className={classes.textField}
-              margin="normal"
+              className="add-wine-input"
             />
-          </div>
-          <div className="form-group col-sm-6 col-md-6">
-            <div className="textfield-label">
-              <label htmlFor="sanderRating">Land</label>
-            </div>
-            <TextField
-              fullWidth
-              id="standard-uncontrolled"
-              label="Land"
-              InputLabelProps={{
-                shrink: true
-              }}
-              value={wineCountry}
-              onChange={event => setWineCountry(event.target.value)}
-              className={classes.textField}
-              margin="normal"
-            />
-          </div>
-          <div className="form-group col-sm-6 col-md-6">
-            <div className="textfield-label">
-              <label htmlFor="sanderRating">Region</label>
-            </div>
-            <TextField
-              fullWidth
-              id="standard-uncontrolled"
-              label="Region"
-              InputLabelProps={{
-                shrink: true
-              }}
-              value={wineRegion}
-              onChange={event => setWineRegion(event.target.value)}
-              className={classes.textField}
-              margin="normal"
-            />
+            {!!errors && errors.wineYear && (
+              <p className="add-wine-error-validation">{errors.wineYear}</p>
+            )}
           </div>
           <div className="form-group col-sm-12 col-md-6">
             <label>Drue</label>
@@ -181,39 +138,67 @@ const AddWineForm = props => {
               onClick={grapeArray => {
                 setWineGrapes(grapeArray);
               }}
+              selectedItems={wineGrapes.map(grape => ({
+                label: grape,
+                value: grape
+              }))}
             />
+          </div>
+          <div className="form-group col-sm-6 col-md-6">
+            <div className="textfield-label">
+              <label htmlFor="sanderRating">Land</label>
+            </div>
+            <input
+              value={wineCountry}
+              onChange={event => setWineCountry(event.target.value)}
+              className="add-wine-input"
+            />
+            {!!errors && errors.wineCountry && (
+              <p className="add-wine-error-validation">{errors.wineCountry}</p>
+            )}
+          </div>
+          <div className="form-group col-sm-6 col-md-6">
+            <div className="textfield-label">
+              <label htmlFor="sanderRating">Region</label>
+            </div>
+            <input
+              value={wineRegion}
+              onChange={event => setWineRegion(event.target.value)}
+              className="add-wine-input"
+            />
+            {!!errors && errors.wineRegion && (
+              <p className="add-wine-error-validation">{errors.wineRegion}</p>
+            )}
           </div>
           <div className="form-group col-sm-6 col-md-6">
             <div className="textfield-label">
               <label htmlFor="sanderRating">Rating Sander</label>{" "}
             </div>
-            <TextField
-              fullWidth
-              id="standard-uncontrolled"
-              label="Rating"
-              value={sanderRating}
+            <input
+              value={sanderRating as string}
               onChange={event => setSanderRating(event.target.value)}
-              className={classes.textField}
-              margin="normal"
+              className="add-wine-input"
             />
+            {!!errors && errors.sanderRating && (
+              <p className="add-wine-error-validation">{errors.sanderRating}</p>
+            )}
           </div>
           <div className="form-group col-sm-6 col-md-6">
             <div className="textfield-label">
               <label htmlFor="ineRating">Rating Ine</label>
             </div>
-            <TextField
-              fullWidth
-              id="standard-uncontrolled"
-              label="Rating"
-              value={ineRating}
+            <input
+              value={ineRating as string}
               onChange={event => setIneRating(event.target.value)}
-              className={classes.textField}
-              margin="normal"
+              className="add-wine-input"
             />
+            {!!errors && errors.ineRating && (
+              <p className="add-wine-error-validation">{errors.ineRating}</p>
+            )}
           </div>
         </div>
         <div className="form-group">
-          <label>Passer til</label>
+          <label>Hva passer vinen til?</label>
           <div className="row fits-to-row">
             {imageKeys.map(imageKey => (
               <ImageCheckbox
@@ -235,11 +220,14 @@ const AddWineForm = props => {
             <label htmlFor="winePicture">Bilde</label>
             <br />
             {winePicture && (
-              <img src={winePicture} className="wine-picture" alt="wine" />
+              <img
+                src={winePicture as string}
+                className="wine-picture"
+                alt="wine"
+              />
             )}
           </div>
         </div>
-        {!!errors && <p>{JSON.stringify(errors)}</p>}
         <button type="submit" className="add-wine-button btn btn-primary">
           Registrer vin
         </button>

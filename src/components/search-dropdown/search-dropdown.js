@@ -9,6 +9,10 @@ const colourStyles = {
     color: state.isSelected ? "#98FB98" : "#023950"
   }),
   control: styles => ({ ...styles, backgroundColor: "#e8eeef" }),
+  valueContainer: base => ({
+    ...base,
+    fontSize: "0.9em"
+  }),
   multiValue: (provided, state) => {
     const transition = "opacity 300ms";
 
@@ -26,6 +30,7 @@ export const SearchDropDown = ({
   return (
     <>
       <Select
+        className="react-select"
         placeholder={placeholder}
         options={searchItems.map(item =>
           item.label && item.value
@@ -43,13 +48,7 @@ export const SearchDropDown = ({
             ? onClick(opt ? opt.map(opt => opt.value) : [])
             : onClick(opt.value);
         }}
-        value={
-          selectedItems &&
-          selectedItems.map(item => ({
-            label: item,
-            value: item
-          }))
-        }
+        value={selectedItems}
         styles={colourStyles}
         isMulti={isMulti}
       />

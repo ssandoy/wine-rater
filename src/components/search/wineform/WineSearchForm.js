@@ -7,9 +7,10 @@ import "./wineform.scss";
 import * as dispatchers from "dispatchers";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
-import { imageKeys } from "images";
+import { imageKeyValues } from "images";
 import { isObjectInArray } from "utils/array-utils";
 
+// TODO TYPESCRIPT.
 const WineSearchFormComponent = props => {
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
@@ -33,20 +34,16 @@ const WineSearchFormComponent = props => {
 
   // TODO prettify to one filter-function
   const filterWines = () => {
-    console.log(selectedWineGrapes);
     props.setWines(
       props.allWines
         .filter(wine =>
-          wine.name.toLowerCase().includes(wineName.toLowerCase())
+          wine.wineName.toLowerCase().includes(wineName.toLowerCase())
         )
-        .filter(wine =>
-          wine.type.toLowerCase().includes(wineType.toLowerCase())
-        )
-        .filter(wine => wine.year >= wineFromYear)
+        .filter(wine => wine.wineYear >= wineFromYear)
         .filter(wine => isObjectInArray(wine.fitsTo, selectedFitsTo))
-        .filter(wine => isObjectInArray(wine.grapes, selectedWineGrapes))
-        .filter(wine => isObjectInArray(wine.country, selectedCountries))
-        .filter(wine => isObjectInArray(wine.region, selectedRegions))
+        .filter(wine => isObjectInArray(wine.wineGrapes, selectedWineGrapes))
+        .filter(wine => isObjectInArray(wine.wineCountry, selectedCountries))
+        .filter(wine => isObjectInArray(wine.wineRegion, selectedRegions))
         .filter(
           wine =>
             wine.sanderRating >= sanderRating && wine.ineRating >= ineRating
@@ -76,6 +73,10 @@ const WineSearchFormComponent = props => {
       value: number,
       label: number.toString()
     };
+  });
+  const imageValues = [];
+  Object.entries(imageKeyValues).map(item => {
+    imageValues.push({ label: item[1], value: item[0] });
   });
 
   const onSubmit = event => {
@@ -123,6 +124,7 @@ const WineSearchFormComponent = props => {
           </div>
           <div className="col-12 wine-search-form__slider">
             <Slider
+              className="react-slider"
               defaultValue={wineFromYear}
               getAriaValueText={value => value}
               aria-labelledby="discrete-slider-always"
@@ -138,7 +140,7 @@ const WineSearchFormComponent = props => {
             <label htmlFor="fitsTo">Passer til</label>
             <SearchDropDown
               placeholder="Type rett"
-              searchItems={imageKeys}
+              searchItems={imageValues}
               selectedItems={selectedFitsTo}
               onClick={fitsToArray => {
                 setSelectedFitsTo(fitsToArray);
@@ -160,7 +162,7 @@ const WineSearchFormComponent = props => {
               placeholder="Land"
               selectedItems={selectedCountries}
               searchItems={[
-                ...new Set(props.allWines.map(wine => wine.country))
+                ...new Set(props.allWines.map(wine => wine.wineCountry))
               ]}
               onClick={countryArray => setSelectedCountries(countryArray)}
             />
@@ -173,17 +175,18 @@ const WineSearchFormComponent = props => {
               searchItems={[
                 ...new Set(
                   props.allWines
-                    .map(wine => wine.region)
+                    .map(wine => wine.wineRegion)
                     .filter(region => region !== null)
                 )
               ]}
               onClick={regionArray => setSelectedRegions(regionArray)}
             />
           </div>
-          <div className="col-6">
+          <div className="col-sm-12 col-md-6">
             <label>Rating Sander</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
+                className="react-slider"
                 defaultValue={sanderRating}
                 getAriaValueText={value => value}
                 aria-labelledby="discrete-slider-always"
@@ -196,10 +199,11 @@ const WineSearchFormComponent = props => {
               />
             </div>
           </div>
-          <div className="col-6">
+          <div className="col-sm-12 col-md-6">
             <label>Rating Ine</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
+                className="react-slider"
                 defaultValue={ineRating}
                 getAriaValueText={value => value}
                 aria-labelledby="range-slider"
