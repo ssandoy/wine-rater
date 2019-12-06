@@ -8,7 +8,9 @@ const colourStyles = {
     borderBottom: "1px dotted pink",
     color: state.isSelected ? "#98FB98" : "#023950"
   }),
-  control: styles => ({ ...styles, backgroundColor: "#e8eeef" }),
+  // TODO TRY TO IMPORT FROM COLOR SCSS
+  // TODO SEPARATE OUT TO COMMON FOR BOTH.
+  control: styles => ({ ...styles, backgroundColor: "#f4f3f6" }),
   valueContainer: base => ({
     ...base,
     fontSize: "0.9em"
@@ -16,7 +18,12 @@ const colourStyles = {
   multiValue: (provided, state) => {
     const transition = "opacity 300ms";
 
-    return { ...provided, backgroundColor: "#add8e6", transition };
+    return {
+      ...provided,
+      backgroundColor: "#add8e6",
+      borderRadius: "24px",
+      transition
+    };
   }
 };
 
