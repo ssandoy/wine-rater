@@ -4,14 +4,13 @@ import "./App.scss";
 import MainPageComponent from "./components/main-page/mainpage";
 import NotFoundComponent from "./components/notfound/notfound";
 import WineDetailsComponent from "./components/wine-details/winedetails";
-import logo from "./wine.png";
+import logo from "./logo.png";
 
 const App = props => {
   return (
     <Router>
       <div className="App">
         <div className="App-header">
-          <h2 className="app-header-text">Vinolini</h2>
           <img src={logo} className="App-logo" alt="logo" />
         </div>
 

@@ -87,7 +87,8 @@ const AddWineForm = props => {
   };
 
   return (
-    <div>
+    <div className="add-wine">
+      <h2 className="add-wine-title">Legg til ny vin</h2>
       <form onSubmit={onSubmitForm} className="wine-form">
         <div className="row">
           <div className="form-group col-sm-12 col-md-8">

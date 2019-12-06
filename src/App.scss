@@ -5,22 +5,22 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 5s linear;
-  height: 60px;
+  height: 100px;
+  // TODO WHAT TO DO ON MOBILE?
 }
 
 .App-header {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  background-color: #222;
   height: 100px;
   padding: 20px;
-  color: white;
+
 }
 
 .app-header-text {
-
+  color: black;
+  font-size: 60px;
 }
 
 .App-intro {
@@ -37,5 +37,5 @@
 }
 // TODO: SEPARATE COLOR-VARIABLES.
 #root {
-  background-color: $base-background-color;
+  background-image: linear-gradient($base-background-color, $base-background-gradient1-color, $base-background-gradient2-color);;
 }
