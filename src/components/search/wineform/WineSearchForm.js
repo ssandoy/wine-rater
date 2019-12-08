@@ -7,8 +7,11 @@ import "./wineform.scss";
 import * as dispatchers from "dispatchers";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
-import { imageKeyValues } from "images";
+import * as images from "images";
+import { imageKeys } from "images";
 import { isObjectInArray } from "utils/array-utils";
+import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
+import { pushOrRemoveToArray } from "utils/array-utils";
 
 // TODO TYPESCRIPT.
 const WineSearchFormComponent = props => {
@@ -74,10 +77,6 @@ const WineSearchFormComponent = props => {
       label: number.toString()
     };
   });
-  const imageValues = [];
-  Object.entries(imageKeyValues).map(item => {
-    imageValues.push({ label: item[1], value: item[0] });
-  });
 
   const onSubmit = event => {
     event.preventDefault();
@@ -138,49 +137,69 @@ const WineSearchFormComponent = props => {
           </div>
           <div className="col-6">
             <label htmlFor="fitsTo">Passer til</label>
-            <SearchDropDown
-              placeholder="Type rett"
-              searchItems={imageValues}
-              selectedItems={selectedFitsTo}
-              onClick={fitsToArray => {
-                setSelectedFitsTo(fitsToArray);
-              }}
-            />
+            <div className="row fits-to-row">
+              {imageKeys.map(imageKey => (
+                <ImageCheckbox
+                  key={imageKey}
+                  columnProps="col-4"
+                  image={images[imageKey]}
+                  htmlFor={imageKey}
+                  value={imageKey}
+                  name="fitsTo"
+                  onChange={event =>
+                    setSelectedFitsTo(
+                      pushOrRemoveToArray(selectedFitsTo, event.target.value)
+                    )
+                  }
+                />
+              ))}
+            </div>
           </div>
           <div className="col-6">
-            <label>Drue</label>
-            <SearchDropDown
-              placeholder="Vindrue"
-              searchItems={wineGrapeItems}
-              selectedItems={selectedWineGrapes}
-              onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
-            />
-          </div>
-          <div className="col-6">
-            <label htmlFor="fitsTo">Land</label>
-            <SearchDropDown
-              placeholder="Land"
-              selectedItems={selectedCountries}
-              searchItems={[
-                ...new Set(props.allWines.map(wine => wine.wineCountry))
-              ]}
-              onClick={countryArray => setSelectedCountries(countryArray)}
-            />
-          </div>
-          <div className="col-6">
-            <label>Region</label>
-            <SearchDropDown
-              placeholder="Region"
-              selectedItems={selectedRegions}
-              searchItems={[
-                ...new Set(
-                  props.allWines
-                    .map(wine => wine.wineRegion)
-                    .filter(region => region !== null)
-                )
-              ]}
-              onClick={regionArray => setSelectedRegions(regionArray)}
-            />
+            <div className="col-12">
+              <label>Drue</label>
+              <SearchDropDown
+                placeholder="Vindrue"
+                searchItems={wineGrapeItems}
+                selectedItems={selectedWineGrapes.map(grape => ({
+                  label: grape,
+                  value: grape
+                }))}
+                onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
+              />
+            </div>
+            <div className="col-12">
+              <label htmlFor="fitsTo">Land</label>
+              <SearchDropDown
+                placeholder="Land"
+                selectedItems={selectedCountries.map(country => ({
+                  label: country,
+                  value: country
+                }))}
+                searchItems={[
+                  ...new Set(props.allWines.map(wine => wine.wineCountry))
+                ]}
+                onClick={countryArray => setSelectedCountries(countryArray)}
+              />
+            </div>
+            <div className="col-12">
+              <label>Region</label>
+              <SearchDropDown
+                placeholder="Region"
+                selectedItems={selectedRegions.map(region => ({
+                  label: region,
+                  value: region
+                }))}
+                searchItems={[
+                  ...new Set(
+                    props.allWines
+                      .map(wine => wine.wineRegion)
+                      .filter(region => region !== null)
+                  )
+                ]}
+                onClick={regionArray => setSelectedRegions(regionArray)}
+              />
+            </div>
           </div>
           <div className="col-sm-12 col-md-6">
             <label>Rating Sander</label>
@@ -217,20 +236,24 @@ const WineSearchFormComponent = props => {
             </div>
           </div>
         </div>
-        <div className="wine-search-form__buttons">
-          <button
-            type="submit"
-            className="wine-search-form__button btn btn-primary"
-          >
-            Filtrer viner
-          </button>
-          <button
-            type="submit"
-            onClick={e => onClear(e)}
-            className="wine-search-form__button btn btn-danger"
-          >
-            Tøm søk
-          </button>
+        <div className="row wine-search-form__buttons">
+          <div className="col-6">
+            <button
+              type="submit"
+              className="wine-search-form__button btn btn-primary"
+            >
+              Filtrer viner
+            </button>
+          </div>
+          <div className="col-6">
+            <button
+              type="submit"
+              onClick={e => onClear(e)}
+              className="wine-search-form__button btn btn-danger"
+            >
+              Tøm søk
+            </button>
+          </div>
         </div>
       </form>
     </div>

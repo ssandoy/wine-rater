@@ -6,7 +6,8 @@ import NotFoundComponent from "./components/notfound/notfound";
 import WineDetailsComponent from "./components/wine-details/winedetails";
 import logo from "./logo.png";
 
-const App = props => {
+const App = () => {
+  document.title = "Vinolini";
   return (
     <Router>
       <div className="App">
