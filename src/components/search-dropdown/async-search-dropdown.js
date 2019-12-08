@@ -1,21 +1,8 @@
 import React from "react";
 import "./search-dropdown.scss";
 import AsyncSelect from "react-select/async";
+import { colourStyles } from "./styles";
 
-const colourStyles = {
-  option: (provided, state) => ({
-    ...provided,
-    borderBottom: "1px dotted pink",
-    color: state.isSelected ? "#98FB98" : "#023950"
-  }),
-  // TODO ATTEMPT TO IMPORT FROM COLOR SCSS
-  control: styles => ({ ...styles, backgroundColor: "#f4f3f6" }),
-  multiValue: (provided, state) => {
-    const transition = "opacity 300ms";
-
-    return { ...provided, backgroundColor: "#add8e6", transition };
-  }
-};
 export const AsyncSearchDropdown = ({
   debouncedPromise,
   placeholder,

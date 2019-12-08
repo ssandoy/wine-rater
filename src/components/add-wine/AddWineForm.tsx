@@ -94,7 +94,7 @@ const AddWineForm = props => {
           <div className="form-group col-sm-12 col-md-8">
             <label htmlFor="wineName">Navn</label>
             <AsyncSearchDropdown
-              placeholder="Velg vin"
+              placeholder="Tast inn navnet på vinen"
               debouncedPromise={debouncedSearchProductsByNameItem}
               onClick={value => {
                 handleSelectedWine(value);
@@ -125,7 +125,7 @@ const AddWineForm = props => {
             <input
               value={wineYear}
               onChange={event => setWineYear(event.target.value)}
-              className="add-wine-input"
+              className="wine-input"
             />
             {!!errors && errors.wineYear && (
               <p className="add-wine-error-validation">{errors.wineYear}</p>
@@ -134,7 +134,7 @@ const AddWineForm = props => {
           <div className="form-group col-sm-12 col-md-6">
             <label>Drue</label>
             <SearchDropDown
-              placeholder="Velg vindrue"
+              placeholder=""
               searchItems={wineGrapeItems}
               onClick={grapeArray => {
                 setWineGrapes(grapeArray);
@@ -152,7 +152,7 @@ const AddWineForm = props => {
             <input
               value={wineCountry}
               onChange={event => setWineCountry(event.target.value)}
-              className="add-wine-input"
+              className="wine-input"
             />
             {!!errors && errors.wineCountry && (
               <p className="add-wine-error-validation">{errors.wineCountry}</p>
@@ -165,7 +165,7 @@ const AddWineForm = props => {
             <input
               value={wineRegion}
               onChange={event => setWineRegion(event.target.value)}
-              className="add-wine-input"
+              className="wine-input"
             />
             {!!errors && errors.wineRegion && (
               <p className="add-wine-error-validation">{errors.wineRegion}</p>
@@ -178,7 +178,7 @@ const AddWineForm = props => {
             <input
               value={sanderRating as string}
               onChange={event => setSanderRating(event.target.value)}
-              className="add-wine-input"
+              className="wine-input"
             />
             {!!errors && errors.sanderRating && (
               <p className="add-wine-error-validation">{errors.sanderRating}</p>
@@ -191,7 +191,7 @@ const AddWineForm = props => {
             <input
               value={ineRating as string}
               onChange={event => setIneRating(event.target.value)}
-              className="add-wine-input"
+              className="wine-input"
             />
             {!!errors && errors.ineRating && (
               <p className="add-wine-error-validation">{errors.ineRating}</p>

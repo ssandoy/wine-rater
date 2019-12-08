@@ -4,15 +4,60 @@
 .wine-item {
   margin: 1em 0;
   @include for-tablet-portrait-up {
-    max-width: 300px;
+    width: 300px;
   }
   @include for-phone-only {
-    width: 500px;
+    width: 350px;
   }
 }
 
 .wine-item-card {
   min-height: 730px;
+
+  &__card-header {
+    display: flex;
+    align-items: flex-end;
+    text-shadow: 2px 2px black;
+    font-size: 24px;
+    margin-bottom: 8px;
+    margin-left: 5px;
+    margin-right: 5px;
+    color: white;
+    @include for-tablet-portrait-up {
+      min-height: 120px;
+    }
+  }
+
+  &__card-body {
+    padding-top: 30px;
+    background-color: white;
+    padding-bottom: 20px;
+  }
+
+  &__header-paragraph {
+    margin-bottom: 0px;
+  }
+
+  &__rating-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__rating-number {
+    display: flex;
+    justify-content: center;
+    height: 45px;
+    background-color: $form-input-color;
+    box-shadow: 0px 0px 1px 1px darkslategray;
+    border-radius: 24px;
+    width: 100px;
+    font-size: 20px;
+  }
+
+  &__rating-label {
+    margin-bottom: 0px;
+  }
 }
 
 .info-text-item {
@@ -23,19 +68,16 @@
   margin-top: 1em;
   display: flex;
   justify-content: space-evenly;
+
+  &__no-margin-top {
+    margin-top: 0;
+  }
 }
 
-.wine-info-text {
-  font-style: italic;
-}
 
 .wine-image {
   height: 24em;
-  margin: auto 15px;
-  @include for-phone-only {
-    height: 24em;
-    margin: auto 15px;
-  }
+  margin: auto 50px;
 }
 
 .centered-label {
@@ -50,7 +92,7 @@
   background-color: $wine-item-card-header-background-color !important;
   color: $wine-item-card-header-text-color;
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   font-size: 18px;
   min-height: 95px;
   @include for-phone-only {
@@ -69,6 +111,8 @@
 }
 
 .wine-info-text {
+  font-style: italic;
+  margin-top: 8px;
   font-size: 1em;
   @include for-phone-only {
     font-size: 20px;

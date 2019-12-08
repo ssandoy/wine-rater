@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import WineSearchFormComponent from "./wineform/WineSearchForm";
-import WineListComponent from "components/search/winelist/winelist";
+import WineListComponent from "./winelist/winelist";
 import PropTypes from "prop-types";
 import "./winesearch.scss";
 

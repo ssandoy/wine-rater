@@ -105,7 +105,7 @@ const WineSearchFormComponent = props => {
               type="text"
               autoComplete="off"
               name="wineName"
-              className="form-control"
+              className="wine-input"
               value={wineName}
               onChange={e => setWineName(e.target.value)}
             />

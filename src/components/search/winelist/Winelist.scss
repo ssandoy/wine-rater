@@ -4,6 +4,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  margin: 0 12px;
 }
 
 .wine-list__container {
@@ -11,11 +12,13 @@
 }
 
 .wine-list__hits-container {
-  position: absolute;
-  left: 6px;
-  top: -10px;
-  @include for-tablet-portrait-up {
-    left: 4px;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.wine-list__hits-paragraph {
+  color: white;
+  font-size: 22px;
+  margin-bottom: 0;
 }

@@ -1,11 +1,16 @@
 @import "./styles/variables.scss";
-
+@import './styles/mixins.scss';
 .App {
  
 }
 
 .App-logo {
-  height: 100px;
+  height: 130px;
+  @include for-phone-only {
+  height: 130px;
+  width: 80vw;
+}
+
   // TODO WHAT TO DO ON MOBILE?
 }
 

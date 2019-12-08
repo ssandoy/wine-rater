@@ -8,7 +8,7 @@ const WineListComponent = (props: any) => {
   return (
     <div className="wine-list__container">
       <div className="wine-list__hits-container">
-        <p>{wineItems.length} treff</p>
+        <p className="wine-list__hits-paragraph">{wineItems.length} TREFF PÅ VINER</p>
       </div>
       <div className="wine-item-list">
         {props.items.map((wine: Wine) => (

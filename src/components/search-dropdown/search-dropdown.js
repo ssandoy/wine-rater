@@ -1,31 +1,7 @@
 import React from "react";
 import "./search-dropdown.scss";
 import Select from "react-select";
-
-const colourStyles = {
-  option: (provided, state) => ({
-    ...provided,
-    borderBottom: "1px dotted pink",
-    color: state.isSelected ? "#98FB98" : "#023950"
-  }),
-  // TODO TRY TO IMPORT FROM COLOR SCSS
-  // TODO SEPARATE OUT TO COMMON FOR BOTH.
-  control: styles => ({ ...styles, backgroundColor: "#f4f3f6" }),
-  valueContainer: base => ({
-    ...base,
-    fontSize: "0.9em"
-  }),
-  multiValue: (provided, state) => {
-    const transition = "opacity 300ms";
-
-    return {
-      ...provided,
-      backgroundColor: "#add8e6",
-      borderRadius: "24px",
-      transition
-    };
-  }
-};
+import { colourStyles } from "./styles";
 
 export const SearchDropDown = ({
   searchItems,

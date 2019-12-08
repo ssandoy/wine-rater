@@ -5,6 +5,7 @@
   margin: 12px;
   box-shadow: 1px 0 2px black;
   background-color: $form-background-color;
+  border-radius: 14px;
 }
 
 .add-wine {
@@ -17,23 +18,13 @@
   margin-bottom: 1em;
   width: 100%;
   border-radius: 24px;
-  background-color: black !important;
+  border-color: transparent!important;
+  background-color: #56c21b !important;
 }
 
 .add-wine-title {
   margin-top: 20px;
   color: white;
-}
-
-.add-wine-input {
-  background-color: $form-input-color;
-  width: 100%;
-  height: 40px;
-  font-size: 1em;
-  padding-left: 10px;
-  border-radius: 24px;
-  border: 1px solid grey;
-  color: hsl(0,0%,20%)
 }
 
 .add-wine-error-validation {

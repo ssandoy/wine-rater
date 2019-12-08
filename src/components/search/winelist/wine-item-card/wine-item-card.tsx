@@ -13,11 +13,11 @@ const WineItemCard = ({ wine }: WineItemCardProps) => {
   const image = wine.winePicture ? wine.winePicture : no_icon_red;
   return (
     <div className="wine-item">
-      <div className="card wine-item-card bg-white">
-        <div className="card-header">
-          <p>{wine.wineName}</p>
+      <div className="wine-item-card">
+        <div className="wine-item-card__card-header">
+          <p className="wine-item-card__header-paragraph">{wine.wineName}</p>
         </div>
-        <div className="card-body">
+        <div className="wine-item-card__card-body">
           <div className="row">
             <div className="col-6">
               <img className="wine-image" alt="wine" src={image}></img>
@@ -37,12 +37,12 @@ const WineItemCard = ({ wine }: WineItemCardProps) => {
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-12 wine-row">
+            <div className="col-12 wine-row">
               <p className="centered-label">Passer til</p>
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-12 wine-row">
+            <div className="col-12 wine-row">
               {wine.fitsTo &&
                 wine.fitsTo.map(item => {
                   return (
@@ -58,11 +58,20 @@ const WineItemCard = ({ wine }: WineItemCardProps) => {
           </div>
           <hr />
           <div className="row">
-            <div className="col-sm-12 wine-row">
-              <p className="">Ine</p>
-              <p className="wine-info-text">{wine.ineRating}</p>
-              <p className="">Sander</p>
-              <p className="wine-info-text">{wine.sanderRating}</p>
+            <div className="col-12 wine-row wine-row__no-margin-top">
+              <p className="centered-label">Rating</p>
+            </div>
+            <div className="col-6 wine-item-card__rating-col">
+              <p className="wine-item-card__rating-label">Ine</p>
+              <div className="wine-item-card__rating-number">
+                <p className="wine-info-text">{wine.ineRating}</p>
+              </div>
+            </div>
+            <div className="col-6 wine-item-card__rating-col">
+              <p className="wine-item-card__rating-label">Sander</p>
+              <div className="wine-item-card__rating-number">
+                <p className="wine-info-text">{wine.sanderRating}</p>
+              </div>
             </div>
           </div>
         </div>
