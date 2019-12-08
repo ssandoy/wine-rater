@@ -34,6 +34,7 @@ export const SearchDropDown = ({
         value={selectedItems}
         styles={colourStyles}
         isMulti={isMulti}
+        noOptionsMessage="Fant ingen treff."
       />
     </>
   );
