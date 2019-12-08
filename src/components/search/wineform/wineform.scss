@@ -1,5 +1,11 @@
  @import '../../../styles/variables.scss';
 
+ .wine-search-form__container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+
  .wine-search-form {
    &__buttons {
      display: flex;
@@ -9,6 +15,12 @@
    &__button {
      width: 100%;
      margin: 0 10px 0 0;
+   }
+
+   &__title {
+     margin-top: 20px;
+     color: white;
+
    }
 
    &__slider {

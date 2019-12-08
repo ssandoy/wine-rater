@@ -95,8 +95,9 @@ const WineSearchFormComponent = props => {
   };
 
   return (
-    <div className="wine-form">
-      <form onSubmit={e => onSubmit(e)}>
+    <div className="searchComponent wine-search-form__container">
+      <h2 className="wine-search-form__title">Søk på lagrede viner</h2>
+      <form className="wine-form" onSubmit={e => onSubmit(e)}>
         <div className="row">
           <div className="col-6">
             <label htmlFor="wineName">Navn</label>
@@ -110,9 +111,9 @@ const WineSearchFormComponent = props => {
             />
           </div>
           <div className="col-6">
-            <label>Type</label>
+            <label>Vintype</label>
             <SearchDropDown
-              placeholder="Velg vintype"
+              placeholder=""
               searchItems={wineTypes}
               isMulti={false}
               onClick={wineType => setWineType(wineType)}

@@ -1,8 +1,12 @@
 @import "./styles/variables.scss";
 @import './styles/mixins.scss';
-.App {
- 
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 40px auto;
 }
+
 
 .App-logo {
   height: 130px;
@@ -16,11 +20,21 @@
 
 .App-header {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100px;
-  padding: 20px;
+  padding: 60px;
+}
 
+.app-navbar {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  a {
+    margin: 0 25px;
+  }
 }
 
 .app-header-text {
