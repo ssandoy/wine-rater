@@ -140,12 +140,12 @@ const WineSearchFormComponent = props => {
             <div className="row fits-to-row">
               {imageKeys.map(imageKey => (
                 <ImageCheckbox
-                  key={imageKey}
+                  key={imageKey + "searchForm"}
                   columnProps="col-4"
                   image={images[imageKey]}
-                  htmlFor={imageKey}
+                  htmlFor={imageKey + "searchForm"}
                   value={imageKey}
-                  name="fitsTo"
+                  name="fitsToSearchForm"
                   onChange={event =>
                     setSelectedFitsTo(
                       pushOrRemoveToArray(selectedFitsTo, event.target.value)
