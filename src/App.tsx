@@ -31,19 +31,21 @@ const App = props => {
     <Router>
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <Link to="/wines/">
+            <img src={logo} className="App-logo" alt="logo" />
+          </Link>
           <div className="app-navbar">
             <Link
               to="/wines/"
               style={{ color: "white" }}
-              activeStyle={{ color: "white" }}
+              activetyle={{ color: "white" }}
             >
               Legg til vin
             </Link>
             <Link
               to="/wines/search"
               style={{ color: "white" }}
-              activeStyle={{ color: "white" }}
+              activestyle={{ color: "white" }}
             >
               Søk på viner
             </Link>

@@ -14,18 +14,10 @@ form {
     margin: 1em 0;
 }
 
-
-input[type=file] { 
-  visibility: hidden;
-  position: absolute
-}
-
-
 .error{
   color: $form-error-color;
   font-size: 0.8em;
 }
-
 
 .wine-input {
   background-color: $form-input-color;

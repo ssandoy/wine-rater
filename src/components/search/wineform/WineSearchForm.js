@@ -16,7 +16,7 @@ import { pushOrRemoveToArray } from "utils/array-utils";
 // TODO TYPESCRIPT.
 const WineSearchFormComponent = props => {
   const [wineName, setWineName] = useState("");
-  const [wineType, setWineType] = useState("");
+  const [wineType, setWineType] = useState(null);
   // TODO FIX DEFAULT VALUES SO THAT PLACEHOLDER IS SHOWN.
   const [wineFromYear, setWineFromYear] = useState(1980);
   const [selectedWineGrapes, setSelectedWineGrapes] = useState([]);
@@ -27,10 +27,10 @@ const WineSearchFormComponent = props => {
   const [ineRating, setIneRating] = useState(0);
 
   const wineTypes = [
-    { label: "Rødvin", value: "RED" },
-    { label: "Hvitvin", value: "WHITE" },
+    { label: "Rødvin", value: "Rødvin" },
+    { label: "Hvitvin", value: "Hvitvin" },
     { label: "Rosé", value: "ROSÉ" },
-    { label: "Musserende", value: "SPARKLING" }
+    { label: "Musserende", value: "Musserende" }
   ];
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
@@ -41,6 +41,11 @@ const WineSearchFormComponent = props => {
       props.allWines
         .filter(wine =>
           wine.wineName.toLowerCase().includes(wineName.toLowerCase())
+        )
+        .filter(wine =>
+          wineType
+            ? wine.wineType.toLowerCase() === wineType.toLowerCase()
+            : true
         )
         .filter(wine => wine.wineYear >= wineFromYear)
         .filter(wine => isObjectInArray(wine.fitsTo, selectedFitsTo))
@@ -97,9 +102,9 @@ const WineSearchFormComponent = props => {
   return (
     <div className="searchComponent wine-search-form__container">
       <h2 className="wine-search-form__title">Søk på lagrede viner</h2>
-      <form className="wine-form" onSubmit={e => onSubmit(e)}>
+      <form className="wine-search-form" onSubmit={e => onSubmit(e)}>
         <div className="row">
-          <div className="col-6">
+          <div className="col-12">
             <label htmlFor="wineName">Navn</label>
             <input
               type="text"
@@ -110,10 +115,11 @@ const WineSearchFormComponent = props => {
               onChange={e => setWineName(e.target.value)}
             />
           </div>
-          <div className="col-6">
+          <div className="col-12">
             <label>Vintype</label>
             <SearchDropDown
               placeholder=""
+              selectedItems={{ label: wineType, value: wineType }}
               searchItems={wineTypes}
               isMulti={false}
               onClick={wineType => setWineType(wineType)}
@@ -136,73 +142,51 @@ const WineSearchFormComponent = props => {
               max={2020}
             />
           </div>
-          <div className="col-6">
-            <label htmlFor="fitsTo">Passer til</label>
-            <div className="row fits-to-row">
-              {imageKeys.map(imageKey => (
-                <ImageCheckbox
-                  key={imageKey + "searchForm"}
-                  columnProps="col-4"
-                  image={images[imageKey]}
-                  htmlFor={imageKey + "searchForm"}
-                  value={imageKey}
-                  name="fitsToSearchForm"
-                  onChange={event =>
-                    setSelectedFitsTo(
-                      pushOrRemoveToArray(selectedFitsTo, event.target.value)
-                    )
-                  }
-                />
-              ))}
-            </div>
+          <div className="col-12">
+            <label>Drue</label>
+            <SearchDropDown
+              placeholder="Vindrue"
+              searchItems={wineGrapeItems}
+              selectedItems={selectedWineGrapes.map(grape => ({
+                label: grape,
+                value: grape
+              }))}
+              onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
+            />
+          </div>
+          <div className="col-12">
+            <label htmlFor="fitsTo">Land</label>
+            <SearchDropDown
+              placeholder="Land"
+              selectedItems={selectedCountries.map(country => ({
+                label: country,
+                value: country
+              }))}
+              searchItems={[
+                ...new Set(props.allWines.map(wine => wine.wineCountry))
+              ]}
+              onClick={countryArray => setSelectedCountries(countryArray)}
+            />
+          </div>
+          <div className="col-12">
+            <label>Region</label>
+            <SearchDropDown
+              placeholder="Region"
+              selectedItems={selectedRegions.map(region => ({
+                label: region,
+                value: region
+              }))}
+              searchItems={[
+                ...new Set(
+                  props.allWines
+                    .map(wine => wine.wineRegion)
+                    .filter(region => region !== null)
+                )
+              ]}
+              onClick={regionArray => setSelectedRegions(regionArray)}
+            />
           </div>
           <div className="col-6">
-            <div className="col-12">
-              <label>Drue</label>
-              <SearchDropDown
-                placeholder="Vindrue"
-                searchItems={wineGrapeItems}
-                selectedItems={selectedWineGrapes.map(grape => ({
-                  label: grape,
-                  value: grape
-                }))}
-                onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
-              />
-            </div>
-            <div className="col-12">
-              <label htmlFor="fitsTo">Land</label>
-              <SearchDropDown
-                placeholder="Land"
-                selectedItems={selectedCountries.map(country => ({
-                  label: country,
-                  value: country
-                }))}
-                searchItems={[
-                  ...new Set(props.allWines.map(wine => wine.wineCountry))
-                ]}
-                onClick={countryArray => setSelectedCountries(countryArray)}
-              />
-            </div>
-            <div className="col-12">
-              <label>Region</label>
-              <SearchDropDown
-                placeholder="Region"
-                selectedItems={selectedRegions.map(region => ({
-                  label: region,
-                  value: region
-                }))}
-                searchItems={[
-                  ...new Set(
-                    props.allWines
-                      .map(wine => wine.wineRegion)
-                      .filter(region => region !== null)
-                  )
-                ]}
-                onClick={regionArray => setSelectedRegions(regionArray)}
-              />
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6">
             <label>Rating Sander</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
@@ -219,7 +203,7 @@ const WineSearchFormComponent = props => {
               />
             </div>
           </div>
-          <div className="col-sm-12 col-md-6">
+          <div className="col-6">
             <label>Rating Ine</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
@@ -235,6 +219,26 @@ const WineSearchFormComponent = props => {
                 max={10}
               />
             </div>
+          </div>
+        </div>
+        <div className="col-12">
+          <label htmlFor="fitsTo">Passer til</label>
+          <div className="row fits-to-row">
+            {imageKeys.map(imageKey => (
+              <ImageCheckbox
+                key={imageKey + "searchForm"}
+                columnProps="col-4"
+                image={images[imageKey]}
+                htmlFor={imageKey + "searchForm"}
+                value={imageKey}
+                name="fitsToSearchForm"
+                onChange={event =>
+                  setSelectedFitsTo(
+                    pushOrRemoveToArray(selectedFitsTo, event.target.value)
+                  )
+                }
+              />
+            ))}
           </div>
         </div>
         <div className="row wine-search-form__buttons">

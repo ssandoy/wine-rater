@@ -17,6 +17,7 @@ import { pushOrRemoveToArray } from "utils/array-utils";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { validateForm } from "components/add-wine/form-util";
 import WineProduct from "../../models/product";
+import {resetRegisteredWine} from '../../dispatchers/add-wine';
 
 const wineTypes = [
   { label: "Rødvin", value: "RED" },
@@ -26,6 +27,7 @@ const wineTypes = [
 ];
 
 const AddWineForm = props => {
+  resetRegisteredWine(); // TODO CALL SOMEWHERE ELSE ALSO.
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
   const [wineYear, setWineYear] = useState("");
@@ -41,7 +43,10 @@ const AddWineForm = props => {
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
-  // TODO ADD POSSIBILITY TO ADD WINE NON-EXISTING IN POLET.
+  const resetSearch = () => {
+    setWineName("");
+    setSelectedWine(false);
+  };
 
   const handleSelectedWine = wine => {
     setSelectedWine(true);
@@ -76,26 +81,26 @@ const AddWineForm = props => {
       fitsTo,
       winePicture
     };
-    console.log(values);
     const validatedErrors: iErrors | null = validateForm(
       validationSchema,
       values
     );
     setErrors(validatedErrors);
-    debugger;
     if (validatedErrors == null) {
       props.addWineToWineList(values, props.firebase);
     }
   };
-
+  const nameContainerWidth = selectedWine ? "col-sm-12 col-md-8" : "col-12";
+  // TODO START HERE WITH REGISTRATION OUTPUT AND UPDATE STATE TO FALSE WHEN SOMETHING (NAVIGATION ETC.)
   return (
     <div className="add-wine">
       <h2 className="add-wine-title">Legg til ny vin</h2>
       <form onSubmit={onSubmitForm} className="wine-form">
         <div className="row">
-          <div className="col-sm-12 col-md-8">
+          <div className={nameContainerWidth}>
             <label htmlFor="wineName">Navn</label>
             <AsyncSearchDropdown
+              selectedItems={{ label: wineName, value: wineName }}
               placeholder="Tast inn navnet på vinen"
               debouncedPromise={debouncedSearchProductsByNameItem}
               onClick={value => {
@@ -254,9 +259,25 @@ const AddWineForm = props => {
           </div>
         )}
         {selectedWine && (
-          <button type="submit" className="add-wine-button btn btn-primary">
-            Registrer vin
-          </button>
+          <div className="add-wine-form__buttons">
+            <button
+              type="submit"
+              className="add-wine-form__button add-wine-form__button-add btn btn-primary"
+            >
+              Registrer vin
+            </button>
+            <button
+              onClick={resetSearch}
+              className="add-wine-form__button add-wine-form__button-reset btn btn-danger"
+            >
+              Angre registrering
+            </button>
+          </div>
+        )}
+        {props.wineRegistered && (
+          <div className="add-wine__wine-registered">
+            <p>Vinen ble lagret!</p>
+          </div>
         )}
       </form>
     </div>
@@ -268,11 +289,16 @@ AddWineForm.propTypes = {
   firebase: PropTypes.object
 };
 
+const mapStateToProps = state => ({
+  wineRegistered: state.wineRegistered
+});
+
 export default withFirebase(
   connect(
-    null,
+    mapStateToProps,
     {
-      addWineToWineList: dispatchers.addWineToWineList
+      addWineToWineList: dispatchers.addWineToWineList,
+      resetRegistered: dispatchers.resetRegisteredWine
     }
   )(AddWineForm)
 );

@@ -3,7 +3,8 @@ import ACTIONS from "actions/action";
 const INITIAL_STATE = {
   allWines: [],
   hasSearched: false,
-  wineItems: []
+  wineItems: [],
+  wineRegistered: false
 };
 
 export default function wineReducer(state = INITIAL_STATE, action) {
@@ -28,6 +29,18 @@ export default function wineReducer(state = INITIAL_STATE, action) {
         ...state,
         wineItems: [],
         hasSearched: false
+      };
+    }
+    case ACTIONS.TYPES.CONFIRM_REGISTERED: {
+      return {
+        ...state,
+        wineRegistered: action.data
+      };
+    }
+    case ACTIONS.TYPES.RESET_REGISTERED: {
+      return {
+        ...state,
+        wineRegistered: action.data
       };
     }
     default:

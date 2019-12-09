@@ -1,6 +1,20 @@
 import { TYPES } from "./action-types";
 
 // actions
+export function wineRegistered(isRegistered) {
+  return {
+    type: TYPES.CONFIRM_REGISTERED,
+    data: isRegistered
+  };
+}
+
+export function resetRegistered() {
+  return {
+    type: TYPES.RESET_REGISTERED,
+    data: false
+  };
+}
+
 export function setWines(wineItems) {
   return {
     type: TYPES.SET_WINES,
@@ -22,6 +36,7 @@ export function clearWines() {
 }
 
 export default {
+  wineRegistered,
   setAllWines,
   setWines,
   clearWines,

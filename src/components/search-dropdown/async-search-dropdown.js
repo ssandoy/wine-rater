@@ -5,6 +5,7 @@ import { colourStyles } from "./styles";
 
 export const AsyncSearchDropdown = ({
   debouncedPromise,
+  selectedItems,
   placeholder,
   noOptionPlaceholder,
   onClick
@@ -13,9 +14,11 @@ export const AsyncSearchDropdown = ({
     <>
       <AsyncSelect
         placeholder={placeholder}
+        value={selectedItems}
         onChange={opt => {
           onClick(opt.value);
         }}
+        loadingMessage={() => "Laster inn viner..."}
         loadOptions={inputvalue => debouncedPromise(inputvalue)}
         styles={colourStyles}
         noOptionsMessage={() => noOptionPlaceholder}

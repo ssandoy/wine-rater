@@ -7,6 +7,11 @@
  }
 
  .wine-search-form {
+   margin: 12px;
+   box-shadow: 1px 0 2px black;
+   background-color: $form-background-color;
+   border-radius: 14px;
+   width: 90vw;
    &__buttons {
      display: flex;
      margin: 10px 0;
@@ -20,7 +25,6 @@
    &__title {
      margin-top: 20px;
      color: white;
-
    }
 
    &__slider {
