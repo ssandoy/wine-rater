@@ -12,6 +12,9 @@ form {
     font-size: 1.2em;
     padding: 0.5em;
     margin: 1em 0;
+  @include for-phone-only {
+    font-size: 1.1em;
+  }
 }
 
 .error{

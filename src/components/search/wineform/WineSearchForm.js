@@ -169,7 +169,7 @@ const WineSearchFormComponent = props => {
             />
           </div>
           <div className="col-6">
-            <label>Minimumsrating Sander</label>
+            <label>Min.rating Sander</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
                 className="react-slider"
@@ -186,7 +186,7 @@ const WineSearchFormComponent = props => {
             </div>
           </div>
           <div className="col-6">
-            <label>Minimumsrating Ine</label>
+            <label>Min.rating Ine</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
                 className="react-slider"
