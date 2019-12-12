@@ -15,7 +15,7 @@ const WineSearchComponent = props => {
         wineItems.length ? (
           <WineListComponent items={wineItems} />
         ) : (
-          <h3 className="wine-search__no-hits">Ingen viner matcher søket...</h3>
+          <h3 className="wine-search__no-hits">Ingen viner matcher søket.</h3>
         )
       ) : null}
     </div>

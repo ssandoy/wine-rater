@@ -7,5 +7,5 @@ export const addWineToWineList = (wineItem, firebase) => async dispatch => {
 };
 
 export const resetRegisteredWine = () => dispatch => {
-  dispatch(ACTIONS.resetRegistered);
+  dispatch(ACTIONS.resetRegistered());
 };

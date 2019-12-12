@@ -9,9 +9,8 @@ import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
 import * as images from "images";
 import { imageKeys } from "images";
-import { isObjectInArray } from "utils/array-utils";
+import { isObjectInArray, pushOrRemoveToArray } from "utils/array-utils";
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
-import { pushOrRemoveToArray } from "utils/array-utils";
 
 // TODO TYPESCRIPT.
 const WineSearchFormComponent = props => {
@@ -126,23 +125,6 @@ const WineSearchFormComponent = props => {
             />
           </div>
           <div className="col-12">
-            <label htmlFor="wineYear">Årgang</label>
-          </div>
-          <div className="col-12 wine-search-form__slider">
-            <Slider
-              className="react-slider"
-              defaultValue={wineFromYear}
-              getAriaValueText={value => value}
-              aria-labelledby="discrete-slider-always"
-              valueLabelDisplay="auto"
-              onChange={(event, value) => setWineFromYear(value)}
-              step={1}
-              marks={wineYearMarks}
-              min={1980}
-              max={2020}
-            />
-          </div>
-          <div className="col-12">
             <label>Drue</label>
             <SearchDropDown
               placeholder="Vindrue"
@@ -187,7 +169,7 @@ const WineSearchFormComponent = props => {
             />
           </div>
           <div className="col-6">
-            <label>Rating Sander</label>
+            <label>Minimumsrating Sander</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
                 className="react-slider"
@@ -204,7 +186,7 @@ const WineSearchFormComponent = props => {
             </div>
           </div>
           <div className="col-6">
-            <label>Rating Ine</label>
+            <label>Minimumsrating Ine</label>
             <div className="col-12 wine-search-form__slider-rating">
               <Slider
                 className="react-slider"

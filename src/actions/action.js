@@ -37,6 +37,7 @@ export function clearWines() {
 
 export default {
   wineRegistered,
+  resetRegistered,
   setAllWines,
   setWines,
   clearWines,

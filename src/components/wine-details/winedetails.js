@@ -5,8 +5,7 @@ import { withFirebase } from "firebase/index";
 const WineDetailsComponent = props => {
   useEffect(() => {
     return () => {
-      const data = this.props.firebase.wine(this.props.match.params.id);
-      console.log(data);
+      this.props.firebase.wine(this.props.match.params.id);
     };
   }, []);
 

@@ -25,7 +25,7 @@ const App = props => {
             .map((item: Wine) => item)
         );
       });
-  }, [props]);
+  }, []);
 
   return (
     <Router>

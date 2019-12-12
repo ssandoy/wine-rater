@@ -26,7 +26,6 @@ class FirebaseService {
       let response = await this.database.ref("wines/").push(wineItem);
       return response.key;
     } catch (error) {
-      console.log(error);
       return -1;
     }
   }

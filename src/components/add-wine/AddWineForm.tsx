@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import * as dispatchers from "dispatchers";
 import { withFirebase } from "firebase/index";
@@ -17,7 +17,6 @@ import { pushOrRemoveToArray } from "utils/array-utils";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { validateForm } from "components/add-wine/form-util";
 import WineProduct from "../../models/product";
-import {resetRegisteredWine} from '../../dispatchers/add-wine';
 
 const wineTypes = [
   { label: "Rødvin", value: "RED" },
@@ -27,7 +26,7 @@ const wineTypes = [
 ];
 
 const AddWineForm = props => {
-  resetRegisteredWine(); // TODO CALL SOMEWHERE ELSE ALSO.
+  // TODO CALL SOMEWHERE ELSE ALSO.
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
   const [wineYear, setWineYear] = useState("");
@@ -42,6 +41,10 @@ const AddWineForm = props => {
   const [errors, setErrors] = useState<iErrors | null>(null);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
+
+  useEffect(() => {
+    props.resetWineRegistered();
+  }, []);
 
   const resetSearch = () => {
     setWineName("");
@@ -116,6 +119,7 @@ const AddWineForm = props => {
             <div className="col-sm-6 col-md-4">
               <label>Type</label>
               <SearchDropDown
+                isDisabled={false}
                 placeholder="Velg vintype"
                 searchItems={wineTypes}
                 selectedItems={{ label: wineType, value: wineType }}
@@ -133,6 +137,7 @@ const AddWineForm = props => {
                 <label htmlFor="sanderRating">Årgang</label>
               </div>
               <input
+                disabled={false}
                 value={wineYear}
                 onChange={event => setWineYear(event.target.value)}
                 className="wine-input"
@@ -146,6 +151,7 @@ const AddWineForm = props => {
             <div className="col-sm-12 col-md-6">
               <label>Drue</label>
               <SearchDropDown
+                isDisabled={true}
                 placeholder=""
                 searchItems={wineGrapeItems}
                 onClick={grapeArray => {
@@ -164,6 +170,7 @@ const AddWineForm = props => {
                 <label htmlFor="sanderRating">Land</label>
               </div>
               <input
+                disabled
                 value={wineCountry}
                 onChange={event => setWineCountry(event.target.value)}
                 className="wine-input"
@@ -181,6 +188,7 @@ const AddWineForm = props => {
                 <label htmlFor="sanderRating">Region</label>
               </div>
               <input
+                disabled
                 value={wineRegion}
                 onChange={event => setWineRegion(event.target.value)}
                 className="wine-input"
@@ -298,7 +306,7 @@ export default withFirebase(
     mapStateToProps,
     {
       addWineToWineList: dispatchers.addWineToWineList,
-      resetRegistered: dispatchers.resetRegisteredWine
+      resetWineRegistered: dispatchers.resetRegisteredWine
     }
   )(AddWineForm)
 );

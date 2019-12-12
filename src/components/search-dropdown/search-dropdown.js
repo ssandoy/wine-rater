@@ -8,11 +8,13 @@ export const SearchDropDown = ({
   selectedItems,
   placeholder,
   onClick,
+  isDisabled = false,
   isMulti = true
 }) => {
   return (
     <>
       <Select
+        isDisabled={isDisabled}
         className="react-select"
         placeholder={placeholder}
         options={searchItems.map(item =>
