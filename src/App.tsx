@@ -36,13 +36,13 @@ const App = props => {
     <Router>
       <div className="App">
         <div className="App-header">
-          <NavLink to="/wines/">
+          <NavLink to="/">
             <img src={logo} className="App-logo" alt="logo" />
           </NavLink>
           <div className="app-navbar">
             <NavLink
               exact
-              to="/wines/"
+              to="/"
               style={{ color: "white" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
@@ -50,7 +50,7 @@ const App = props => {
             </NavLink>
             <NavLink
               exact
-              to="/wines/search"
+              to="/search"
               style={{ color: "white" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
@@ -60,8 +60,8 @@ const App = props => {
         </div>
         <div className="container">
           <Switch>
-            <Route exact path={["/wines", "/"]} component={AddWineForm} />
-            <Route path="/wines/search" component={WineSearchComponent} />.
+            <Route exact path={"/"} component={AddWineForm} />
+            <Route path="/search" component={WineSearchComponent} />.
             <Route component={NotFoundComponent} />
           </Switch>
         </div>
