@@ -47,6 +47,7 @@
 
   &__rating-number {
     display: flex;
+    align-items: center;
     justify-content: center;
     height: 45px;
     background-color: $form-input-color;
@@ -119,6 +120,10 @@
     font-size: 18px !important;
     margin-bottom: 10px;
     margin-top: 0;
+  }
+
+  &__rating_number {
+    margin-bottom: 0;
   }
 }
 

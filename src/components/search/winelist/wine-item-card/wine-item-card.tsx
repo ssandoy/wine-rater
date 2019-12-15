@@ -64,13 +64,17 @@ const WineItemCard = ({ wine }: WineItemCardProps) => {
             <div className="col-6 wine-item-card__rating-col">
               <p className="wine-item-card__rating-label">Ine</p>
               <div className="wine-item-card__rating-number">
-                <p className="wine-info-text">{wine.ineRating}</p>
+                <p className="wine-info-text wine-info-text__rating_number">
+                  {wine.ineRating}
+                </p>
               </div>
             </div>
             <div className="col-6 wine-item-card__rating-col">
               <p className="wine-item-card__rating-label">Sander</p>
               <div className="wine-item-card__rating-number">
-                <p className="wine-info-text">{wine.sanderRating}</p>
+                <p className="wine-info-text wine-info-text__rating_number">
+                  {wine.sanderRating}
+                </p>
               </div>
             </div>
           </div>
