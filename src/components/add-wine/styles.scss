@@ -1,4 +1,5 @@
 @import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 // TODO BETTER STRUCTURE OF SCSS.
 
 .wine-form {
@@ -7,6 +8,7 @@
   background-color: $form-background-color;
   border-radius: 14px;
   width: 90vw;
+  max-width: 900px;
 }
 
 .add-wine {
@@ -36,6 +38,9 @@
       background-color: #56c21b !important;
     }
   }
+  &__textfield {
+    margin-top: 4px !important;
+  }
 }
 
 .add-wine-title {
@@ -50,8 +55,12 @@
 }
 
 .fits-to-row {
-  margin-left: 10px !important;
   justify-content: space-around;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  @include for-phone-only {
+    margin-left: 10px !important;
+  }
 }
 
 .form-control {
@@ -70,6 +79,7 @@
 }
 
 .textfield-label {
+  margin-left: 4px;
   margin-bottom: 0;
 }
 

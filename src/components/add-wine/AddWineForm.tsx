@@ -19,10 +19,9 @@ import { validateForm } from "components/add-wine/form-util";
 import WineProduct from "../../models/product";
 
 const wineTypes = [
-  { label: "Rødvin", value: "RED" },
-  { label: "Hvitvin", value: "WHITE" },
-  { label: "Rosé", value: "ROSÉ" },
-  { label: "Musserende", value: "SPARKLING" }
+  { label: "Rødvin", value: "Rødvin" },
+  { label: "Hvitvin", value: "Hvitvin" },
+  { label: "Musserende", value: "Musserende vin" }
 ];
 
 const AddWineForm = props => {
@@ -44,7 +43,7 @@ const AddWineForm = props => {
 
   useEffect(() => {
     props.resetWineRegistered();
-  }, []);
+  }, [props]);
 
   const resetSearch = () => {
     setWineName("");
@@ -118,14 +117,9 @@ const AddWineForm = props => {
           {selectedWine && (
             <div className="col-sm-6 col-md-4">
               <label>Type</label>
-              <SearchDropDown
-                isDisabled={false}
-                placeholder="Velg vintype"
-                searchItems={wineTypes}
-                selectedItems={{ label: wineType, value: wineType }}
-                isMulti={false}
-                onClick={wineType => setWineType(wineType)}
-              />
+              <div className="wine-input">
+                <p className="add-wine-form__textfield">{wineType}</p>
+              </div>
               {!!errors && errors.wineType && (
                 <p className="add-wine-error-validation">{errors.wineType}</p>
               )}
@@ -169,12 +163,9 @@ const AddWineForm = props => {
               <div className="textfield-label">
                 <label htmlFor="sanderRating">Land</label>
               </div>
-              <input
-                disabled
-                value={wineCountry}
-                onChange={event => setWineCountry(event.target.value)}
-                className="wine-input"
-              />
+              <div className="wine-input">
+                <p className="add-wine-form__textfield ">{wineCountry}</p>
+              </div>
               {!!errors && errors.wineCountry && (
                 <p className="add-wine-error-validation">
                   {errors.wineCountry}
@@ -187,12 +178,9 @@ const AddWineForm = props => {
               <div className="textfield-label">
                 <label htmlFor="sanderRating">Region</label>
               </div>
-              <input
-                disabled
-                value={wineRegion}
-                onChange={event => setWineRegion(event.target.value)}
-                className="wine-input"
-              />
+              <div className="wine-input">
+                <p className="add-wine-form__textfield ">{wineRegion}</p>
+              </div>
               {!!errors && errors.wineRegion && (
                 <p className="add-wine-error-validation">{errors.wineRegion}</p>
               )}

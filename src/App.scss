@@ -38,6 +38,9 @@
   a {
     margin: 0 25px;
   }
+  > a:not(.activeLink):hover {
+    text-decoration: none;
+  }
 }
 
 .app-header-text {

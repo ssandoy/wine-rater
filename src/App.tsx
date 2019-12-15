@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  NavLink
+} from "react-router-dom";
 import "./App.scss";
 import AddWineForm from "components/add-wine/AddWineForm";
 import WineSearchComponent from "components/search/winesearch";
@@ -25,30 +30,32 @@ const App = props => {
             .map((item: Wine) => item)
         );
       });
-  }, []);
+  }, [props]);
 
   return (
     <Router>
       <div className="App">
         <div className="App-header">
-          <Link to="/wines/">
+          <NavLink to="/wines/">
             <img src={logo} className="App-logo" alt="logo" />
-          </Link>
+          </NavLink>
           <div className="app-navbar">
-            <Link
+            <NavLink
+              exact
               to="/wines/"
               style={{ color: "white" }}
-              activetyle={{ color: "white" }}
+              activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
               Legg til vin
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
+              exact
               to="/wines/search"
               style={{ color: "white" }}
-              activestyle={{ color: "white" }}
+              activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
               Søk på viner
-            </Link>
+            </NavLink>
           </div>
         </div>
         <div className="container">
