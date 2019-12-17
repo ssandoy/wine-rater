@@ -42,7 +42,7 @@ const WineItemCard = ({ wine }: WineItemCardProps) => {
             </div>
           </div>
           <div className="row">
-            <div className="col-12 wine-row">
+            <div className="col-12 wine-row wine-row__fits-to">
               {wine.fitsTo &&
                 wine.fitsTo.map(item => {
                   return (

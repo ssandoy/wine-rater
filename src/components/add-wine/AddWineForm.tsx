@@ -43,10 +43,11 @@ const AddWineForm = props => {
 
   useEffect(() => {
     props.resetWineRegistered();
-  }, [props]);
+  }, []);
 
   const resetSearch = () => {
     setWineName("");
+    setErrors(null);
     setSelectedWine(false);
   };
 
@@ -117,7 +118,7 @@ const AddWineForm = props => {
           {selectedWine && (
             <div className="col-sm-6 col-md-4">
               <label>Type</label>
-              <div className="wine-input">
+              <div className="add-wine-form__textfield wine-input">
                 <p className="add-wine-form__textfield">{wineType}</p>
               </div>
               {!!errors && errors.wineType && (

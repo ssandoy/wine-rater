@@ -74,6 +74,11 @@
   &__no-margin-top {
     margin-top: 0;
   }
+
+  &__fits-to {
+    // TODO CONSIDER MODULO 3 FOR ITEMS.
+    flex-wrap: wrap;
+  }
 }
 
 
