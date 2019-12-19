@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import * as dispatchers from "dispatchers";
 import { withFirebase } from "firebase/index";
@@ -24,8 +24,23 @@ const wineTypes = [
   { label: "Musserende", value: "Musserende vin" }
 ];
 
+const scrollToRef = ref => {
+  console.log(ref.current.offsetTop);
+  window.scrollTo(0, ref.current.offsetTop);
+};
+// General scroll to element function
+
 const AddWineForm = props => {
-  // TODO CALL SOMEWHERE ELSE ALSO.
+  const errorRefMap = {
+    sanderRating: useRef(null),
+    ineRating: useRef(null),
+    wineYear: useRef(null)
+  };
+
+  const executeErrorScroll = errors => {
+    scrollToRef(errorRefMap[Object.keys(errors)[0]]);
+  };
+
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
   const [wineYear, setWineYear] = useState("");
@@ -43,12 +58,17 @@ const AddWineForm = props => {
 
   useEffect(() => {
     props.resetWineRegistered();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resetSearch = () => {
+    props.resetWineRegistered();
     setWineName("");
     setErrors(null);
     setSelectedWine(false);
+    setSanderRating("");
+    setIneRating("");
+    setWineYear("");
   };
 
   const handleSelectedWine = wine => {
@@ -91,10 +111,11 @@ const AddWineForm = props => {
     setErrors(validatedErrors);
     if (validatedErrors == null) {
       props.addWineToWineList(values, props.firebase);
+    } else {
+      executeErrorScroll(validatedErrors);
     }
   };
   const nameContainerWidth = selectedWine ? "col-sm-12 col-md-8" : "col-12";
-  // TODO START HERE WITH REGISTRATION OUTPUT AND UPDATE STATE TO FALSE WHEN SOMETHING (NAVIGATION ETC.)
   return (
     <div className="add-wine">
       <h2 className="add-wine-title">Legg til ny vin</h2>
@@ -111,9 +132,6 @@ const AddWineForm = props => {
               }}
               noOptionPlaceholder="Fant ingen treff på dette navnet"
             />
-            {!!errors && errors.wineName && (
-              <p className="add-wine-error-validation">{errors.wineName}</p>
-            )}
           </div>
           {selectedWine && (
             <div className="col-sm-6 col-md-4">
@@ -121,18 +139,14 @@ const AddWineForm = props => {
               <div className="add-wine-form__textfield wine-input">
                 <p className="add-wine-form__textfield">{wineType}</p>
               </div>
-              {!!errors && errors.wineType && (
-                <p className="add-wine-error-validation">{errors.wineType}</p>
-              )}
             </div>
           )}
           {selectedWine && (
             <div className="col-sm-6 col-md-6">
-              <div className="textfield-label">
-                <label htmlFor="sanderRating">Årgang</label>
+              <div className="textfield-label" ref={errorRefMap.wineYear}>
+                <label htmlFor="wineYear">Årgang</label>
               </div>
               <input
-                disabled={false}
                 value={wineYear}
                 onChange={event => setWineYear(event.target.value)}
                 className="wine-input"
@@ -188,7 +202,7 @@ const AddWineForm = props => {
             </div>
           )}
           {selectedWine && (
-            <div className="col-sm-6 col-md-6">
+            <div className="col-sm-6 col-md-6" ref={errorRefMap.sanderRating}>
               <div className="textfield-label">
                 <label htmlFor="sanderRating">Rating Sander</label>{" "}
               </div>
@@ -198,14 +212,16 @@ const AddWineForm = props => {
                 className="wine-input"
               />
               {!!errors && errors.sanderRating && (
-                <p className="add-wine-error-validation">
-                  {errors.sanderRating}
-                </p>
+                <div>
+                  <p className="add-wine-error-validation">
+                    {errors.sanderRating}
+                  </p>
+                </div>
               )}
             </div>
           )}
           {selectedWine && (
-            <div className="col-sm-6 col-md-6">
+            <div className="col-sm-6 col-md-6" ref={errorRefMap.ineRating}>
               <div className="textfield-label">
                 <label htmlFor="ineRating">Rating Ine</label>
               </div>
@@ -215,7 +231,11 @@ const AddWineForm = props => {
                 className="wine-input"
               />
               {!!errors && errors.ineRating && (
-                <p className="add-wine-error-validation">{errors.ineRating}</p>
+                <div>
+                  <p className="add-wine-error-validation">
+                    {errors.ineRating}
+                  </p>
+                </div>
               )}
             </div>
           )}
