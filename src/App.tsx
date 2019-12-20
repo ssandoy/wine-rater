@@ -24,13 +24,14 @@ const App = props => {
       .ref("wines")
       .once("value")
       .then((wineItemsSnapshot: any) => {
-        props.setAllWines(
-          props.firebase
-            .snapshotToArray(wineItemsSnapshot)
-            .map((item: Wine) => item)
-        );
+        const allWines = props.firebase
+          .snapshotToArray(wineItemsSnapshot)
+          .map((item: Wine) => item);
+        props.setAllWines(allWines);
+        props.setWines(allWines);
       });
-  }, [props]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Router>
@@ -84,7 +85,8 @@ export default withFirebase(
   connect(
     mapStateToProps,
     {
-      setAllWines: dispatchers.setAllWines
+      setAllWines: dispatchers.setAllWines,
+      setWines: dispatchers.setWines
     }
   )(App)
 );

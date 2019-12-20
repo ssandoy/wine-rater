@@ -2,8 +2,8 @@ import ACTIONS from "actions/action";
 
 const INITIAL_STATE = {
   allWines: [],
-  hasSearched: false,
   wineItems: [],
+  hasFetchedAllWines: false,
   wineRegistered: false
 };
 
@@ -13,22 +13,21 @@ export default function wineReducer(state = INITIAL_STATE, action) {
       const wineItems = action.data;
       return {
         ...state,
-        wineItems: wineItems,
-        hasSearched: true
+        wineItems: wineItems
       };
     }
     case ACTIONS.TYPES.SET_ALL_WINES: {
       const wineItems = action.data;
       return {
         ...state,
-        allWines: wineItems
+        allWines: wineItems,
+        hasFetchedAllWines: true
       };
     }
-    case ACTIONS.TYPES.CLEAR_WINES: {
+    case ACTIONS.TYPES.CLEAR_FILTER: {
       return {
         ...state,
-        wineItems: [],
-        hasSearched: false
+        wineItems: state.allWines
       };
     }
     case ACTIONS.TYPES.CONFIRM_REGISTERED: {

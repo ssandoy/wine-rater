@@ -18,12 +18,6 @@ import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dro
 import { validateForm } from "components/add-wine/form-util";
 import WineProduct from "../../models/product";
 
-const wineTypes = [
-  { label: "Rødvin", value: "Rødvin" },
-  { label: "Hvitvin", value: "Hvitvin" },
-  { label: "Musserende", value: "Musserende vin" }
-];
-
 const scrollToRef = ref => {
   console.log(ref.current.offsetTop);
   window.scrollTo(0, ref.current.offsetTop);

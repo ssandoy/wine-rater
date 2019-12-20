@@ -29,9 +29,9 @@ export function setAllWines(wineItems) {
   };
 }
 
-export function clearWines() {
+export function clearFilter() {
   return {
-    type: TYPES.CLEAR_WINES
+    type: TYPES.CLEAR_FILTER
   };
 }
 
@@ -40,6 +40,6 @@ export default {
   resetRegistered,
   setAllWines,
   setWines,
-  clearWines,
+  clearFilter,
   TYPES
 };

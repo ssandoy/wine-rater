@@ -15,22 +15,13 @@ import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
 // TODO TYPESCRIPT.
 const WineSearchFormComponent = props => {
   const [wineName, setWineName] = useState("");
-  const [wineType, setWineType] = useState(null);
   // TODO FIX DEFAULT VALUES SO THAT PLACEHOLDER IS SHOWN.
-  const [wineFromYear, setWineFromYear] = useState(1980);
   const [selectedWineGrapes, setSelectedWineGrapes] = useState([]);
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [selectedRegions, setSelectedRegions] = useState([]);
   const [selectedFitsTo, setSelectedFitsTo] = useState([]);
   const [sanderRating, setSanderRating] = useState(0);
   const [ineRating, setIneRating] = useState(0);
-
-  const wineTypes = [
-    { label: "Rødvin", value: "Rødvin" },
-    { label: "Hvitvin", value: "Hvitvin" },
-    { label: "Rosé", value: "ROSÉ" },
-    { label: "Musserende", value: "Musserende" }
-  ];
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
@@ -41,12 +32,6 @@ const WineSearchFormComponent = props => {
         .filter(wine =>
           wine.wineName.toLowerCase().includes(wineName.toLowerCase())
         )
-        .filter(wine =>
-          wineType
-            ? wine.wineType.toLowerCase() === wineType.toLowerCase()
-            : true
-        )
-        .filter(wine => wine.wineYear >= wineFromYear)
         .filter(wine => isObjectInArray(wine.fitsTo, selectedFitsTo))
         .filter(wine => isObjectInArray(wine.wineGrapes, selectedWineGrapes))
         .filter(wine => isObjectInArray(wine.wineCountry, selectedCountries))
@@ -59,23 +44,6 @@ const WineSearchFormComponent = props => {
   };
 
   const marks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(number => {
-    return {
-      value: number,
-      label: number.toString()
-    };
-  });
-
-  const wineYearMarks = [
-    1980,
-    1985,
-    1990,
-    1995,
-    2000,
-    2005,
-    2010,
-    2015,
-    2020
-  ].map(number => {
     return {
       value: number,
       label: number.toString()
@@ -95,7 +63,7 @@ const WineSearchFormComponent = props => {
     setSelectedWineGrapes([]);
     setSelectedCountries([]);
     setWineName("");
-    props.clearWines();
+    props.clearFilter();
   };
 
   return (
@@ -112,16 +80,6 @@ const WineSearchFormComponent = props => {
               className="wine-input"
               value={wineName}
               onChange={e => setWineName(e.target.value)}
-            />
-          </div>
-          <div className="col-12">
-            <label>Vintype</label>
-            <SearchDropDown
-              placeholder=""
-              selectedItems={{ label: wineType, value: wineType }}
-              searchItems={wineTypes}
-              isMulti={false}
-              onClick={wineType => setWineType(wineType)}
             />
           </div>
           <div className="col-12">
@@ -209,7 +167,7 @@ const WineSearchFormComponent = props => {
             {imageKeys.map(imageKey => (
               <ImageCheckbox
                 key={imageKey + "searchForm"}
-                columnProps="col-4"
+                columnProps="col-4 fits-to-cell"
                 image={images[imageKey]}
                 htmlFor={imageKey + "searchForm"}
                 value={imageKey}
@@ -251,7 +209,7 @@ WineSearchFormComponent.propTypes = {
   setWines: PropTypes.func,
   setAllWines: PropTypes.func,
   handleCheckBoxChange: PropTypes.func,
-  clearWines: PropTypes.func,
+  clearFilter: PropTypes.func,
   allWines: PropTypes.array
 };
 
@@ -265,6 +223,6 @@ export default connect(
   {
     setAllWines: dispatchers.setAllWines,
     setWines: dispatchers.setWines,
-    clearWines: dispatchers.clearWines
+    clearFilter: dispatchers.clearFilter
   }
 )(WineSearchFormComponent);

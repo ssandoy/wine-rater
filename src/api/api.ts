@@ -24,7 +24,7 @@ export const searchProductsByNameMapToSelect = async (query: string) => {
       headers: {
         // TODO: ENV BEFORE PUSH.
         Accept: "application/json",
-        "Ocp-Apim-Subscription-Key": <string>apiSubscriptionKey
+        "Ocp-Apim-Subscription-Key": apiSubscriptionKey as string
       }
     }
   );

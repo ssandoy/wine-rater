@@ -1,5 +1,13 @@
-.wine-search__no-hits {
-  text-align: center;
-  margin: 30px 0;
-  color: white;
+.wine-search{
+  &__no-hits {
+    text-align: center;
+    margin: 30px 0;
+    color: white;
+  }
+  &__pending {
+    text-align: center;
+    margin: 30px 0;
+    color: white;
+
+  }
 }
