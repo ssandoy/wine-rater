@@ -19,7 +19,6 @@ import { validateForm } from "components/add-wine/form-util";
 import WineProduct from "../../models/product";
 
 const scrollToRef = ref => {
-  console.log(ref.current.offsetTop);
   window.scrollTo(0, ref.current.offsetTop);
 };
 // General scroll to element function
@@ -241,7 +240,7 @@ const AddWineForm = props => {
               {imageKeys.map(imageKey => (
                 <ImageCheckbox
                   key={imageKey}
-                  columnProps="col-4 col-md-1"
+                  columnProps="col-4 col-md-1 fits-to-cell"
                   image={images[imageKey]}
                   htmlFor={imageKey}
                   value={imageKey}

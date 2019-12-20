@@ -99,7 +99,7 @@ const WineSearchFormComponent = props => {
               />
             </div>
             <div className="col-12">
-              <label htmlFor="fitsTo">Land</label>
+              <label htmlFor="country">Land</label>
               <SearchDropDown
                 placeholder="Land"
                 selectedItems={selectedCountries.map(country => ({

@@ -30,8 +30,7 @@ const App = props => {
         props.setAllWines(allWines);
         props.setWines(allWines);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.wineRegistered]);
 
   return (
     <Router>
@@ -74,11 +73,13 @@ const App = props => {
 App.propTypes = {
   allWines: PropTypes.array,
   setAllWines: PropTypes.func,
+  wineRegistered: PropTypes.bool,
   firebase: PropTypes.object
 };
 
 const mapStateToProps = (state: any) => ({
-  allWines: state.allWines
+  allWines: state.allWines,
+  wineRegistered: state.wineRegistered
 });
 
 export default withFirebase(
