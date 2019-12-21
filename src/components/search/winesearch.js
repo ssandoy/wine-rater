@@ -4,6 +4,7 @@ import WineSearchFormComponent from "./wineform/WineSearchForm";
 import WineListComponent from "./winelist/winelist";
 import PropTypes from "prop-types";
 import "./winesearch.scss";
+import Spinner from "../spinner/Spinner";
 
 // TODO CONSISTENT FILENAMING PLEASE.
 const WineSearchComponent = props => {
@@ -16,7 +17,10 @@ const WineSearchComponent = props => {
       ) : hasFetchedAllWines ? (
         <h3 className="wine-search__no-hits">Ingen viner matcher søket.</h3>
       ) : (
-        <h3 className="wine-search__pending">Laster inn viner...</h3>
+        <div className="wine-search__pending-container">
+          <h3 className="wine-search__pending">Laster inn viner</h3>
+          <Spinner />
+        </div>
       )}
     </div>
   );

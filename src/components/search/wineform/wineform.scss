@@ -12,6 +12,7 @@
    background-color: $form-background-color;
    border-radius: 14px;
    width: 90vw;
+   max-width: 1000px;
    &__buttons {
      display: flex;
      margin: 10px 0;
@@ -37,6 +38,11 @@
    &__toggle-filter {
      // TODO STYLE BUTTON.
      margin: 16px 0;
+     > button {
+       border: transparent;
+       background-color: lightgrey;
+       color: black;
+     }
    }
 
  }

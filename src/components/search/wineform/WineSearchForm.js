@@ -197,7 +197,7 @@ const WineSearchFormComponent = props => {
               window.scrollTo(0, 0);
             }}
           >
-            {expandedFilter ? "Skjul ekstra filter" : "Vis flere filter"}
+            {expandedFilter ? "Skjul ekstra filter" : "Vis ekstra filter"}
           </button>
         </div>
         <div className="row wine-search-form__buttons">

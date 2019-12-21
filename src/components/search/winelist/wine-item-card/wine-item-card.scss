@@ -4,7 +4,7 @@
 .wine-item {
   margin: 1em 0;
   @include for-tablet-portrait-up {
-    width: 300px;
+    max-width: 320px;
   }
   @include for-phone-only {
     width: 90vw;
@@ -121,6 +121,7 @@
   font-style: italic;
   margin-top: 8px;
   font-size: 1em;
+  max-width: 90px;
   @include for-phone-only {
     font-size: 18px !important;
     margin-bottom: 10px;

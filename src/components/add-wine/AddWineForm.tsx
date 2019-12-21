@@ -271,6 +271,7 @@ const AddWineForm = props => {
         {selectedWine && (
           <div className="add-wine-form__buttons">
             <button
+              disabled={props.wineRegistered}
               type="submit"
               className="add-wine-form__button add-wine-form__button-add btn btn-primary"
             >

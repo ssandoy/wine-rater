@@ -23,15 +23,12 @@
   background-color: $form-background-color;
   border-radius: 24px;
   display: flex;
+  margin: 10px auto;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  @include for-tablet-portrait-up {
-    width: 300px;
-  }
-  @include for-phone-only {
-    width: 90vw;
-  }
+  width: 90vw;
+  max-width: 1000px;
 }
 
 .wine-list__radio-group {

@@ -9,7 +9,7 @@ export const validationSchema = {
     required: true,
     validator: {
       regEx: /^[0-9]{4}$/,
-      error: "Årgangen må være et gyldig år."
+      error: "Årgangen må være et gyldig årstall."
     }
   },
   wineCountry: {

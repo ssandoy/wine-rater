@@ -1,7 +1,7 @@
 import React from "react";
 import "./search-dropdown.scss";
 import Select from "react-select";
-import { colourStyles } from "./styles";
+import { colourStyles, dropdownDisabledColourStyles } from "./styles";
 
 export const SearchDropDown = ({
   searchItems,
@@ -34,7 +34,7 @@ export const SearchDropDown = ({
             : onClick(opt.value);
         }}
         value={selectedItems}
-        styles={colourStyles}
+        styles={isDisabled ? dropdownDisabledColourStyles : colourStyles}
         isMulti={isMulti}
         noOptionsMessage={() => "Fant ingen treff."}
       />
