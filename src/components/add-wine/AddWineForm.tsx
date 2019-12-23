@@ -281,7 +281,7 @@ const AddWineForm = props => {
               onClick={resetSearch}
               className="add-wine-form__button add-wine-form__button-reset btn btn-danger"
             >
-              Angre registrering
+              Start på nytt
             </button>
           </div>
         )}

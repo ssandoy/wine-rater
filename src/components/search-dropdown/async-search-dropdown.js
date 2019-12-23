@@ -26,6 +26,3 @@ export const AsyncSearchDropdown = ({
     </>
   );
 };
-
-// TODO DESIRED BEHAVIOUR:
-// PASS DOWN KEY AND VALUE, SET TO VALUE AND LABEL. THUS ACCESS KEY ON ONCLICK.

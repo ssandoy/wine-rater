@@ -130,7 +130,7 @@ const WineSearchFormComponent = props => {
                 onClick={regionArray => setSelectedRegions(regionArray)}
               />
             </div>
-            <div className="col-6">
+            <div className="col-12">
               <label>Rating Sander</label>
               <div className="col-12 wine-search-form__slider-rating">
                 <Slider
@@ -147,7 +147,7 @@ const WineSearchFormComponent = props => {
                 />
               </div>
             </div>
-            <div className="col-6">
+            <div className="col-12">
               <label>Rating Ine</label>
               <div className="col-12 wine-search-form__slider-rating">
                 <Slider

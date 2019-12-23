@@ -16,9 +16,7 @@
   @include for-phone-only {
     height: 130px;
     width: 80vw;
-}
-
-  // TODO WHAT TO DO ON MOBILE?
+  }
 }
 
 .App-header {
@@ -65,7 +63,6 @@
     transform: rotate(360deg);
   }
 }
-// TODO: SEPARATE COLOR-VARIABLES.
 #root {
   background-image: linear-gradient($base-background-color, $base-background-gradient1-color, $base-background-gradient2-color);;
 }

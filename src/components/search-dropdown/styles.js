@@ -24,7 +24,6 @@ export const dropdownDisabledColourStyles = {
     borderBottom: "1px solid #023950",
     color: state.isSelected ? "#98FB98" : "#023950"
   }),
-  // TODO ATTEMPT TO IMPORT FROM COLOR SCSS
   control: styles => ({
     ...styles,
     backgroundColor: "#f4f3f6",
