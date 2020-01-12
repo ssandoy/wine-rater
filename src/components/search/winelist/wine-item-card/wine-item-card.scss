@@ -4,7 +4,7 @@
 .wine-item {
   margin: 1em 0;
   @include for-tablet-portrait-up {
-    max-width: 320px;
+    width: 320px;
   }
   @include for-phone-only {
     width: 90vw;
