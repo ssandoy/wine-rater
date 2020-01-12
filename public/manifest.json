@@ -1,0 +1,15 @@
+{
+  "short_name": "Vinolini",
+  "name": "Vinolini",
+  "icons": [
+    {
+      "src": "/manifest.jpg",
+      "type": "image/jpg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#4B6566",
+  "display": "standalone",
+  "theme_color": "#4B6566"
+}
