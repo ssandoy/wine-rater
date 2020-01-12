@@ -27,8 +27,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 90vw;
-  max-width: 1000px;
+  width: 60vw;
+  min-width: 270px;
+  max-width: 300px;
+  @include for-phone-only {
+    width: 70vw;
+    max-width: 300px;
+  }
 }
 
 .wine-list__radio-group {

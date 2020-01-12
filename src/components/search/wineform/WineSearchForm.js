@@ -190,7 +190,7 @@ const WineSearchFormComponent = props => {
         )}
         <div className="wine-search-form__toggle-filter">
           <button
-            type="submit"
+            type="button"
             className="wine-search-form__button btn btn-primary"
             onClick={() => {
               setExpandedFilter(!expandedFilter);
