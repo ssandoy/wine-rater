@@ -44,6 +44,7 @@ const AddWineForm = props => {
   const [sanderRating, setSanderRating] = useState<string | null>(null);
   const [fitsTo, setFitsTo] = useState<string[]>([]);
   const [winePicture, setWinePicture] = useState<string | null>(null);
+  const [productId, setProductId] = useState<string | null>(null);
   const [selectedWine, setSelectedWine] = useState(false);
   const [errors, setErrors] = useState<iErrors | null>(null);
 
@@ -81,6 +82,7 @@ const AddWineForm = props => {
     setWineYear(wine.basic.vintage);
     setWineType(wine.classification.productTypeName);
     setWineGrapes(wine.ingredients.grapes.map(grape => grape.grapeDesc));
+    setProductId(wine.basic.productId);
   };
 
   const onSubmitForm = event => {
@@ -95,7 +97,8 @@ const AddWineForm = props => {
       sanderRating,
       ineRating,
       fitsTo,
-      winePicture
+      winePicture,
+      apiId: productId
     };
     const validatedErrors: iErrors | null = validateForm(
       validationSchema,
@@ -111,7 +114,7 @@ const AddWineForm = props => {
   const nameContainerWidth = selectedWine ? "col-sm-12 col-md-8" : "col-12";
   return (
     <div className="add-wine">
-      <h2 className="add-wine-title">Legg til ny vin</h2>
+      <h2 className="page-title">Legg til ny vin</h2>
       <form onSubmit={onSubmitForm} className="wine-form">
         <div className="row">
           <div className={nameContainerWidth}>

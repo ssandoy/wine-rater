@@ -1,5 +1,6 @@
 export default interface Wine {
   key: string;
+  apiId?: string;
   wineName: string;
   wineType: string;
   wineYear: number;

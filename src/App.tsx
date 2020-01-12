@@ -9,6 +9,7 @@ import "./App.scss";
 import AddWineForm from "components/add-wine/AddWineForm";
 import WineSearchComponent from "components/search/winesearch";
 import NotFoundComponent from "components/notfound/notfound";
+import LookUpComponent from "components/lookup/LookUpComponent";
 import logo from "./logo.png";
 import PropTypes from "prop-types";
 import * as dispatchers from "dispatchers";
@@ -52,6 +53,14 @@ const App = props => {
             </NavLink>
             <NavLink
               exact
+              to="/lookup"
+              style={{ color: "white" }}
+              activeStyle={{ color: "white", borderBottom: "1px solid white" }}
+            >
+              Detaljer
+            </NavLink>
+            <NavLink
+              exact
               to="/add"
               style={{ color: "white" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
@@ -69,6 +78,7 @@ const App = props => {
               component={WineSearchComponent}
             />
             <Route exact path={"/login"} component={LoginComponent} />
+            <Route exact path={"/lookup"} component={LookUpComponent} />
             <Route component={NotFoundComponent} />
           </Switch>
         </div>

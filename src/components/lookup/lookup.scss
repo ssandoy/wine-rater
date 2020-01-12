@@ -1,0 +1,35 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+.lookup {
+  &-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &-details-container {
+    margin: 12px;
+    padding: 0 12px 12px;
+    box-shadow: 1px 0 2px black;
+    background-color: $form-background-color;
+    border-radius: 14px;
+    width: 90vw;
+    max-width: 900px;
+  }
+  &-row {
+    width: 50vw;
+    @include for-phone-only {
+      width: 90vw;
+    }
+  }
+}
+
+.wine-details-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  button {
+    margin-top: 20px
+  }
+}
