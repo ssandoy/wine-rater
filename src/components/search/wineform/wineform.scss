@@ -19,8 +19,13 @@
    }
 
    &__button {
+     border-radius: 14px;
      width: 100%;
      margin: 0 10px 0 0;
+     &-toggle {
+       color: white !important;
+       background-color: dimgray !important;
+     }
    }
 
    &__title {

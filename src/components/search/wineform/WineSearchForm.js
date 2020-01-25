@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Slider from "@material-ui/core/Slider";
 
 import "./wineform.scss";
 import * as dispatchers from "dispatchers";
@@ -21,8 +20,6 @@ const WineSearchFormComponent = props => {
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [selectedRegions, setSelectedRegions] = useState([]);
   const [selectedFitsTo, setSelectedFitsTo] = useState([]);
-  const [sanderRating, setSanderRating] = useState(0);
-  const [ineRating, setIneRating] = useState(0);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
@@ -37,26 +34,14 @@ const WineSearchFormComponent = props => {
         .filter(wine => isObjectInArray(wine.wineGrapes, selectedWineGrapes))
         .filter(wine => isObjectInArray(wine.wineCountry, selectedCountries))
         .filter(wine => isObjectInArray(wine.wineRegion, selectedRegions))
-        .filter(
-          wine =>
-            wine.sanderRating >= sanderRating && wine.ineRating >= ineRating
-        )
     );
   };
-
-  const marks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(number => {
-    return {
-      value: number,
-      label: number.toString()
-    };
-  });
 
   const onSubmit = event => {
     event.preventDefault();
     filterWines();
   };
 
-  // FIXME SET SLIDER VALUES AND ALSO RENDERUPDATE THESE.
   const onClear = event => {
     event.preventDefault();
     setSelectedFitsTo([]);
@@ -130,40 +115,6 @@ const WineSearchFormComponent = props => {
                 onClick={regionArray => setSelectedRegions(regionArray)}
               />
             </div>
-            <div className="col-12">
-              <label>Rating Sander</label>
-              <div className="col-12 wine-search-form__slider-rating">
-                <Slider
-                  className="react-slider"
-                  defaultValue={sanderRating}
-                  getAriaValueText={value => value}
-                  aria-labelledby="discrete-slider-always"
-                  valueLabelDisplay="auto"
-                  onChange={(event, value) => setSanderRating(value)}
-                  step={0.1}
-                  marks={marks}
-                  min={0}
-                  max={10}
-                />
-              </div>
-            </div>
-            <div className="col-12">
-              <label>Rating Ine</label>
-              <div className="col-12 wine-search-form__slider-rating">
-                <Slider
-                  className="react-slider"
-                  defaultValue={ineRating}
-                  getAriaValueText={value => value}
-                  aria-labelledby="range-slider"
-                  onChange={(event, value) => setIneRating(value)}
-                  valueLabelDisplay="auto"
-                  step={0.1}
-                  marks={marks}
-                  min={0}
-                  max={10}
-                />
-              </div>
-            </div>
           </div>
         )}
         {expandedFilter && (
@@ -191,7 +142,7 @@ const WineSearchFormComponent = props => {
         <div className="wine-search-form__toggle-filter">
           <button
             type="button"
-            className="wine-search-form__button btn btn-primary"
+            className="wine-search-form__button wine-search-form__button-toggle"
             onClick={() => {
               setExpandedFilter(!expandedFilter);
               window.scrollTo(0, 0);
@@ -237,6 +188,7 @@ const mapStateToProps = state => ({
   allWines: state.allWines
 });
 
+// TODO TEST USESELECTOR INSTEAD
 export default connect(
   mapStateToProps,
   {
