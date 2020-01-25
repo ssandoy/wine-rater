@@ -15,6 +15,8 @@ import * as dispatchers from "dispatchers";
 import { withFirebase } from "firebase/index";
 import Wine from "models/wine";
 import { connect } from "react-redux";
+import LoginComponent from "./components/login";
+import PrivateRoute from "./routes";
 
 const App = props => {
   document.title = "Vinolini";
@@ -60,8 +62,13 @@ const App = props => {
         </div>
         <div className="container">
           <Switch>
-            <Route exact path={"/add"} component={AddWineForm} />
-            <Route path={["/", "/search"]} component={WineSearchComponent} />.
+            <PrivateRoute exact path={"/add"} component={AddWineForm} />
+            <Route
+              exact
+              path={["/", "/search"]}
+              component={WineSearchComponent}
+            />
+            <Route exact path={"/login"} component={LoginComponent} />
             <Route component={NotFoundComponent} />
           </Switch>
         </div>
@@ -78,8 +85,8 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state: any) => ({
-  allWines: state.allWines,
-  wineRegistered: state.wineRegistered
+  allWines: state.wineReducer.allWines,
+  wineRegistered: state.wineReducer.wineRegistered
 });
 
 export default withFirebase(

@@ -32,8 +32,8 @@ WineSearchComponent.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    wineItems: state.wineItems,
-    hasFetchedAllWines: state.hasFetchedAllWines
+    wineItems: state.wineReducer.wineItems,
+    hasFetchedAllWines: state.wineReducer.hasFetchedAllWines
   };
 }
 

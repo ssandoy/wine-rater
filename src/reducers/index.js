@@ -1,3 +1,5 @@
 import wineReducer from "./wine-reducer";
+import loginReducer from "./login-reducer";
+import { combineReducers } from "redux";
 
-export default (state, action) => wineReducer(state, action);
+export default combineReducers({ wineReducer, loginReducer });
