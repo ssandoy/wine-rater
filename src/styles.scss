@@ -9,10 +9,12 @@ body {
 }
 
 form {
+    background-color: $form-background-color;
     color: $form-text-color;
     font-size: 1.2em;
     padding: 0.5em;
     margin: 1em 0;
+    border-radius: 14px;
   @include for-phone-only {
     font-size: 1.1em;
   }

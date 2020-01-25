@@ -35,11 +35,19 @@ export function clearFilter() {
   };
 }
 
+export function login(isLoggedIn) {
+  return {
+    type: TYPES.LOGIN,
+    data: isLoggedIn
+  };
+}
+
 export default {
   wineRegistered,
   resetRegistered,
   setAllWines,
   setWines,
   clearFilter,
+  login,
   TYPES
 };

@@ -184,8 +184,8 @@ WineSearchFormComponent.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  wineItems: state.wineItems,
-  allWines: state.allWines
+  wineItems: state.wineReducer.wineItems,
+  allWines: state.wineReducer.allWines
 });
 
 // TODO TEST USESELECTOR INSTEAD

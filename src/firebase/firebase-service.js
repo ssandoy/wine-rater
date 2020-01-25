@@ -23,10 +23,19 @@ class FirebaseService {
 
   async storeWineToFirebase(wineItem) {
     try {
-      let response = await this.database.ref("wines/").push(wineItem);
+      const response = await this.database.ref("wines/").push(wineItem);
       return response.key;
     } catch (error) {
       return -1;
+    }
+  }
+
+  async login(password) {
+    try {
+      const isSuccessfulLogin = await this.database.ref("login/");
+      return isSuccessfulLogin;
+    } catch (e) {
+      return false;
     }
   }
 
