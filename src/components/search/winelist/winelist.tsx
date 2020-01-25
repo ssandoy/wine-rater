@@ -24,7 +24,11 @@ const WineListComponent = (props: any) => {
           );
         }
         case "grape": {
-          return obj1.wineGrapes[0] >= obj2.wineGrapes[0] ? 1 : -1;
+          return obj1.wineGrapes && obj2.wineGrapes
+            ? obj1.wineGrapes[0] >= obj2.wineGrapes[0]
+              ? 1
+              : -1
+            : -1;
         }
         case "name": {
           return obj1.wineName >= obj2.wineName ? 1 : -1;

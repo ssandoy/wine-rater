@@ -42,7 +42,7 @@ const App = props => {
           <div className="app-navbar">
             <NavLink
               exact
-              to="/"
+              to="/add"
               style={{ color: "white" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
@@ -60,8 +60,8 @@ const App = props => {
         </div>
         <div className="container">
           <Switch>
-            <Route exact path={"/"} component={AddWineForm} />
-            <Route path="/search" component={WineSearchComponent} />.
+            <Route exact path={"/add"} component={AddWineForm} />
+            <Route path={["/", "/search"]} component={WineSearchComponent} />.
             <Route component={NotFoundComponent} />
           </Switch>
         </div>
