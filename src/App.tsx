@@ -42,19 +42,19 @@ const App = props => {
           <div className="app-navbar">
             <NavLink
               exact
-              to="/add"
-              style={{ color: "white" }}
-              activeStyle={{ color: "white", borderBottom: "1px solid white" }}
-            >
-              Legg til vin
-            </NavLink>
-            <NavLink
-              exact
               to="/search"
               style={{ color: "white" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
               Søk på viner
+            </NavLink>
+            <NavLink
+              exact
+              to="/add"
+              style={{ color: "white" }}
+              activeStyle={{ color: "white", borderBottom: "1px solid white" }}
+            >
+              Legg til vin
             </NavLink>
           </div>
         </div>
