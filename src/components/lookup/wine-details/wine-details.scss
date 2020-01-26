@@ -9,14 +9,23 @@
   &-row-item {
     grid-column-start: 2;
     grid-column-end: 4;
+    p {
+      color: grey;
+    }
   }
 
   &-item-col-1 {
     grid-column: 2;
+    p {
+      color: grey;
+    }
   }
 
   &-item-col-2 {
     grid-column: 3;
+    p {
+      color: grey;
+    }
   }
 
   &-title {
@@ -27,8 +36,4 @@
       color: black;
     }
   }
-}
-
-p {
-  color: grey;
 }
