@@ -23,7 +23,7 @@ export default interface WineProduct {
     barcodes: [
       {
         gtin: string;
-        isMainGtin: true;
+        isMainGtin: boolean;
       }
     ];
     orderPack: string;
@@ -53,16 +53,16 @@ export default interface WineProduct {
     ecoLabelling: string;
     storagePotentialId: string;
     storagePotential: string;
-    organic: true;
-    biodynamic: true;
-    ethicallyCertified: true;
-    vintageControlled: true;
-    sweetWine: true;
-    freeOrLowOnGluten: true;
-    kosher: true;
-    locallyProduced: true;
-    noAddedSulphur: true;
-    environmentallySmart: true;
+    organic: boolean;
+    biodynamic: boolean;
+    ethicallyCertified: boolean;
+    vintageControlled: boolean;
+    sweetWine: boolean;
+    freeOrLowOnGluten: boolean;
+    kosher: boolean;
+    locallyProduced: boolean;
+    noAddedSulphur: boolean;
+    environmentallySmart: boolean;
     productionMethodStorage: string;
   };
   classification: {
