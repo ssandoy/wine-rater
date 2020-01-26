@@ -33,15 +33,17 @@ const App = props => {
         props.setAllWines(allWines);
         props.setWines(allWines);
       });
-  }, [props.wineRegistered]);
+  }, [props, props.wineRegistered]);
 
   return (
     <Router>
       <div className="App">
         <div className="App-header">
-          <NavLink to="/">
-            <img src={logo} className="App-logo" alt="logo" />
-          </NavLink>
+          <div className="app-header-icon">
+            <NavLink to="/">
+              <img src={logo} className="App-logo" alt="logo" />
+            </NavLink>
+          </div>
           <div className="app-navbar">
             <NavLink
               exact
