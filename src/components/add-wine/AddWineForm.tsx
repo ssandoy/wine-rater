@@ -147,7 +147,7 @@ const AddWineForm = props => {
                 onChange={event => setWineYear(event.target.value)}
                 className="wine-input"
               />
-              {!!errors && errors.wineYear && (
+              {errors?.wineYear && (
                 <p className="add-wine-error-validation">{errors.wineYear}</p>
               )}
             </div>
@@ -177,7 +177,7 @@ const AddWineForm = props => {
               <div className="wine-input">
                 <p className="add-wine-form__textfield ">{wineCountry}</p>
               </div>
-              {!!errors && errors.wineCountry && (
+              {errors?.wineCountry && (
                 <p className="add-wine-error-validation">
                   {errors.wineCountry}
                 </p>
@@ -192,7 +192,7 @@ const AddWineForm = props => {
               <div className="wine-input">
                 <p className="add-wine-form__textfield ">{wineRegion}</p>
               </div>
-              {!!errors && errors.wineRegion && (
+              {errors?.wineRegion && (
                 <p className="add-wine-error-validation">{errors.wineRegion}</p>
               )}
             </div>
@@ -300,19 +300,18 @@ const AddWineForm = props => {
 
 AddWineForm.propTypes = {
   addWineToWineList: PropTypes.func,
+  resetWineRegistered: PropTypes.func,
+  wineRegistered: PropTypes.bool,
   firebase: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-  wineRegistered: state.wineRegistered
+  wineRegistered: state.wineReducer.wineRegistered
 });
 
 export default withFirebase(
-  connect(
-    mapStateToProps,
-    {
-      addWineToWineList: dispatchers.addWineToWineList,
-      resetWineRegistered: dispatchers.resetRegisteredWine
-    }
-  )(AddWineForm)
+  connect(mapStateToProps, {
+    addWineToWineList: dispatchers.addWineToWineList,
+    resetWineRegistered: dispatchers.resetRegisteredWine
+  })(AddWineForm)
 );

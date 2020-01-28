@@ -91,6 +91,7 @@ const App = props => {
 
 App.propTypes = {
   allWines: PropTypes.array,
+  setWines: PropTypes.func,
   setAllWines: PropTypes.func,
   wineRegistered: PropTypes.bool,
   firebase: PropTypes.object
@@ -102,11 +103,8 @@ const mapStateToProps = (state: any) => ({
 });
 
 export default withFirebase(
-  connect(
-    mapStateToProps,
-    {
-      setAllWines: dispatchers.setAllWines,
-      setWines: dispatchers.setWines
-    }
-  )(App)
+  connect(mapStateToProps, {
+    setAllWines: dispatchers.setAllWines,
+    setWines: dispatchers.setWines
+  })(App)
 );

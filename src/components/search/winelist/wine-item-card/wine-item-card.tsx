@@ -1,6 +1,6 @@
 import React from "react";
 import * as images from "images";
-import no_icon_red from "images/no_icon_red.png";
+import noIconRed from "images/no_icon_red.png";
 import Wine from "models/wine";
 import "./wine-item-card.scss";
 import WineItemCardInfoTextItem from "./wine-item-card-info-text-item";
@@ -8,9 +8,9 @@ import WineItemCardInfoTextItem from "./wine-item-card-info-text-item";
 interface WineItemCardProps {
   wine: Wine;
 }
-
+// TODO ASSERT WARNING BY Component: React.FunctionComponent<Props> = (props: Props)
 const WineItemCard = ({ wine }: WineItemCardProps) => {
-  const image = wine.winePicture ? wine.winePicture : no_icon_red;
+  const image = wine.winePicture ? wine.winePicture : noIconRed;
   return (
     <div className="wine-item">
       <div className="wine-item-card">

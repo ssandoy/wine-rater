@@ -1,5 +1,5 @@
 import ACTIONS from "actions/action";
-
+// TODO CONVERT TO TYPESCRIPT.
 const INITIAL_STATE = {
   isLoggedIn: false
 };

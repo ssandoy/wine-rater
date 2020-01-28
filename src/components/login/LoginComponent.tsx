@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import * as dispatchers from "dispatchers";
 import "./login.scss";
+import PropTypes from "prop-types";
 
 const LoginComponent = ({ isLoggedIn, loginFirebase }) => {
   const [inputPassword, setInputPassword] = useState("");
@@ -37,15 +38,17 @@ const LoginComponent = ({ isLoggedIn, loginFirebase }) => {
   );
 };
 
+LoginComponent.propTypes = {
+  isLoggedIn: PropTypes.bool,
+  loginFirebase: PropTypes.func
+};
+
 const mapStateToProps = state => {
   return {
     isLoggedIn: state.loginReducer.isLoggedIn
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    loginFirebase: dispatchers.loginFirebase
-  }
-)(LoginComponent);
+export default connect(mapStateToProps, {
+  loginFirebase: dispatchers.loginFirebase
+})(LoginComponent);

@@ -27,7 +27,8 @@ const WineSearchComponent = props => {
 };
 
 WineSearchComponent.propTypes = {
-  wineItems: PropTypes.array
+  wineItems: PropTypes.array,
+  hasFetchedAllWines: PropTypes.bool
 };
 
 function mapStateToProps(state) {

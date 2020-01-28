@@ -101,7 +101,7 @@ export default interface WineProduct {
     recommendedFood: [
       {
         foodId: string;
-        foodDesc: string;
+        foodDesc?: string;
       }
     ];
   };

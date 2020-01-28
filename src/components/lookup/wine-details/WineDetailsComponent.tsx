@@ -10,7 +10,7 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
   const getWinePicture = async (wineId: string) => {
     const wineDetails = await getWine(wineId);
     setWinePicture(
-      convertVinmonopoletPictureSize(wineDetails.images[1].url, 800)
+      convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
     );
   };
 
@@ -21,9 +21,7 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
   return (
     <div className="wine-details-container">
       <div className="wine-details-title">
-        <p>
-          {wineProduct.basic.productLongName}
-        </p>
+        <p>{wineProduct.basic.productShortName}</p>
       </div>
       <div className="wine-details-item-col-1">
         <label>Type</label>
@@ -62,14 +60,14 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
       </div>
       <div className="wine-details-item-col-2">
         <label>Pris</label>
-        <p>{Math.ceil(wineProduct.prices[0].salesPrice)} kr</p>
+        <p>{Math.ceil(wineProduct.prices[0]?.salesPrice)} kr</p>
       </div>
       <div className="wine-details-row-item">
         <label>Passer til</label>
         <p>
           {wineProduct.description.recommendedFood
             .map((food, idx) =>
-              idx !== 0 ? food.foodDesc.toLocaleLowerCase() : food.foodDesc
+              idx !== 0 ? food.foodDesc?.toLocaleLowerCase() : food.foodDesc
             )
             .join(", ")}
         </p>

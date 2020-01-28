@@ -24,6 +24,7 @@ const WineListComponent = (props: any) => {
           );
         }
         case "grape": {
+          // TODO optional chaining?
           return obj1.wineGrapes && obj2.wineGrapes
             ? obj1.wineGrapes[0] >= obj2.wineGrapes[0]
               ? 1
