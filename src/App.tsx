@@ -19,21 +19,22 @@ import { connect } from "react-redux";
 import LoginComponent from "./components/login";
 import PrivateRoute from "./routes";
 
-const App = props => {
+const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
   document.title = "Vinolini";
 
   useEffect(() => {
-    props.firebase.database
+    firebase.database
       .ref("wines")
       .once("value")
       .then((wineItemsSnapshot: any) => {
-        const allWines = props.firebase
+        const allWines = firebase
           .snapshotToArray(wineItemsSnapshot)
           .map((item: Wine) => item);
-        props.setAllWines(allWines);
-        props.setWines(allWines);
+        setAllWines(allWines);
+        setWineItems(allWines);
       });
-  }, [props, props.wineRegistered]);
+    // TODO: Learn hooks...
+  }, [wineRegistered]);
 
   return (
     <Router>
@@ -91,7 +92,7 @@ const App = props => {
 
 App.propTypes = {
   allWines: PropTypes.array,
-  setWines: PropTypes.func,
+  setWineItems: PropTypes.func,
   setAllWines: PropTypes.func,
   wineRegistered: PropTypes.bool,
   firebase: PropTypes.object
@@ -105,6 +106,6 @@ const mapStateToProps = (state: any) => ({
 export default withFirebase(
   connect(mapStateToProps, {
     setAllWines: dispatchers.setAllWines,
-    setWines: dispatchers.setWines
+    setWineItems: dispatchers.setWineItems
   })(App)
 );

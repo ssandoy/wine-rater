@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -12,7 +12,7 @@ import { isObjectInArray, pushOrRemoveToArray } from "utils/array-utils";
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
 
 // TODO TYPESCRIPT.
-const WineSearchFormComponent = props => {
+const WineSearchFormComponent = ({ setWineItems, allWines }) => {
   const [wineName, setWineName] = useState("");
   const [expandedFilter, setExpandedFilter] = useState(false);
   // TODO FIX DEFAULT VALUES SO THAT PLACEHOLDER IS SHOWN.
@@ -25,8 +25,8 @@ const WineSearchFormComponent = props => {
 
   // TODO prettify to one filter-function
   const filterWines = () => {
-    props.setWines(
-      props.allWines
+    setWineItems(
+      allWines
         .filter(wine =>
           wine.wineName.toLowerCase().includes(wineName.toLowerCase())
         )
@@ -49,7 +49,7 @@ const WineSearchFormComponent = props => {
     setSelectedWineGrapes([]);
     setSelectedCountries([]);
     setWineName("");
-    props.clearFilter();
+    setWineItems(allWines);
   };
 
   return (
@@ -92,7 +92,7 @@ const WineSearchFormComponent = props => {
                   value: country
                 }))}
                 searchItems={[
-                  ...new Set(props.allWines.map(wine => wine.wineCountry))
+                  ...new Set(allWines.map(wine => wine.wineCountry))
                 ]}
                 onClick={countryArray => setSelectedCountries(countryArray)}
               />
@@ -107,7 +107,7 @@ const WineSearchFormComponent = props => {
                 }))}
                 searchItems={[
                   ...new Set(
-                    props.allWines
+                    allWines
                       .map(wine => wine.wineRegion)
                       .filter(region => region !== null)
                   )
@@ -176,10 +176,8 @@ const WineSearchFormComponent = props => {
 };
 
 WineSearchFormComponent.propTypes = {
-  setWines: PropTypes.func,
-  setAllWines: PropTypes.func,
+  setWineItems: PropTypes.func,
   handleCheckBoxChange: PropTypes.func,
-  clearFilter: PropTypes.func,
   allWines: PropTypes.array
 };
 
@@ -189,11 +187,6 @@ const mapStateToProps = state => ({
 });
 
 // TODO TEST USESELECTOR INSTEAD
-export default connect(
-  mapStateToProps,
-  {
-    setAllWines: dispatchers.setAllWines,
-    setWines: dispatchers.setWines,
-    clearFilter: dispatchers.clearFilter
-  }
-)(WineSearchFormComponent);
+export default connect(mapStateToProps, {
+  setWineItems: dispatchers.setWineItems
+})(WineSearchFormComponent);

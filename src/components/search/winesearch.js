@@ -7,8 +7,8 @@ import "./winesearch.scss";
 import Spinner from "../spinner/Spinner";
 
 // TODO CONSISTENT FILENAMING PLEASE.
-const WineSearchComponent = props => {
-  const { hasFetchedAllWines, wineItems } = props;
+const WineSearchComponent = ({ hasFetchedAllWines, wineItems }) => {
+  // FIXME WINEITEMS IS SET AND MUTATED IN CHILD COMPONENT... Better structure plz.
   return (
     <div>
       <WineSearchFormComponent />

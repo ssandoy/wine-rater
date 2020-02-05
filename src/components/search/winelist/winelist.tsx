@@ -3,17 +3,18 @@ import WineItemCard from "components/search/winelist/wine-item-card/wine-item-ca
 import "./Winelist.scss";
 import Wine from "../../../models/wine";
 import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import PropTypes from "prop-types";
 
-const WineListComponent = (props: any) => {
+const WineListComponent = ({ items }) => {
   const [sortValue, setSortValue] = React.useState("rating");
-  const wineItems = props.items;
+  const wineItems = items;
 
   const handleChange = event => {
     setSortValue(event.target.value);
   };
 
-  const sortWines = (items: Wine[], sortKey: string) => {
-    return items.sort(function(obj1: Wine, obj2: Wine) {
+  const sortWines = (wineItems: Wine[], sortKey: string) => {
+    return wineItems.sort(function(obj1: Wine, obj2: Wine) {
       switch (sortKey) {
         case "rating": {
           // FIXME THIS IS HACKY.
@@ -81,12 +82,16 @@ const WineListComponent = (props: any) => {
         </RadioGroup>
       </div>
       <div className="wine-item-list">
-        {sortWines(props.items, sortValue).map((wine: Wine) => (
+        {sortWines(items, sortValue).map((wine: Wine) => (
           <WineItemCard key={wine.key} wine={wine} />
         ))}
       </div>
     </div>
   );
+};
+
+WineListComponent.propTypes = {
+  items: PropTypes.array
 };
 
 export default WineListComponent;

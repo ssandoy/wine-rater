@@ -15,7 +15,7 @@ export function resetRegistered() {
   };
 }
 
-export function setWines(wineItems) {
+export function setWineItems(wineItems) {
   return {
     type: TYPES.SET_WINES,
     data: wineItems
@@ -26,12 +26,6 @@ export function setAllWines(wineItems) {
   return {
     type: TYPES.SET_ALL_WINES,
     data: wineItems
-  };
-}
-
-export function clearFilter() {
-  return {
-    type: TYPES.CLEAR_FILTER
   };
 }
 
@@ -46,8 +40,7 @@ export default {
   wineRegistered,
   resetRegistered,
   setAllWines,
-  setWines,
-  clearFilter,
+  setWineItems,
   login,
   TYPES
 };
