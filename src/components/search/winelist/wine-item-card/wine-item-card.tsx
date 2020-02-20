@@ -18,7 +18,7 @@ const WineItemCard = ({ wine }: WineItemCardProps) => {
           <p className="wine-item-card__header-paragraph">{wine.wineName}</p>
         </div>
         <div className="wine-item-card__card-body">
-          <div className="row">
+          <div className="row wine-item-card__card-top-body">
             <div className="col-6">
               <img className="wine-image" alt="wine" src={image}></img>
             </div>
