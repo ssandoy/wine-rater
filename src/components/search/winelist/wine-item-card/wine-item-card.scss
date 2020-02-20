@@ -38,7 +38,9 @@
   }
   
   &__card-top-body {
-    min-height: 500px;
+    @include for-tablet-portrait-up {
+      min-height: 500px;
+    }
   }
 
   &__header-paragraph {
