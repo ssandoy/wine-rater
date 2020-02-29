@@ -6,7 +6,7 @@ import WineProduct from "models/product";
 import WineDetailsComponent from "./wine-details/WineDetailsComponent";
 
 const LookUpComponent = () => {
-  const [wineName, setWineName] = useState("");
+  const [wineName] = useState("");
   const [wineProduct, setWineProduct] = useState<WineProduct | null>(null);
 
   const handleSelectedWine = (value: WineProduct | null) => {

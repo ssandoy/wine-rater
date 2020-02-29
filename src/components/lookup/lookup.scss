@@ -15,20 +15,8 @@
     background-color: $form-background-color;
     border-radius: 14px;
     min-width: 400px;
-  }
-  &-row {
-    width: 50vw;
     @include for-phone-only {
-      width: 90vw;
+      min-width: 300px;
     }
-  }
-}
-
-.wine-details-component {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  button {
-    margin-top: 20px
   }
 }
