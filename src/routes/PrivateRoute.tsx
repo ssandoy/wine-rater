@@ -2,7 +2,18 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-const PrivateRoute = ({ isLoggedIn, component: Component, ...rest }) => {
+interface Props {
+  isLoggedIn: boolean;
+  component: React.FunctionComponent;
+  exact: boolean;
+  path: string;
+}
+
+const PrivateRoute: React.FunctionComponent<Props> = ({
+  isLoggedIn,
+  component: Component,
+  ...rest
+}: Props) => {
   return (
     <Route
       {...rest}

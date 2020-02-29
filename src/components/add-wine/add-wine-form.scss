@@ -1,0 +1,143 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+// TODO BETTER STRUCTURE OF SCSS.
+
+
+.add-wine {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  &__wine-registered {
+    display: flex;
+    font-size: 30px;
+    justify-content: center;
+  }
+}
+
+.add-wine-form {
+  margin: 12px;
+  box-shadow: 1px 0 2px black;
+  background-color: $form-background-color;
+  border-radius: 14px;
+  width: 90vw;
+  max-width: 900px;
+
+  @include for-phone-only {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 5% 90% 5%;
+  }
+  @include for-tablet-portrait-up {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 5% 42% 5% 42% 5%;
+  }
+
+  &__row {
+    @include for-tablet-portrait-up {
+      grid-column-start: 2;
+      grid-column-end: 5;
+    }
+
+    @include for-phone-only {
+      grid-column-start: 2;
+      grid-column-end: 4;
+    }
+  }
+
+  &__col-1 {
+    @include for-phone-only {
+       grid-column-start: 2;
+       grid-column-end: 3;
+     }
+    @include for-tablet-portrait-up {
+      grid-column-start: 2;
+      grid-column-end: 3;
+    }
+  }
+
+
+  &__col-2 {
+    @include for-phone-only {
+      grid-column-start: 2;
+      grid-column-end: 3;
+    }
+
+    @include for-tablet-portrait-up {
+      grid-column-start: 4;
+      grid-column-end: 5;
+    }
+  }
+
+  &__fits-to-grid {
+    width: 100%;
+    height: 100%;
+    display: inline-grid;
+    grid-template-columns: 30% 30% 30%;
+    grid-template-rows: 30% 30% 30%;
+  }
+
+  &__fits-to-cell {
+    justify-self: center;
+  }
+
+
+  &__buttons {
+    display: inline-grid;
+    grid-template-columns: 45% 45%;
+    width: 100%;
+  }
+
+  &__button {
+    margin: 20px;
+    width: 120px;
+    @include for-tablet-portrait-up {
+      width: 240px;
+    }
+    padding: 8px;
+    border-radius: 24px;
+    border-color: transparent;
+    justify-self: center;
+    &-add {
+      grid-column-start: 1;
+      background-color: #36DE34;
+    }
+
+    &-reset {
+      background-color: $button-reset-color;
+      grid-column-start: 2;
+    }
+  }
+  &__textfield {
+    margin-top: 4px !important;
+  }
+}
+
+
+.add-wine-error-validation {
+  margin-left: 2px;
+  text-decoration: underline;
+  color: $form-error-color;
+}
+
+.form-control {
+  background-color: #e8eeef!important;
+}
+
+.custom-select {
+  background-color: #e8eeef!important;
+}
+
+.wine-picture {
+  width: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.textfield-label {
+  margin-left: 4px;
+  margin-bottom: 0;
+}
+

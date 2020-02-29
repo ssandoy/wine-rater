@@ -1,14 +1,21 @@
 import React from "react";
 import "./image-checkbox.scss";
 
-const ImageCheckbox = props => {
+interface Props {
+  htmlFor: string;
+  name: string;
+  value: string | number;
+  onChange: any;
+  image: string;
+}
+
+const ImageCheckbox: React.FunctionComponent<Props> = (props: Props) => {
   return (
-    <div className={`${props.columnProps}`}>
+    <div>
       <label htmlFor={`${props.htmlFor}`}>
         <input
           type="checkbox"
           id={`${props.htmlFor}`}
-          className="form-control"
           name={`${props.name}`}
           value={`${props.value}`}
           onChange={props.onChange}

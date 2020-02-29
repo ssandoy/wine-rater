@@ -11,19 +11,21 @@ import { Raastoff } from "data/raastoff";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { SearchDropDown } from "../search-dropdown/search-dropdown";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
-import "./styles.scss";
+import "./add-wine-form.scss";
 import PropTypes from "prop-types";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { validateForm } from "components/add-wine/form-util";
 import WineProduct from "../../models/product";
+import index from "../../reducers";
 
 const scrollToRef = ref => {
   window.scrollTo(0, ref.current.offsetTop);
 };
 // General scroll to element function
+// TODO PROPSINTERFACE.
 
-const AddWineForm = props => {
+const AddWineForm: React.FunctionComponent<any> = props => {
   const errorRefMap = {
     sanderRating: useRef(null),
     ineRating: useRef(null),
@@ -111,181 +113,184 @@ const AddWineForm = props => {
       executeErrorScroll(validatedErrors);
     }
   };
-  const nameContainerWidth = selectedWine ? "col-sm-12 col-md-8" : "col-12";
+  const nameContainerWidth = selectedWine ? "add-wine-form__col-1" : "add-wine-form__row";
   return (
     <div className="add-wine">
       <h2 className="page-title">Legg til ny vin</h2>
-      <form onSubmit={onSubmitForm} className="wine-form">
-        <div className="row">
-          <div className={nameContainerWidth}>
-            <label htmlFor="wineName">Navn</label>
-            <AsyncSearchDropdown
-              selectedItems={{ label: wineName, value: wineName }}
-              placeholder="Tast inn navnet på vinen"
-              debouncedPromise={debouncedSearchProductsByNameItem}
-              onClick={value => {
-                handleSelectedWine(value);
-              }}
-              noOptionPlaceholder="Fant ingen treff på dette navnet"
-            />
-          </div>
-          {selectedWine && (
-            <div className="col-sm-6 col-md-4">
-              <label>Type</label>
-              <div className="add-wine-form__textfield wine-input">
-                <p className="add-wine-form__textfield">{wineType}</p>
-              </div>
-            </div>
-          )}
-          {selectedWine && (
-            <div className="col-sm-6 col-md-6">
-              <div className="textfield-label" ref={errorRefMap.wineYear}>
-                <label htmlFor="wineYear">Årgang</label>
-              </div>
-              <input
-                value={wineYear}
-                onChange={event => setWineYear(event.target.value)}
-                className="wine-input"
-              />
-              {errors?.wineYear && (
-                <p className="add-wine-error-validation">{errors.wineYear}</p>
-              )}
-            </div>
-          )}
-          {selectedWine && (
-            <div className="col-sm-12 col-md-6">
-              <label>Drue</label>
-              <SearchDropDown
-                isDisabled={true}
-                placeholder=""
-                searchItems={wineGrapeItems}
-                onClick={grapeArray => {
-                  setWineGrapes(grapeArray);
-                }}
-                selectedItems={wineGrapes.map(grape => ({
-                  label: grape,
-                  value: grape
-                }))}
-              />
-            </div>
-          )}
-          {selectedWine && (
-            <div className="col-sm-6 col-md-6">
-              <div className="textfield-label">
-                <label htmlFor="sanderRating">Land</label>
-              </div>
-              <div className="wine-input">
-                <p className="add-wine-form__textfield ">{wineCountry}</p>
-              </div>
-              {errors?.wineCountry && (
-                <p className="add-wine-error-validation">
-                  {errors.wineCountry}
-                </p>
-              )}
-            </div>
-          )}
-          {selectedWine && (
-            <div className="col-sm-6 col-md-6">
-              <div className="textfield-label">
-                <label htmlFor="sanderRating">Region</label>
-              </div>
-              <div className="wine-input">
-                <p className="add-wine-form__textfield ">{wineRegion}</p>
-              </div>
-              {errors?.wineRegion && (
-                <p className="add-wine-error-validation">{errors.wineRegion}</p>
-              )}
-            </div>
-          )}
-          {selectedWine && (
-            <div className="col-sm-6 col-md-6" ref={errorRefMap.sanderRating}>
-              <div className="textfield-label">
-                <label htmlFor="sanderRating">Rating Sander</label>{" "}
-              </div>
-              <input
-                value={sanderRating as string}
-                onChange={event => setSanderRating(event.target.value)}
-                className="wine-input"
-              />
-              {!!errors && errors.sanderRating && (
-                <div>
-                  <p className="add-wine-error-validation">
-                    {errors.sanderRating}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-          {selectedWine && (
-            <div className="col-sm-6 col-md-6" ref={errorRefMap.ineRating}>
-              <div className="textfield-label">
-                <label htmlFor="ineRating">Rating Ine</label>
-              </div>
-              <input
-                value={ineRating as string}
-                onChange={event => setIneRating(event.target.value)}
-                className="wine-input"
-              />
-              {!!errors && errors.ineRating && (
-                <div>
-                  <p className="add-wine-error-validation">
-                    {errors.ineRating}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+      <form onSubmit={onSubmitForm} className="add-wine-form">
+        <div className={nameContainerWidth}>
+          <label htmlFor="wineName">Navn</label>
+          <AsyncSearchDropdown
+            selectedItems={{ label: wineName, value: wineName }}
+            placeholder="Tast inn navnet på vinen"
+            debouncedPromise={debouncedSearchProductsByNameItem}
+            onClick={value => {
+              handleSelectedWine(value);
+            }}
+            noOptionPlaceholder="Fant ingen treff på dette navnet"
+          />
         </div>
         {selectedWine && (
-          <div className="form-group">
-            <label>Hva passer vinen til?</label>
-            <div className="row fits-to-row">
-              {imageKeys.map(imageKey => (
-                <ImageCheckbox
-                  key={imageKey}
-                  columnProps="col-4 col-md-1 fits-to-cell"
-                  image={images[imageKey]}
-                  htmlFor={imageKey}
-                  value={imageKey}
-                  name="fitsTo"
-                  onChange={event =>
-                    setFitsTo(pushOrRemoveToArray(fitsTo, event.target.value))
-                  }
-                />
-              ))}
+          <div className="add-wine-form__col-2">
+            <label>Type</label>
+            <div className="add-wine-form__textfield wine-input">
+              <p className="add-wine-form__textfield">{wineType}</p>
             </div>
           </div>
         )}
         {selectedWine && (
-          <div className="row">
-            <div className="col-12">
-              <label htmlFor="winePicture">Bilde</label>
-              <br />
-              {winePicture && (
-                <img
-                  src={winePicture as string}
-                  className="wine-picture"
-                  alt="wine"
-                />
-              )}
+          <div className="add-wine-form__col-1">
+            <div className="textfield-label" ref={errorRefMap.wineYear}>
+              <label htmlFor="wineYear">Årgang</label>
             </div>
+            <input
+              value={wineYear}
+              onChange={event => setWineYear(event.target.value)}
+              className="wine-input"
+            />
+            {errors?.wineYear && (
+              <p className="add-wine-error-validation">{errors.wineYear}</p>
+            )}
           </div>
         )}
         {selectedWine && (
-          <div className="add-wine-form__buttons">
-            <button
-              disabled={props.wineRegistered}
-              type="submit"
-              className="add-wine-form__button add-wine-form__button-add btn btn-primary"
-            >
-              Registrer vin
-            </button>
-            <button
-              onClick={resetSearch}
-              className="add-wine-form__button add-wine-form__button-reset btn btn-danger"
-            >
-              Start på nytt
-            </button>
+          <div className="add-wine-form__col-2">
+            <label>Drue</label>
+            <SearchDropDown
+              isDisabled={true}
+              placeholder=""
+              searchItems={wineGrapeItems}
+              onClick={grapeArray => {
+                setWineGrapes(grapeArray);
+              }}
+              selectedItems={wineGrapes.map(grape => ({
+                label: grape,
+                value: grape
+              }))}
+            />
+          </div>
+        )}
+        {selectedWine && (
+          <div className="add-wine-form__col-1">
+            <div className="textfield-label">
+              <label htmlFor="sanderRating">Land</label>
+            </div>
+            <div className="wine-input">
+              <p className="add-wine-form__textfield ">{wineCountry}</p>
+            </div>
+            {errors?.wineCountry && (
+              <p className="add-wine-error-validation">{errors.wineCountry}</p>
+            )}
+          </div>
+        )}
+        {selectedWine && (
+          <div className="add-wine-form__col-2">
+            <div className="textfield-label">
+              <label htmlFor="sanderRating">Region</label>
+            </div>
+            <div className="wine-input">
+              <p className="add-wine-form__textfield ">{wineRegion}</p>
+            </div>
+            {errors?.wineRegion && (
+              <p className="add-wine-error-validation">{errors.wineRegion}</p>
+            )}
+          </div>
+        )}
+        {selectedWine && (
+          <div className="add-wine-form__col-1" ref={errorRefMap.sanderRating}>
+            <div className="textfield-label">
+              <label htmlFor="sanderRating">Rating Sander</label>{" "}
+            </div>
+            <input
+              value={sanderRating as string}
+              onChange={event => setSanderRating(event.target.value)}
+              className="wine-input"
+            />
+            {!!errors && errors.sanderRating && (
+              <div>
+                <p className="add-wine-error-validation">
+                  {errors.sanderRating}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+        {selectedWine && (
+          <div className="add-wine-form__col-2" ref={errorRefMap.ineRating}>
+            <div className="textfield-label">
+              <label htmlFor="ineRating">Rating Ine</label>
+            </div>
+            <input
+              value={ineRating as string}
+              onChange={event => setIneRating(event.target.value)}
+              className="wine-input"
+            />
+            {!!errors && errors.ineRating && (
+              <div>
+                <p className="add-wine-error-validation">{errors.ineRating}</p>
+              </div>
+            )}
+          </div>
+        )}
+        {selectedWine && (
+          <>
+            <div className="add-wine-form__col-1">
+              <label>Hva passer vinen til?</label>
+              <div className="add-wine-form__fits-to-grid">
+                {imageKeys.map((imageKey, index) => (
+                  <div
+                    className="add-wine-form__fits-to-cell"
+                    key={index + imageKey}
+                  >
+                    <ImageCheckbox
+                      key={imageKey}
+                      image={images[imageKey]}
+                      htmlFor={imageKey}
+                      value={imageKey}
+                      name="fitsTo"
+                      onChange={event =>
+                        setFitsTo(
+                          pushOrRemoveToArray(fitsTo, event.target.value)
+                        )
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+        {selectedWine && (
+          <div className="add-wine-form__col-2">
+						<div className="textfield-label">
+            <label htmlFor="winePicture">Bilde</label>
+            </div>
+            {winePicture && (
+              <img
+                src={winePicture as string}
+                className="wine-picture"
+                alt="wine"
+              />
+            )}
+          </div>
+        )}
+        {selectedWine && (
+          <div className="add-wine-form__row">
+            <div className="add-wine-form__buttons">
+              <button
+                disabled={props.wineRegistered}
+                type="submit"
+                className="add-wine-form__button add-wine-form__button-add"
+              >
+                Registrer vin
+              </button>
+              <button
+                onClick={resetSearch}
+                className="add-wine-form__button add-wine-form__button-reset"
+              >
+                Start på nytt
+              </button>
+            </div>
           </div>
         )}
         {props.wineRegistered && (
