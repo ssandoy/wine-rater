@@ -10,7 +10,7 @@
 
   &-details-container {
     margin: 12px;
-    padding: 0 12px 12px;
+    padding: 20px;
     box-shadow: 1px 0 2px black;
     background-color: $form-background-color;
     border-radius: 14px;
@@ -18,5 +18,11 @@
     @include for-phone-only {
       min-width: 300px;
     }
+  }
+
+  &__button {
+    margin-top: 16px;
+    width: 100%;
+    background-color: #87d7f0;
   }
 }

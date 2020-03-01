@@ -34,7 +34,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
         setWineItems(allWines);
       });
     // TODO: Learn hooks...
-  }, [wineRegistered]);
+  }, [firebase, setAllWines, setWineItems, wineRegistered]);
 
   return (
     <Router>
@@ -49,7 +49,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
             <NavLink
               exact
               to="/search"
-              style={{ color: "white" }}
+              style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
               Søk på viner
@@ -57,7 +57,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
             <NavLink
               exact
               to="/lookup"
-              style={{ color: "white" }}
+              style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
               Detaljer
@@ -65,7 +65,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
             <NavLink
               exact
               to="/add"
-              style={{ color: "white" }}
+              style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
               Legg til vin

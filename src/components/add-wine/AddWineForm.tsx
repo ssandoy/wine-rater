@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import * as dispatchers from "dispatchers";
-import { withFirebase } from "firebase/index";
 
 import { debouncedSearchProductsByNameItem, getWine } from "api/api";
 import validationSchema, { iErrors } from "./validationSchema";
@@ -12,20 +11,28 @@ import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { SearchDropDown } from "../search-dropdown/search-dropdown";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
 import "./add-wine-form.scss";
-import PropTypes from "prop-types";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { validateForm } from "components/add-wine/form-util";
+import Wine from "../../models/wine";
 import WineProduct from "../../models/product";
-import index from "../../reducers";
 
 const scrollToRef = ref => {
   window.scrollTo(0, ref.current.offsetTop);
 };
 // General scroll to element function
-// TODO PROPSINTERFACE.
 
-const AddWineForm: React.FunctionComponent<any> = props => {
+interface Props {
+  wineRegistered: boolean;
+  resetWineRegistered: () => void;
+  addWineToWineList: (Wine: Wine) => void;
+}
+
+const AddWineForm = ({
+  wineRegistered,
+  resetWineRegistered,
+  addWineToWineList
+}: Props) => {
   const errorRefMap = {
     sanderRating: useRef(null),
     ineRating: useRef(null),
@@ -38,33 +45,33 @@ const AddWineForm: React.FunctionComponent<any> = props => {
 
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
-  const [wineYear, setWineYear] = useState("");
+  const [wineYear, setWineYear] = useState<number>(0);
   const [wineCountry, setWineCountry] = useState("");
   const [wineGrapes, setWineGrapes] = useState<string[]>([]);
   const [wineRegion, setWineRegion] = useState("");
-  const [ineRating, setIneRating] = useState<string | null>(null);
-  const [sanderRating, setSanderRating] = useState<string | null>(null);
+  const [ineRating, setIneRating] = useState<number>(0);
+  const [sanderRating, setSanderRating] = useState<number>(0);
   const [fitsTo, setFitsTo] = useState<string[]>([]);
-  const [winePicture, setWinePicture] = useState<string | null>(null);
-  const [productId, setProductId] = useState<string | null>(null);
+  const [winePicture, setWinePicture] = useState<string | undefined>(undefined);
+  const [productId, setProductId] = useState<string | undefined>(undefined);
   const [selectedWine, setSelectedWine] = useState(false);
   const [errors, setErrors] = useState<iErrors | null>(null);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
   useEffect(() => {
-    props.resetWineRegistered();
+    resetWineRegistered();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resetSearch = () => {
-    props.resetWineRegistered();
+    resetWineRegistered();
     setWineName("");
     setErrors(null);
     setSelectedWine(false);
-    setSanderRating("");
-    setIneRating("");
-    setWineYear("");
+    setSanderRating(-1);
+    setIneRating(-1);
+    setWineYear(0);
   };
 
   const handleSelectedWine = wine => {
@@ -81,7 +88,7 @@ const AddWineForm: React.FunctionComponent<any> = props => {
     const { country, region } = wine.origins.origin;
     setWineCountry(country);
     setWineRegion(region);
-    setWineYear(wine.basic.vintage);
+    setWineYear(Number(wine.basic.vintage));
     setWineType(wine.classification.productTypeName);
     setWineGrapes(wine.ingredients.grapes.map(grape => grape.grapeDesc));
     setProductId(wine.basic.productId);
@@ -89,7 +96,7 @@ const AddWineForm: React.FunctionComponent<any> = props => {
 
   const onSubmitForm = event => {
     event.preventDefault();
-    const values = {
+    const values: Wine = {
       wineName,
       wineType,
       wineYear,
@@ -108,18 +115,22 @@ const AddWineForm: React.FunctionComponent<any> = props => {
     );
     setErrors(validatedErrors);
     if (validatedErrors == null) {
-      props.addWineToWineList(values, props.firebase);
+      addWineToWineList(values);
     } else {
       executeErrorScroll(validatedErrors);
     }
   };
-  const nameContainerWidth = selectedWine ? "add-wine-form__col-1" : "add-wine-form__row";
+  const nameContainerWidth = selectedWine
+    ? "add-wine-form__col-1"
+    : "add-wine-form__row";
   return (
     <div className="add-wine">
-      <h2 className="page-title">Legg til ny vin</h2>
+      <h1 className="page-title">Legg til ny vin</h1>
       <form onSubmit={onSubmitForm} className="add-wine-form">
         <div className={nameContainerWidth}>
-          <label htmlFor="wineName">Navn</label>
+          <div className="textfield-label">
+            <label htmlFor="wineName">Navn</label>
+          </div>
           <AsyncSearchDropdown
             selectedItems={{ label: wineName, value: wineName }}
             placeholder="Tast inn navnet på vinen"
@@ -132,8 +143,10 @@ const AddWineForm: React.FunctionComponent<any> = props => {
         </div>
         {selectedWine && (
           <div className="add-wine-form__col-2">
-            <label>Type</label>
-            <div className="add-wine-form__textfield wine-input">
+            <div className="textfield-label">
+              <label>Type</label>
+            </div>
+            <div className="wine-input-container">
               <p className="add-wine-form__textfield">{wineType}</p>
             </div>
           </div>
@@ -143,11 +156,12 @@ const AddWineForm: React.FunctionComponent<any> = props => {
             <div className="textfield-label" ref={errorRefMap.wineYear}>
               <label htmlFor="wineYear">Årgang</label>
             </div>
-            <input
-              value={wineYear}
-              onChange={event => setWineYear(event.target.value)}
-              className="wine-input"
-            />
+            <div className="wine-input-container">
+              <input
+                value={wineYear}
+                onChange={event => setWineYear(parseInt(event.target.value))}
+              />
+            </div>
             {errors?.wineYear && (
               <p className="add-wine-error-validation">{errors.wineYear}</p>
             )}
@@ -155,7 +169,9 @@ const AddWineForm: React.FunctionComponent<any> = props => {
         )}
         {selectedWine && (
           <div className="add-wine-form__col-2">
-            <label>Drue</label>
+            <div className="textfield-label">
+              <label>Drue</label>
+            </div>
             <SearchDropDown
               isDisabled={true}
               placeholder=""
@@ -175,7 +191,7 @@ const AddWineForm: React.FunctionComponent<any> = props => {
             <div className="textfield-label">
               <label htmlFor="sanderRating">Land</label>
             </div>
-            <div className="wine-input">
+            <div className="wine-input-container">
               <p className="add-wine-form__textfield ">{wineCountry}</p>
             </div>
             {errors?.wineCountry && (
@@ -188,7 +204,7 @@ const AddWineForm: React.FunctionComponent<any> = props => {
             <div className="textfield-label">
               <label htmlFor="sanderRating">Region</label>
             </div>
-            <div className="wine-input">
+            <div className="wine-input-container">
               <p className="add-wine-form__textfield ">{wineRegion}</p>
             </div>
             {errors?.wineRegion && (
@@ -201,11 +217,14 @@ const AddWineForm: React.FunctionComponent<any> = props => {
             <div className="textfield-label">
               <label htmlFor="sanderRating">Rating Sander</label>{" "}
             </div>
-            <input
-              value={sanderRating as string}
-              onChange={event => setSanderRating(event.target.value)}
-              className="wine-input"
-            />
+            <div className="wine-input-container">
+              <input
+                value={sanderRating.toString()}
+                onChange={event =>
+                  setSanderRating(parseInt(event.target.value))
+                }
+              />
+            </div>
             {!!errors && errors.sanderRating && (
               <div>
                 <p className="add-wine-error-validation">
@@ -220,11 +239,12 @@ const AddWineForm: React.FunctionComponent<any> = props => {
             <div className="textfield-label">
               <label htmlFor="ineRating">Rating Ine</label>
             </div>
-            <input
-              value={ineRating as string}
-              onChange={event => setIneRating(event.target.value)}
-              className="wine-input"
-            />
+            <div className="wine-input-container">
+              <input
+                value={ineRating.toString()}
+                onChange={event => setIneRating(parseInt(event.target.value))}
+              />
+            </div>
             {!!errors && errors.ineRating && (
               <div>
                 <p className="add-wine-error-validation">{errors.ineRating}</p>
@@ -235,7 +255,9 @@ const AddWineForm: React.FunctionComponent<any> = props => {
         {selectedWine && (
           <>
             <div className="add-wine-form__col-1">
-              <label>Hva passer vinen til?</label>
+              <div className="textfield-label">
+                <label>Hva passer vinen til?</label>
+              </div>
               <div className="add-wine-form__fits-to-grid">
                 {imageKeys.map((imageKey, index) => (
                   <div
@@ -262,8 +284,8 @@ const AddWineForm: React.FunctionComponent<any> = props => {
         )}
         {selectedWine && (
           <div className="add-wine-form__col-2">
-						<div className="textfield-label">
-            <label htmlFor="winePicture">Bilde</label>
+            <div className="textfield-label">
+              <label htmlFor="winePicture">Bilde</label>
             </div>
             {winePicture && (
               <img
@@ -278,7 +300,7 @@ const AddWineForm: React.FunctionComponent<any> = props => {
           <div className="add-wine-form__row">
             <div className="add-wine-form__buttons">
               <button
-                disabled={props.wineRegistered}
+                disabled={wineRegistered}
                 type="submit"
                 className="add-wine-form__button add-wine-form__button-add"
               >
@@ -293,7 +315,7 @@ const AddWineForm: React.FunctionComponent<any> = props => {
             </div>
           </div>
         )}
-        {props.wineRegistered && (
+        {wineRegistered && (
           <div className="add-wine__wine-registered">
             <p>Vinen ble lagret!</p>
           </div>
@@ -303,20 +325,11 @@ const AddWineForm: React.FunctionComponent<any> = props => {
   );
 };
 
-AddWineForm.propTypes = {
-  addWineToWineList: PropTypes.func,
-  resetWineRegistered: PropTypes.func,
-  wineRegistered: PropTypes.bool,
-  firebase: PropTypes.object
-};
-
 const mapStateToProps = state => ({
   wineRegistered: state.wineReducer.wineRegistered
 });
 
-export default withFirebase(
-  connect(mapStateToProps, {
-    addWineToWineList: dispatchers.addWineToWineList,
-    resetWineRegistered: dispatchers.resetRegisteredWine
-  })(AddWineForm)
-);
+export default connect(mapStateToProps, {
+  addWineToWineList: dispatchers.addWineToWineList,
+  resetWineRegistered: dispatchers.resetRegisteredWine
+})(AddWineForm);
