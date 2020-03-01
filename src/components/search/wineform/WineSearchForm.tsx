@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import "./wineform.scss";
@@ -10,9 +9,18 @@ import * as images from "images";
 import { imageKeys } from "images";
 import { isObjectInArray, pushOrRemoveToArray } from "utils/array-utils";
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
+import Wine from "../../../models/wine";
+
+interface Props {
+  setWineItems: (value) => Wine[];
+  allWines: Wine[];
+}
 
 // TODO TYPESCRIPT.
-const WineSearchFormComponent = ({ setWineItems, allWines }) => {
+const WineSearchFormComponent: React.FunctionComponent<Props> = ({
+  setWineItems,
+  allWines
+}: Props) => {
   const [wineName, setWineName] = useState("");
   const [expandedFilter, setExpandedFilter] = useState(false);
   // TODO FIX DEFAULT VALUES SO THAT PLACEHOLDER IS SHOWN.
@@ -53,25 +61,26 @@ const WineSearchFormComponent = ({ setWineItems, allWines }) => {
   };
 
   return (
-    <div className="searchComponent wine-search-form__container">
-      <h2 className="wine-search-form__title">Søk på lagrede viner</h2>
-      <form className="wine-search-form" onSubmit={e => onSubmit(e)}>
-        <div className="row">
-          <div className="col-12">
-            <label htmlFor="wineName">Navn</label>
+    <div className="wine-search-form">
+      <h1 className="wine-search-form__title page-title">
+        Søk på lagrede viner
+      </h1>
+      <form className="wine-search-form__form" onSubmit={e => onSubmit(e)}>
+        <div className="wine-search-form__form__row">
+          <label htmlFor="wineName">Navn</label>
+          <div className="wine-input-container">
             <input
               type="text"
               autoComplete="off"
               name="wineName"
-              className="wine-input"
               value={wineName}
               onChange={e => setWineName(e.target.value)}
             />
           </div>
         </div>
         {expandedFilter && (
-          <div className="row">
-            <div className="col-12">
+          <>
+            <div className="wine-search-form__form__row">
               <label>Drue</label>
               <SearchDropDown
                 placeholder="Vindrue"
@@ -83,7 +92,7 @@ const WineSearchFormComponent = ({ setWineItems, allWines }) => {
                 onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
               />
             </div>
-            <div className="col-12">
+            <div className="wine-search-form__form__row">
               <label htmlFor="country">Land</label>
               <SearchDropDown
                 placeholder="Land"
@@ -97,7 +106,7 @@ const WineSearchFormComponent = ({ setWineItems, allWines }) => {
                 onClick={countryArray => setSelectedCountries(countryArray)}
               />
             </div>
-            <div className="col-12">
+            <div className="wine-search-form__form__row">
               <label>Region</label>
               <SearchDropDown
                 placeholder="Region"
@@ -115,26 +124,27 @@ const WineSearchFormComponent = ({ setWineItems, allWines }) => {
                 onClick={regionArray => setSelectedRegions(regionArray)}
               />
             </div>
-          </div>
+          </>
         )}
         {expandedFilter && (
-          <div className="col-12">
-            <label htmlFor="fitsTo">Passer til</label>
-            <div className="row fits-to-row">
+          <div className="wine-search-form__form__row">
+            <label>Hva passer vinen til?</label>
+            <div className="wine-search-form__form__fits-to-grid">
               {imageKeys.map(imageKey => (
-                <ImageCheckbox
-                  key={imageKey + "searchForm"}
-                  columnProps="col-4 fits-to-cell"
-                  image={images[imageKey]}
-                  htmlFor={imageKey + "searchForm"}
-                  value={imageKey}
-                  name="fitsToSearchForm"
-                  onChange={event =>
-                    setSelectedFitsTo(
-                      pushOrRemoveToArray(selectedFitsTo, event.target.value)
-                    )
-                  }
-                />
+                <div key={imageKey} className="fits-to-cell">
+                  <ImageCheckbox
+                    key={imageKey + "searchForm"}
+                    image={images[imageKey]}
+                    htmlFor={imageKey + "searchForm"}
+                    value={imageKey}
+                    name="wineSearchForm"
+                    onChange={event =>
+                      setSelectedFitsTo(
+                        pushOrRemoveToArray(selectedFitsTo, event.target.value)
+                      )
+                    }
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -151,34 +161,26 @@ const WineSearchFormComponent = ({ setWineItems, allWines }) => {
             {expandedFilter ? "Skjul ekstra filter" : "Vis ekstra filter"}
           </button>
         </div>
-        <div className="row wine-search-form__buttons">
-          <div className="col-6">
-            <button
-              type="submit"
-              className="wine-search-form__button btn btn-primary"
-            >
-              Filtrer viner
-            </button>
-          </div>
-          <div className="col-6">
-            <button
-              type="submit"
-              onClick={e => onClear(e)}
-              className="wine-search-form__button btn btn-danger"
-            >
-              Tøm søk
-            </button>
-          </div>
+        <div className="wine-search-form__form__col-1">
+          <button
+            type="submit"
+            className="wine-search-form__button wine-search-form__button-search"
+          >
+            Filtrer viner
+          </button>
+        </div>
+        <div className="wine-search-form__form__col-2">
+          <button
+            type="submit"
+            onClick={e => onClear(e)}
+            className="wine-search-form__button wine-search-form__button-reset"
+          >
+            Tøm søk
+          </button>
         </div>
       </form>
     </div>
   );
-};
-
-WineSearchFormComponent.propTypes = {
-  setWineItems: PropTypes.func,
-  handleCheckBoxChange: PropTypes.func,
-  allWines: PropTypes.array
 };
 
 const mapStateToProps = state => ({

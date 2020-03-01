@@ -15,7 +15,7 @@ const LookUpComponent = () => {
 
   return (
     <div className="lookup-container">
-      <h2 className="page-title ">Vindetaljer</h2>
+      <h1 className="page-title ">Vindetaljer</h1>
       <div className="lookup-details-container">
         {!wineProduct && (
           <div>
@@ -36,7 +36,7 @@ const LookUpComponent = () => {
           <div className="wine-details-component">
             <WineDetailsComponent wineProduct={wineProduct} />{" "}
             <button
-              className="btn btn-primary"
+              className="lookup__button"
               onClick={() => handleSelectedWine(null)}
             >
               Søk på nytt

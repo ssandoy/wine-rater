@@ -29,7 +29,7 @@ const LoginComponent = ({ isLoggedIn, loginFirebase }) => {
           value={inputPassword}
           onChange={event => setInputPassword(event.target.value)}
         />
-        <button className="login-button btn btn-secondary" type="submit">
+        <button className="login-button" type="submit">
           Logg inn
         </button>
         {hasError && <p className="login-hasError">Feil passord!</p>}

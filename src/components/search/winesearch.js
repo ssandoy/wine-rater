@@ -10,7 +10,7 @@ import Spinner from "../spinner/Spinner";
 const WineSearchComponent = ({ hasFetchedAllWines, wineItems }) => {
   // FIXME WINEITEMS IS SET AND MUTATED IN CHILD COMPONENT... Better structure plz.
   return (
-    <div>
+    <>
       <WineSearchFormComponent />
       {wineItems.length ? (
         <WineListComponent items={wineItems} />
@@ -22,7 +22,7 @@ const WineSearchComponent = ({ hasFetchedAllWines, wineItems }) => {
           <Spinner />
         </div>
       )}
-    </div>
+    </>
   );
 };
 
