@@ -31,7 +31,7 @@
   @include for-tablet-portrait-up {
     display: grid;
     grid-template-rows: auto;
-    grid-template-columns: 5% 42% 5% 42% 5%;
+    grid-template-columns: 3% 44% 5% 44% 3%;
   }
 
   &__row {
