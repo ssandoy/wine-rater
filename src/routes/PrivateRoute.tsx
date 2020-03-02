@@ -18,7 +18,7 @@ const PrivateRoute: React.FunctionComponent<Props> = ({
     <Route
       {...rest}
       render={props =>
-        true ? <Component {...props} /> : <Redirect to="/login" />
+        isLoggedIn ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   );
