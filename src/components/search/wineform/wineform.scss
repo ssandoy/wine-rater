@@ -53,6 +53,7 @@
    @include for-phone-only {
      grid-template-rows: auto;
      grid-template-columns: 5% 90% 5%;
+     width: 85vw;
    }
    @include for-tablet-portrait-up {
      grid-template-rows: auto;
