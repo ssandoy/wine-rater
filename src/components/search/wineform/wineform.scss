@@ -49,11 +49,10 @@
    display: inline-grid;
    grid-row-gap: 8px;
    justify-self: center;
-   width: 100%;
+   width: 85vw;
    @include for-phone-only {
      grid-template-rows: auto;
      grid-template-columns: 5% 90% 5%;
-     width: 85vw;
    }
    @include for-tablet-portrait-up {
      grid-template-rows: auto;
