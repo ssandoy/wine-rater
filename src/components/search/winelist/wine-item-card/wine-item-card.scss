@@ -2,7 +2,7 @@
 @import '../../../../styles/variables';
 
 .wine-item-card {
-  margin: 1em 0;
+  margin: 1em;
   @include for-tablet-portrait-up {
     width: $wine-item-card-width__tablet_up;
   }
@@ -75,6 +75,12 @@
       justify-self: center;
     }
 
+    &-row-1 {
+      @include for-tablet-portrait-up {
+        min-height: 450px;
+      }
+    }
+
     &-wine-row {
       grid-column-start: 2;
       grid-column-end: 4;
@@ -94,7 +100,7 @@
 .wine-image {
   height: 24em;
   margin: auto 25px;
-  max-width: 180px;
+  max-width: 175px;
 }
 
 .wine-item-card__label {
@@ -129,7 +135,7 @@
 
   &__rating_number {
     color: black;
-    margin-bottom: 0;
+    margin: 0;
   }
 }
 

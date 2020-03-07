@@ -20,7 +20,7 @@
   box-shadow: 1px 0 2px black;
   background-color: $form-background-color;
   border-radius: 14px;
-  width: 90vw;
+  width: $form-width;
   max-width: 900px;
 
   @include for-phone-only {

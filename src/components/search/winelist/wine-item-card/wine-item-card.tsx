@@ -19,10 +19,10 @@ const WineItemCard: React.FunctionComponent<WineItemCardProps> = ({
         <p className="wine-item-card__header-paragraph">{wine.wineName}</p>
       </div>
       <div className="wine-item-card__card-body">
-        <div className="wine-item-card__card-body-col-1">
+        <div className="wine-item-card__card-body-col-1 wine-item-card__card-body-row-1">
           <img className="wine-image" alt="wine" src={image}></img>
         </div>
-        <div className="wine-item-card__card-body-col-2">
+        <div className="wine-item-card__card-body-col-2 wine-item-card__card-body-row-1">
           <WineItemCardInfoTextItem label="Type" value={wine.wineType} />
           <WineItemCardInfoTextItem label="Årgang" value={wine.wineYear} />
           <WineItemCardInfoTextItem label="Land" value={wine.wineCountry} />

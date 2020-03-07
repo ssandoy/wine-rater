@@ -10,7 +10,7 @@
    @include for-tablet-portrait-up {
      grid-template-rows: auto;
      margin: 0px auto;
-     width: 90vw;
+     width: $form-width;
    }
 
    &__title {
@@ -36,6 +36,10 @@
    &__button {
      width: 100%;
      margin: 0 10px 0 0;
+
+     &-toggle {
+       background-color: transparent;
+     }
 
      &-search {
        background-color: $button-confirm-color;
