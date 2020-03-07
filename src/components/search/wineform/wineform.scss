@@ -115,13 +115,8 @@
      display: inline-grid;
      grid-template-columns: 33%33%30%;
      grid-template-rows: 33%33%30%;
+     margin-top: 4px;
    }
-
-   &__fits-to-cell {
-     justify-self: center;
-   }
-
-
  }
 
  label {
@@ -135,4 +130,5 @@
  .fits-to-cell {
    display: flex;
    justify-content: center;
+   padding: 4px;
  }

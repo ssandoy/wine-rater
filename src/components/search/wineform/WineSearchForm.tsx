@@ -52,6 +52,7 @@ const WineSearchFormComponent: React.FunctionComponent<Props> = ({
 
   const onClear = event => {
     event.preventDefault();
+    setExpandedFilter(false);
     setSelectedFitsTo([]);
     setSelectedRegions([]);
     setSelectedWineGrapes([]);
@@ -166,7 +167,7 @@ const WineSearchFormComponent: React.FunctionComponent<Props> = ({
             type="submit"
             className="wine-search-form__button wine-search-form__button-search"
           >
-            Filtrer viner
+            Søk
           </button>
         </div>
         <div className="wine-search-form__form__col-2">
