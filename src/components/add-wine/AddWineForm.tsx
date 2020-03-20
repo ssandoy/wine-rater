@@ -337,4 +337,4 @@ const mapStateToProps = state => ({
 export default withFirebase(connect(mapStateToProps, 
        {	  addWineToWineList: dispatchers.addWineToWineList,
             resetWineRegistered: dispatchers.resetRegisteredWine
-	})(AddWineForm);
+	})(AddWineForm));
