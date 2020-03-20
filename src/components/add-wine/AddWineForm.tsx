@@ -96,6 +96,8 @@ const AddWineForm = ({
 
   const onSubmitForm = event => {
     event.preventDefault();
+    const sRating = parseInt(sanderRating);
+    const iRating = parseInt(ineRating);
     const values: Wine = {
       wineName,
       wineType,
@@ -103,8 +105,8 @@ const AddWineForm = ({
       wineCountry,
       wineGrapes,
       wineRegion,
-      parseInt(sanderRating),
-      parseInt(ineRating),
+      ineRating: irating,
+      sanderRating: sRating,
       fitsTo,
       winePicture,
       apiId: productId
