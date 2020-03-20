@@ -103,8 +103,8 @@ const AddWineForm = ({
       wineCountry,
       wineGrapes,
       wineRegion,
-      sanderRating,
-      ineRating,
+      parseInt(sanderRating),
+      parseInt(ineRating),
       fitsTo,
       winePicture,
       apiId: productId
