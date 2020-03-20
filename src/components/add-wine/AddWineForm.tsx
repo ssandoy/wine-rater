@@ -120,7 +120,7 @@ const AddWineForm = ({
     );
     setErrors(validatedErrors);
     if (validatedErrors == null) {
-      addWineToWineList(values);
+      addWineToWineList(values, firebase);
     } else {
       executeErrorScroll(validatedErrors);
     }
