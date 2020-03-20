@@ -26,7 +26,7 @@ const scrollToRef = ref => {
 interface Props {
   wineRegistered: boolean;
   resetWineRegistered: () => void;
-  addWineToWineList: (Wine: Wine) => void;
+  addWineToWineList: (Wine: Wine, firebase: any) => void;
   firebase: any;
 }
 
