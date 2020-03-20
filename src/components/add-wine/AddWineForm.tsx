@@ -49,8 +49,8 @@ const AddWineForm = ({
   const [wineCountry, setWineCountry] = useState("");
   const [wineGrapes, setWineGrapes] = useState<string[]>([]);
   const [wineRegion, setWineRegion] = useState("");
-  const [ineRating, setIneRating] = useState<number>(0);
-  const [sanderRating, setSanderRating] = useState<number>(0);
+  const [ineRating, setIneRating] = useState<number|string>(0);
+  const [sanderRating, setSanderRating] = useState<number|string>(0);
   const [fitsTo, setFitsTo] = useState<string[]>([]);
   const [winePicture, setWinePicture] = useState<string | undefined>(undefined);
   const [productId, setProductId] = useState<string | undefined>(undefined);
@@ -221,7 +221,7 @@ const AddWineForm = ({
               <input
                 value={sanderRating.toString()}
                 onChange={event =>
-                  setSanderRating(parseInt(event.target.value))
+                  setSanderRating(event.target.value)
                 }
               />
             </div>
@@ -242,7 +242,7 @@ const AddWineForm = ({
             <div className="wine-input-container">
               <input
                 value={ineRating.toString()}
-                onChange={event => setIneRating(parseInt(event.target.value))}
+                onChange={event => setIneRating(event.target.value)}
               />
             </div>
             {!!errors && errors.ineRating && (
