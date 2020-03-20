@@ -105,7 +105,7 @@ const AddWineForm = ({
       wineCountry,
       wineGrapes,
       wineRegion,
-      ineRating: irating,
+      ineRating: iRating,
       sanderRating: sRating,
       fitsTo,
       winePicture,
