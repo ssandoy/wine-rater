@@ -69,8 +69,8 @@ const AddWineForm = ({
     setWineName("");
     setErrors(null);
     setSelectedWine(false);
-    setSanderRating(-1);
-    setIneRating(-1);
+    setSanderRating("");
+    setIneRating("");
     setWineYear(0);
   };
 
