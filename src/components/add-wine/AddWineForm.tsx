@@ -16,6 +16,7 @@ import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dro
 import { validateForm } from "components/add-wine/form-util";
 import Wine from "../../models/wine";
 import WineProduct from "../../models/product";
+import { withFirebase } from "firebase/index";
 
 const scrollToRef = ref => {
   window.scrollTo(0, ref.current.offsetTop);
@@ -26,12 +27,14 @@ interface Props {
   wineRegistered: boolean;
   resetWineRegistered: () => void;
   addWineToWineList: (Wine: Wine) => void;
+  firebase: any;
 }
 
 const AddWineForm = ({
   wineRegistered,
   resetWineRegistered,
-  addWineToWineList
+  addWineToWineList,
+  firebase
 }: Props) => {
   const errorRefMap = {
     sanderRating: useRef(null),
@@ -331,7 +334,7 @@ const mapStateToProps = state => ({
   wineRegistered: state.wineReducer.wineRegistered
 });
 
-export default connect(mapStateToProps, {
-  addWineToWineList: dispatchers.addWineToWineList,
-  resetWineRegistered: dispatchers.resetRegisteredWine
-})(AddWineForm);
+export default withFirebase(connect(mapStateToProps, 
+       {	  addWineToWineList: dispatchers.addWineToWineList,
+            resetWineRegistered: dispatchers.resetRegisteredWine
+	})(AddWineForm);
