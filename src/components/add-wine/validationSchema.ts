@@ -18,7 +18,7 @@ export const validationSchema = {
   sanderRating: {
     required: true,
     validator: {
-      regEx: /^(10|(\d{1}(\.\d{1,2})?))$/,
+      regEx: /^(10|(\d{1}(\.\d{1,2})))$/,
       error: "Ratingen må være et tall mellom 0.0 og 10.0"
     }
   },
@@ -31,14 +31,14 @@ export const validationSchema = {
   }
 };
 
-export interface iErrors {
+export interface Errors {
   wineName: string;
   wineType: string;
   wineRegion: string;
   wineCountry: string;
   wineYear: string;
   sanderRating: string;
-  ineRating;
+  ineRating: string;
 }
 
 export default validationSchema;

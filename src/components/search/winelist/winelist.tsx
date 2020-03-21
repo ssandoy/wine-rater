@@ -37,9 +37,9 @@ const WineListComponent = ({ items }) => {
         }
         default: {
           return (
-            obj1.sanderRating +
-            obj1.ineRating -
-            (obj2.sanderRating + obj2.ineRating)
+            +obj1.sanderRating +
+            +obj1.ineRating -
+            (+obj2.sanderRating + +obj2.ineRating)
           );
         }
       }

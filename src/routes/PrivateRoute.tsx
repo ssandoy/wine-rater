@@ -1,6 +1,6 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { connect, ConnectedComponent } from "react-redux";
+import React from 'react';
+import {Redirect, Route} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 interface Props {
   isLoggedIn: boolean;

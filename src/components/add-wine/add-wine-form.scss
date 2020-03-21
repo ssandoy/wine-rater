@@ -87,7 +87,7 @@
 
   &__buttons {
     display: inline-grid;
-    grid-template-columns: 45% 45%;
+    grid-template-columns: 45% 10% 45%;
     width: 100%;
   }
 
@@ -101,11 +101,8 @@
 
     &-reset {
       background-color: $button-reset-color;
-      grid-column-start: 2;
+      grid-column-start: 3;
     }
-  }
-  &__textfield {
-    margin-top: 8px;
   }
 }
 

@@ -1,7 +1,7 @@
-import { iErrors } from "./validationSchema";
+import { Errors } from "./validationSchema";
 
-export const validateForm = (validationSchema, values): iErrors | null => {
-  const errors = {} as iErrors;
+export const validateForm = (validationSchema, values): Errors | null => {
+  const errors = {} as Errors;
   Object.keys(validationSchema).forEach(key => {
     const error = checkError(validationSchema, key, values[key]);
     if (error[0]) {

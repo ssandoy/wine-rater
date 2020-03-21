@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import * as dispatchers from "dispatchers";
 
 import { debouncedSearchProductsByNameItem, getWine } from "api/api";
-import validationSchema, { iErrors } from "./validationSchema";
+import validationSchema, { Errors } from "./validationSchema";
 import * as images from "images";
 import { imageKeys } from "images";
 import { Raastoff } from "data/raastoff";
@@ -48,7 +48,7 @@ const AddWineForm = ({
 
   const [wineName, setWineName] = useState("");
   const [wineType, setWineType] = useState("");
-  const [wineYear, setWineYear] = useState<number>(0);
+  const [wineYear, setWineYear] = useState<string>("");
   const [wineCountry, setWineCountry] = useState("");
   const [wineGrapes, setWineGrapes] = useState<string[]>([]);
   const [wineRegion, setWineRegion] = useState("");
@@ -58,7 +58,7 @@ const AddWineForm = ({
   const [winePicture, setWinePicture] = useState<string | undefined>(undefined);
   const [productId, setProductId] = useState<string | undefined>(undefined);
   const [selectedWine, setSelectedWine] = useState(false);
-  const [errors, setErrors] = useState<iErrors | null>(null);
+  const [errors, setErrors] = useState<Errors | null>(null);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
@@ -74,7 +74,7 @@ const AddWineForm = ({
     setSelectedWine(false);
     setSanderRating("");
     setIneRating("");
-    setWineYear(0);
+    setWineYear("");
   };
 
   const handleSelectedWine = wine => {
@@ -91,7 +91,7 @@ const AddWineForm = ({
     const { country, region } = wine.origins.origin;
     setWineCountry(country);
     setWineRegion(region);
-    setWineYear(Number(wine.basic.vintage));
+    setWineYear(wine.basic.vintage);
     setWineType(wine.classification.productTypeName);
     setWineGrapes(wine.ingredients.grapes.map(grape => grape.grapeDesc));
     setProductId(wine.basic.productId);
@@ -99,8 +99,6 @@ const AddWineForm = ({
 
   const onSubmitForm = event => {
     event.preventDefault();
-    const sRating = parseInt(sanderRating);
-    const iRating = parseInt(ineRating);
     const values: Wine = {
       wineName,
       wineType,
@@ -108,18 +106,18 @@ const AddWineForm = ({
       wineCountry,
       wineGrapes,
       wineRegion,
-      ineRating: iRating,
-      sanderRating: sRating,
+      ineRating,
+      sanderRating,
       fitsTo,
       winePicture,
       apiId: productId
     };
-    const validatedErrors: iErrors | null = validateForm(
+    const validatedErrors: Errors | null = validateForm(
       validationSchema,
       values
     );
     setErrors(validatedErrors);
-    if (validatedErrors == null) {
+    if (!validatedErrors) {
       addWineToWineList(values, firebase);
     } else {
       executeErrorScroll(validatedErrors);
@@ -164,7 +162,7 @@ const AddWineForm = ({
             <div className="wine-input-container">
               <input
                 value={wineYear}
-                onChange={event => setWineYear(parseInt(event.target.value))}
+                onChange={event => setWineYear(event.target.value)}
               />
             </div>
             {errors?.wineYear && (
@@ -225,9 +223,7 @@ const AddWineForm = ({
             <div className="wine-input-container">
               <input
                 value={sanderRating.toString()}
-                onChange={event =>
-                  setSanderRating(event.target.value)
-                }
+                onChange={event => setSanderRating(event.target.value)}
               />
             </div>
             {!!errors && errors.sanderRating && (
@@ -334,7 +330,9 @@ const mapStateToProps = state => ({
   wineRegistered: state.wineReducer.wineRegistered
 });
 
-export default withFirebase(connect(mapStateToProps, 
-       {	  addWineToWineList: dispatchers.addWineToWineList,
-            resetWineRegistered: dispatchers.resetRegisteredWine
-	})(AddWineForm));
+export default withFirebase(
+  connect(mapStateToProps, {
+    addWineToWineList: dispatchers.addWineToWineList,
+    resetWineRegistered: dispatchers.resetRegisteredWine
+  })(AddWineForm)
+);

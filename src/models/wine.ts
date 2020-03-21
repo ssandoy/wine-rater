@@ -4,10 +4,10 @@ export default interface Wine {
   apiId?: string;
   wineName: string;
   wineType: string;
-  wineYear: number;
+  wineYear: string;
   fitsTo: string[];
-  ineRating: number;
-  sanderRating: number;
+  ineRating: string;
+  sanderRating: string;
   wineGrapes: string[];
   wineRegion: string;
   wineCountry: string;
