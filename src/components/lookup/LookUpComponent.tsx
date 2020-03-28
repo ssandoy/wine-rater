@@ -6,12 +6,17 @@ import WineProduct from "models/product";
 import WineDetailsComponent from "./wine-details/WineDetailsComponent";
 
 const LookUpComponent = () => {
-  const [wineName] = useState("");
+  const [wineName, setWineName] = useState("");
   const [wineProduct, setWineProduct] = useState<WineProduct | null>(null);
 
   const handleSelectedWine = (value: WineProduct | null) => {
     return setWineProduct(value);
   };
+
+  let noOptionText = "Tast inn navnet på vinen";
+  if (wineName) {
+    noOptionText = "Fant ingen treff på dette navnet";
+  }
 
   return (
     <div className="lookup-container">
@@ -21,14 +26,14 @@ const LookUpComponent = () => {
           <div>
             <label htmlFor="wineName">Søk opp en vin</label>
             <AsyncSearchDropdown
-              // FIXME.
               selectedItems={{ label: wineName, value: wineName }}
               placeholder="Tast inn navnet på vinen"
               debouncedPromise={debouncedSearchProductsByNameItem}
               onClick={value => {
                 handleSelectedWine(value);
               }}
-              noOptionPlaceholder="Fant ingen treff på dette navnet"
+              noOptionPlaceholder={noOptionText}
+              setValue={setWineName}
             />
           </div>
         )}

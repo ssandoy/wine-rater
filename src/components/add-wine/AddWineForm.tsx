@@ -126,6 +126,10 @@ const AddWineForm = ({
   const nameContainerWidth = selectedWine
     ? "add-wine-form__col-1"
     : "add-wine-form__row";
+  let noOptionText = "Tast inn navnet på vinen";
+  if (wineName) {
+    noOptionText = "Fant ingen treff på dette navnet";
+  }
   return (
     <div className="add-wine">
       <h1 className="page-title">Legg til ny vin</h1>
@@ -141,7 +145,8 @@ const AddWineForm = ({
             onClick={value => {
               handleSelectedWine(value);
             }}
-            noOptionPlaceholder="Fant ingen treff på dette navnet"
+            noOptionPlaceholder={noOptionText}
+            setValue={setWineName}
           />
         </div>
         {selectedWine && (

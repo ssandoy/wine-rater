@@ -8,7 +8,8 @@ export const AsyncSearchDropdown = ({
   selectedItems,
   placeholder,
   noOptionPlaceholder,
-  onClick
+  onClick,
+  setValue = null
 }) => {
   return (
     <>
@@ -16,10 +17,18 @@ export const AsyncSearchDropdown = ({
         placeholder={placeholder}
         value={selectedItems}
         onChange={opt => {
+          if (!opt) {
+            setValue("");
+            return;
+          }
           onClick(opt.value);
         }}
         loadingMessage={() => "Laster inn viner..."}
-        loadOptions={inputvalue => debouncedPromise(inputvalue)}
+        isClearable={true}
+        loadOptions={inputvalue => {
+          setValue(inputvalue);
+          return debouncedPromise(inputvalue);
+        }}
         styles={colourStyles}
         noOptionsMessage={() => noOptionPlaceholder}
       />
