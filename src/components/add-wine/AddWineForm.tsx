@@ -322,8 +322,10 @@ const AddWineForm = ({
           </div>
         )}
         {wineRegistered && (
-          <div className="add-wine__wine-registered">
-            <p>Vinen ble lagret!</p>
+          <div className="add-wine-form__row">
+            <div className="add-wine__wine-registered">
+              <p>Vinen ble lagret!</p>
+            </div>
           </div>
         )}
       </form>
