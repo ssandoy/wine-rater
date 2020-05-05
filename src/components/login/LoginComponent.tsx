@@ -26,7 +26,6 @@ const LoginComponent = ({ isLoggedIn, loginFirebase }) => {
         <input
           className="login-input"
           type="password"
-          value={inputPassword}
           onChange={event => setInputPassword(event.target.value)}
         />
         <button className="login-button" type="submit">
