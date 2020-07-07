@@ -186,7 +186,10 @@ const AddWineForm = ({
               <label>Type</label>
             </div>
             <div className="wine-input-container">
-              <p className="add-wine-form__textfield">{wineType}</p>
+              <input
+                value={wineType}
+                onChange={event => setWineType(event.target.value)}
+              />
             </div>
           </div>
         )}
@@ -212,7 +215,7 @@ const AddWineForm = ({
               <label>Drue</label>
             </div>
             <SearchDropDown
-              isDisabled={true}
+              isDisabled={!manualRegistration}
               placeholder=""
               searchItems={wineGrapeItems}
               onClick={grapeArray => {
@@ -231,7 +234,10 @@ const AddWineForm = ({
               <label htmlFor="sanderRating">Land</label>
             </div>
             <div className="wine-input-container">
-              <p className="add-wine-form__textfield ">{wineCountry}</p>
+              <input
+                value={wineCountry}
+                onChange={event => setWineCountry(event.target.value)}
+              />
             </div>
             {errors?.wineCountry && (
               <p className="add-wine-error-validation">{errors.wineCountry}</p>
@@ -244,7 +250,10 @@ const AddWineForm = ({
               <label htmlFor="sanderRating">Region</label>
             </div>
             <div className="wine-input-container">
-              <p className="add-wine-form__textfield ">{wineRegion}</p>
+              <input
+                value={wineRegion}
+                onChange={event => setWineRegion(event.target.value)}
+              />
             </div>
             {errors?.wineRegion && (
               <p className="add-wine-error-validation">{errors.wineRegion}</p>
