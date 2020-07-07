@@ -1,5 +1,6 @@
 import firebase from "@firebase/app";
 import "@firebase/database";
+import "@firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -15,8 +16,10 @@ class FirebaseService {
   constructor() {
     firebase.initializeApp(firebaseConfig);
     this.database = firebase.database();
+    this.storage = firebase.storage();
+    this.storageRef = this.storage.ref();
     this.storeWineToFirebase = this.storeWineToFirebase.bind(this);
-    this.all_wines = this.all_wines.bind(this);
+    this.allWines = this.allWines.bind(this);
     this.wine = this.wine.bind(this);
     this.snapshotToArray = this.snapshotToArray.bind(this);
   }
@@ -39,7 +42,7 @@ class FirebaseService {
     }
   }
 
-  all_wines() {
+  allWines() {
     return this.database.ref("wines").once("value");
   }
 
@@ -52,10 +55,10 @@ class FirebaseService {
   }
 
   snapshotToArray(snapshot) {
-    var returnArr = [];
+    const returnArr = [];
 
     snapshot.forEach(function(childSnapshot) {
-      var item = childSnapshot.val();
+      const item = childSnapshot.val();
       item.key = childSnapshot.key;
 
       returnArr.push(item);
@@ -63,6 +66,21 @@ class FirebaseService {
 
     return returnArr;
   }
+
+  // todo.
+  uploadImage = (imageRefName, filename, image) => {
+    const imageRef = this.storageRef.child(imageRefName);
+    const uploadRef = imageRef.child(filename);
+    const imageUrl = uploadRef.put(image).then(
+      success => {
+        return success.ref.getDownloadURL();
+      },
+      error => {
+        // TODO ADD ERRORHANDLING...
+      }
+    );
+    return imageUrl;
+  };
 }
 
 export default FirebaseService;
