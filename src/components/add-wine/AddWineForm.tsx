@@ -114,9 +114,11 @@ const AddWineForm = ({
       ineRating,
       sanderRating,
       fitsTo,
-      winePicture,
-      apiId: productId
+      winePicture
     };
+    if (productId) {
+      values.apiId = productId;
+    }
     const validatedErrors: Errors | null = validateForm(
       validationSchema,
       values
