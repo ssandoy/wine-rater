@@ -23,7 +23,7 @@ export const CroppedImageUploader: React.FC<Props> = ({
   title,
   buttonUploadText = "Last opp",
   cropAspectRatio = 9 / 16
-}) => {
+}: Props) => {
   const myRef = useRef(null);
 
   const [crop, setCrop] = useState<Crop>({
