@@ -17,6 +17,7 @@ import { validateForm } from "components/add-wine/form-util";
 import Wine from "../../models/wine";
 import WineProduct from "../../models/product";
 import { withFirebase } from "firebase/index";
+import CroppedImageUploader from "../image-uploader/CroppedImageUploader";
 
 const scrollToRef = ref => {
   window.scrollTo(0, ref.current.offsetTop);
@@ -58,6 +59,8 @@ const AddWineForm = ({
   const [winePicture, setWinePicture] = useState<string | undefined>(undefined);
   const [productId, setProductId] = useState<string | undefined>(undefined);
   const [selectedWine, setSelectedWine] = useState(false);
+  const [showImageUploader, setShowImageUploader] = useState(false);
+  const [manualRegistration, setManualRegistration] = useState(false);
   const [errors, setErrors] = useState<Errors | null>(null);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
@@ -75,6 +78,8 @@ const AddWineForm = ({
     setSanderRating("");
     setIneRating("");
     setWineYear("");
+    setSelectedWine(false);
+    setManualRegistration(false);
   };
 
   const handleSelectedWine = wine => {
@@ -109,9 +114,11 @@ const AddWineForm = ({
       ineRating,
       sanderRating,
       fitsTo,
-      winePicture,
-      apiId: productId
+      winePicture
     };
+    if (productId) {
+      values.apiId = productId;
+    }
     const validatedErrors: Errors | null = validateForm(
       validationSchema,
       values
@@ -138,16 +145,42 @@ const AddWineForm = ({
           <div className="textfield-label">
             <label htmlFor="wineName">Navn</label>
           </div>
-          <AsyncSearchDropdown
-            selectedItems={{ label: wineName, value: wineName }}
-            placeholder="Tast inn navnet på vinen"
-            debouncedPromise={debouncedSearchProductsByNameItem}
-            onClick={value => {
-              handleSelectedWine(value);
-            }}
-            noOptionPlaceholder={noOptionText}
-            setValue={setWineName}
-          />
+          {!manualRegistration && (
+            <AsyncSearchDropdown
+              selectedItems={{ label: wineName, value: wineName }}
+              placeholder="Tast inn navnet på vinen"
+              debouncedPromise={debouncedSearchProductsByNameItem}
+              onClick={value => {
+                handleSelectedWine(value);
+              }}
+              noOptionPlaceholder={noOptionText}
+              setValue={setWineName}
+            />
+          )}
+          {manualRegistration && (
+            <div className="wine-input-container">
+              <input
+                value={wineName}
+                onChange={event => setWineName(event.target.value)}
+              />
+            </div>
+          )}
+          {!manualRegistration && !selectedWine && (
+            <button
+              type="button"
+              className="add-wine-form__button--manual-reg"
+              onClick={() => {
+                if (!manualRegistration) {
+                  setSelectedWine(true);
+                } else {
+                  setSelectedWine(false);
+                }
+                setManualRegistration(!manualRegistration);
+              }}
+            >
+              Finner du ikke vinen? Registrer den manuelt!
+            </button>
+          )}
         </div>
         {selectedWine && (
           <div className="add-wine-form__col-2">
@@ -155,7 +188,10 @@ const AddWineForm = ({
               <label>Type</label>
             </div>
             <div className="wine-input-container">
-              <p className="add-wine-form__textfield">{wineType}</p>
+              <input
+                value={wineType}
+                onChange={event => setWineType(event.target.value)}
+              />
             </div>
           </div>
         )}
@@ -181,7 +217,7 @@ const AddWineForm = ({
               <label>Drue</label>
             </div>
             <SearchDropDown
-              isDisabled={true}
+              isDisabled={!manualRegistration}
               placeholder=""
               searchItems={wineGrapeItems}
               onClick={grapeArray => {
@@ -200,7 +236,10 @@ const AddWineForm = ({
               <label htmlFor="sanderRating">Land</label>
             </div>
             <div className="wine-input-container">
-              <p className="add-wine-form__textfield ">{wineCountry}</p>
+              <input
+                value={wineCountry}
+                onChange={event => setWineCountry(event.target.value)}
+              />
             </div>
             {errors?.wineCountry && (
               <p className="add-wine-error-validation">{errors.wineCountry}</p>
@@ -213,7 +252,10 @@ const AddWineForm = ({
               <label htmlFor="sanderRating">Region</label>
             </div>
             <div className="wine-input-container">
-              <p className="add-wine-form__textfield ">{wineRegion}</p>
+              <input
+                value={wineRegion}
+                onChange={event => setWineRegion(event.target.value)}
+              />
             </div>
             {errors?.wineRegion && (
               <p className="add-wine-error-validation">{errors.wineRegion}</p>
@@ -290,14 +332,33 @@ const AddWineForm = ({
         )}
         {selectedWine && (
           <div className="add-wine-form__col-2">
-            <div className="textfield-label">
-              <label htmlFor="winePicture">Bilde</label>
+            <div className="add-wine-form__label-button-container">
+              <div className="textfield-label">
+                <label htmlFor="winePicture">Bilde</label>
+              </div>
+              <button
+                type="button"
+                className="add-wine-form__button--upload"
+                onClick={() => setShowImageUploader(!showImageUploader)}
+              >
+                Laste opp eget bilde?
+              </button>
             </div>
-            {winePicture && (
+            {winePicture && !showImageUploader && (
               <img
                 src={winePicture as string}
                 className="wine-picture"
                 alt="wine"
+              />
+            )}
+            {showImageUploader && (
+              <CroppedImageUploader
+                firebase={firebase}
+                firebaseStorageRef="wine-pictures"
+                handleUpdateComplete={fileUrl => {
+                  setWinePicture(fileUrl);
+                  setShowImageUploader(false);
+                }}
               />
             )}
           </div>

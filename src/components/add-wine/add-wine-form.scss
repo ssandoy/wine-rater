@@ -84,6 +84,11 @@
     padding: 4px;
   }
 
+  &__label-button-container {
+    display: flex;
+    flex-direction: column;
+  }
+
 
   &__buttons {
     display: inline-grid;
@@ -97,11 +102,22 @@
     &-add {
       grid-column-start: 1;
       background-color: $button-confirm-color;
+      font-size: 1rem;
     }
 
     &-reset {
       background-color: $button-reset-color;
       grid-column-start: 3;
+      font-size: 1rem;
+    }
+
+    &--manual-reg {
+      margin-top: 8px;
+      font-size: 1rem;
+    }
+    &--upload {
+      margin: 12px 0;
+      font-size: 1rem;
     }
   }
 }
