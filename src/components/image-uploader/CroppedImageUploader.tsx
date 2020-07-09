@@ -28,7 +28,9 @@ export const CroppedImageUploader: React.FC<Props> = ({
 
   const [crop, setCrop] = useState<Crop>({
     aspect: cropAspectRatio,
-    width: 150
+    width: 150,
+    x: 1,
+    y: 1
   });
   const [fileName, setFileName] = useState<string>("");
   const [fileLocation, setFileLocation] = useState<string>("");
