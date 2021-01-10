@@ -5,8 +5,9 @@ interface Props {
   htmlFor: string;
   name: string;
   value: string | number;
-  onChange: any;
+  onClick: (event?: any) => void;
   image: string;
+  checked: boolean;
 }
 
 const ImageCheckbox: React.FunctionComponent<Props> = (props: Props) => {
@@ -18,9 +19,15 @@ const ImageCheckbox: React.FunctionComponent<Props> = (props: Props) => {
           id={`${props.htmlFor}`}
           name={`${props.name}`}
           value={`${props.value}`}
-          onChange={props.onChange}
+          checked={props.checked}
+          onChange={() => null}
         />
-        <img src={props.image} className="image" alt={`${props.htmlFor}`} />
+        <img
+          src={props.image}
+          className="image"
+          alt={`${props.htmlFor}`}
+          onClick={() => props.onClick(props.value)}
+        />
       </label>
     </div>
   );

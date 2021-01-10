@@ -67,8 +67,7 @@ const AddWineForm = ({
 
   useEffect(() => {
     resetWineRegistered();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resetWineRegistered]);
 
   const resetSearch = () => {
     resetWineRegistered();
@@ -318,10 +317,9 @@ const AddWineForm = ({
                       htmlFor={imageKey}
                       value={imageKey}
                       name="fitsTo"
-                      onChange={event =>
-                        setFitsTo(
-                          pushOrRemoveToArray(fitsTo, event.target.value)
-                        )
+                      checked={fitsTo.includes(imageKey)}
+                      onClick={value =>
+                        setFitsTo(pushOrRemoveToArray(fitsTo, value))
                       }
                     />
                   </div>

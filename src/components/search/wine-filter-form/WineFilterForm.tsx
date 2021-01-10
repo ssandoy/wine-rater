@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./wineform.scss";
@@ -6,7 +6,7 @@ import * as dispatchers from "dispatchers";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
 import * as images from "images";
-import { imageKeys } from "images";
+import { imageKeys as imgKeys } from "images";
 import { allWines as wines } from "../../../selectors/wine-selectors";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
@@ -20,6 +20,8 @@ type Props = {
 };
 const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
   const allWines = useSelector(wines);
+  const [imageKeys] = useState<string[]>(imgKeys);
+
   const dispatch = useDispatch();
   const {
     hasOpenedFilter,
@@ -38,7 +40,6 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
       }
     }
   } = useWineFilterContext();
-
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
   const onSubmit = event => {
@@ -135,11 +136,12 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
                     htmlFor={imageKey + "searchForm"}
                     value={imageKey}
                     name="wineSearchForm"
-                    onChange={event =>
+                    checked={selectedFitsTo.includes(imageKey)}
+                    onClick={value => {
                       setSelectedFitsTo(
-                        pushOrRemoveToArray(selectedFitsTo, event.target.value)
-                      )
-                    }
+                        pushOrRemoveToArray(selectedFitsTo, value)
+                      );
+                    }}
                   />
                 </div>
               ))}

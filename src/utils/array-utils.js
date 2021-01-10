@@ -1,13 +1,11 @@
 export const pushOrRemoveToArray = (array, item) => {
-  const exists = array.includes(item);
+  const tmp = [...array];
+  const exists = tmp.includes(item);
   if (exists) {
-    return array.filter(c => {
-      return c !== item;
-    });
+    return tmp.filter(c => c !== item);
   } else {
-    const result = array;
-    result.push(item);
-    return result;
+    tmp.push(item);
+    return tmp;
   }
 };
 
