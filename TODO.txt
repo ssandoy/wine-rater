@@ -1,0 +1,7 @@
+Ting som maa fikses:
+
+- Kunne filtrere paa hvit, roed og alle viner.
+- Legge til pris paa hver lagret vin.
+- Endre farger paa knapper. Legg til, sok, tom sok osv.
+- Fjerne sortering drue. Pris i stedet.
+- Lage en filter-bar i stedet for en blokk midt paa siden? Legges paa siden og er expandable paa mobil.

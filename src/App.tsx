@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
+  NavLink,
   Route,
-  Switch,
-  NavLink
+  Switch
 } from "react-router-dom";
 import "./App.scss";
 import AddWineForm from "components/add-wine/AddWineForm";
-import WineSearchComponent from "components/search/winesearch";
 import NotFoundComponent from "components/notfound/notfound";
 import LookUpComponent from "components/lookup/LookUpComponent";
 import logo from "./logo.png";
@@ -18,6 +17,7 @@ import Wine from "models/wine";
 import { connect } from "react-redux";
 import LoginComponent from "./components/login";
 import PrivateRoute from "./routes";
+import { WineSearchPage } from "./components/search/WineSearchPage";
 
 const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
   document.title = "Vinolini";
@@ -29,11 +29,17 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
       .then((wineItemsSnapshot: any) => {
         const allWines = firebase
           .snapshotToArray(wineItemsSnapshot)
-          .map((item: Wine) => item);
+          .map((item: Wine) => item)
+          .sort(function(obj1: Wine, obj2: Wine) {
+            return (
+              +obj2.sanderRating +
+              +obj2.ineRating -
+              (+obj1.sanderRating + +obj1.ineRating)
+            );
+          });
         setAllWines(allWines);
         setWineItems(allWines);
       });
-    // TODO: Learn hooks...
   }, [firebase, setAllWines, setWineItems, wineRegistered]);
 
   return (
@@ -52,7 +58,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
               style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
-              Søk på viner
+              Søk
             </NavLink>
             <NavLink
               exact
@@ -68,23 +74,19 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
               style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
-              Legg til vin
+              Legg til
             </NavLink>
           </div>
         </div>
-        <div className="container">
+        <>
           <Switch>
             <PrivateRoute exact path={"/add"} component={AddWineForm} />
-            <Route
-              exact
-              path={["/", "/search"]}
-              component={WineSearchComponent}
-            />
+            <Route exact path={["/", "/search"]} component={WineSearchPage} />
             <Route exact path={"/login"} component={LoginComponent} />
             <Route exact path={"/lookup"} component={LookUpComponent} />
             <Route component={NotFoundComponent} />
           </Switch>
-        </div>
+        </>
       </div>
     </Router>
   );

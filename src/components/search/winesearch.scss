@@ -1,13 +1,40 @@
-.wine-search{
+@import "../../styles/mixins.scss";
+
+.wine-search {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    @include for-phone-only {
+      align-items: center;
+    }
+  }
+
   &__no-hits {
     text-align: center;
     margin: 30px 0;
     color: white;
   }
+
   &__pending-container {
     display: flex;
     justify-content: center;
     margin: 30px 0;
     color: white;
+    width: 100%;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__filter-icon {
+    margin-left: 20px;
+    padding-top: 8px;
   }
 }

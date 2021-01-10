@@ -3,13 +3,8 @@
 
 .App {
   min-height: 100vh;
+  margin-bottom:50px;
 }
-.container {
-  display: flex;
-  flex-direction: column;
-  margin: 40px auto;
-}
-
 
 .App-logo {
   height: 130px;
@@ -34,9 +29,7 @@
   font-size: 24px;
 
   @include for-phone-only {
-    // TODO HAMBURGER TO TOGGLE?
     font-size: 20px;
-    flex-direction: column;
     align-items: center;
   }
 

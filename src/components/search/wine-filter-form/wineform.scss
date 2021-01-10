@@ -1,0 +1,113 @@
+@import '../../../styles/variables.scss';
+@import '../../../styles/mixins.scss';
+
+@keyframes fade-in-native {
+  from {
+    opacity: 0;
+    top: 1000px
+  }
+  to {
+    opacity: 1;
+    top: 200px
+  }
+}
+
+@keyframes fade-in-tablet {
+  from {
+    opacity: 0;
+    top: 1000px
+  }
+  to {
+    opacity: 1;
+    top: 300px
+  }
+}
+
+@keyframes fade-in-desktop {
+  from {
+    opacity: 0;
+    top: 1000px
+  }
+  to {
+    opacity: 1;
+    top: 350px
+  }
+}
+
+.wine-search-form__container {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: $form-background-color;
+  width: 280px;
+
+  @include for-phone-only {
+    width: 100%;
+    animation: fade-in-native 0.3s linear;
+  }
+  @include for-tablet {
+    animation: fade-in-tablet 0.3s linear;
+  }
+  @include for-desktop {
+    animation: fade-in-desktop 0.3s linear;
+  }
+}
+
+.wine-search-form {
+  display: flex;
+  flex-direction: column;
+  margin: 12px;
+
+  &__exit-icon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  &__buttons-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+  &__button {
+    display: flex;
+  }
+
+  &__row {
+    margin: 5px 0px;
+    @include for-tablet-portrait-up {
+      grid-column-start: 2;
+      grid-column-end: 5;
+    }
+
+    @include for-phone-only {
+      grid-column-start: 2;
+      grid-column-end: 3;
+    }
+  }
+
+  &__fits-to-grid {
+    width: 100%;
+    height: 100%;
+    display: inline-grid;
+    grid-template-columns: 33%33%30%;
+    grid-template-rows: 33%33%30%;
+    margin-top: 16px;
+  }
+}
+
+label {
+  margin: 10px 0 !important;
+}
+
+.fits-to-row {
+  margin-left: 0 !important;
+}
+
+.fits-to-cell {
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}

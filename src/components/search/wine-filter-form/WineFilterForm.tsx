@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./wineform.scss";
 import * as dispatchers from "dispatchers";
@@ -7,67 +7,63 @@ import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
 import * as images from "images";
 import { imageKeys } from "images";
-import { isObjectInArray, pushOrRemoveToArray } from "utils/array-utils";
+import { allWines as wines } from "../../../selectors/wine-selectors";
+import { pushOrRemoveToArray } from "utils/array-utils";
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
-import Wine from "../../../models/wine";
+import { useWineFilterContext } from "../../../context/filter-context/WineFilterContext";
+import ExitIcon from "../../../icons/ExitIcon";
+import TrashIcon from "../../../icons/TrashIcon";
+import SearchIcon from "../../../icons/SearchIcon";
 
-interface Props {
-  setWineItems: (value) => Wine[];
-  allWines: Wine[];
-}
-
-// TODO TYPESCRIPT.
-const WineSearchFormComponent: React.FunctionComponent<Props> = ({
-  setWineItems,
-  allWines
-}: Props) => {
-  const [wineName, setWineName] = useState("");
-  const [expandedFilter, setExpandedFilter] = useState(false);
-  // TODO FIX DEFAULT VALUES SO THAT PLACEHOLDER IS SHOWN.
-  const [selectedWineGrapes, setSelectedWineGrapes] = useState([]);
-  const [selectedCountries, setSelectedCountries] = useState([]);
-  const [selectedRegions, setSelectedRegions] = useState([]);
-  const [selectedFitsTo, setSelectedFitsTo] = useState([]);
+type Props = {
+  onFilter: () => void;
+};
+const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
+  const allWines = useSelector(wines);
+  const dispatch = useDispatch();
+  const {
+    hasOpenedFilter,
+    setHasOpenedFilter,
+    filters: {
+      wineName: { value: wineName, setValue: setWineName },
+      selectedWineGrapes: {
+        value: selectedWineGrapes,
+        setValue: setSelectedWineGrapes
+      },
+      selectedRegions: { value: selectedRegions, setValue: setSelectedRegions },
+      selectedFitsTo: { value: selectedFitsTo, setValue: setSelectedFitsTo },
+      selectedCountries: {
+        value: selectedCountries,
+        setValue: setSelectedCountries
+      }
+    }
+  } = useWineFilterContext();
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
-  // TODO prettify to one filter-function
-  const filterWines = () => {
-    setWineItems(
-      allWines
-        .filter(wine =>
-          wine.wineName.toLowerCase().includes(wineName.toLowerCase())
-        )
-        .filter(wine => isObjectInArray(wine.fitsTo, selectedFitsTo))
-        .filter(wine => isObjectInArray(wine.wineGrapes, selectedWineGrapes))
-        .filter(wine => isObjectInArray(wine.wineCountry, selectedCountries))
-        .filter(wine => isObjectInArray(wine.wineRegion, selectedRegions))
-    );
-  };
-
   const onSubmit = event => {
     event.preventDefault();
-    filterWines();
+    onFilter();
+    setHasOpenedFilter(false);
   };
 
-  const onClear = event => {
-    event.preventDefault();
-    setExpandedFilter(false);
+  const onClear: () => void = () => {
     setSelectedFitsTo([]);
     setSelectedRegions([]);
     setSelectedWineGrapes([]);
     setSelectedCountries([]);
     setWineName("");
-    setWineItems(allWines);
+    dispatch(dispatchers.setWineItems(allWines));
+    setHasOpenedFilter(false);
   };
 
   return (
-    <div className="wine-search-form">
-      <h1 className="wine-search-form__title page-title">
-        Søk på lagrede viner
-      </h1>
-      <form className="wine-search-form__form" onSubmit={e => onSubmit(e)}>
-        <div className="wine-search-form__form__row">
+    <div className="wine-search-form__container">
+      <div className="wine-search-form__exit-icon">
+        <ExitIcon onClick={() => setHasOpenedFilter(!hasOpenedFilter)} />
+      </div>
+      <form className="wine-search-form" onSubmit={e => onSubmit(e)}>
+        <div className="wine-search-form__row">
           <label htmlFor="wineName">Navn</label>
           <div className="wine-input-container">
             <input
@@ -79,9 +75,9 @@ const WineSearchFormComponent: React.FunctionComponent<Props> = ({
             />
           </div>
         </div>
-        {expandedFilter && (
+        {
           <>
-            <div className="wine-search-form__form__row">
+            <div className="wine-search-form__row">
               <label>Drue</label>
               <SearchDropDown
                 placeholder="Vindrue"
@@ -93,7 +89,7 @@ const WineSearchFormComponent: React.FunctionComponent<Props> = ({
                 onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
               />
             </div>
-            <div className="wine-search-form__form__row">
+            <div className="wine-search-form__row">
               <label htmlFor="country">Land</label>
               <SearchDropDown
                 placeholder="Land"
@@ -107,7 +103,7 @@ const WineSearchFormComponent: React.FunctionComponent<Props> = ({
                 onClick={countryArray => setSelectedCountries(countryArray)}
               />
             </div>
-            <div className="wine-search-form__form__row">
+            <div className="wine-search-form__row">
               <label>Region</label>
               <SearchDropDown
                 placeholder="Region"
@@ -126,11 +122,11 @@ const WineSearchFormComponent: React.FunctionComponent<Props> = ({
               />
             </div>
           </>
-        )}
-        {expandedFilter && (
-          <div className="wine-search-form__form__row">
+        }
+        {
+          <div className="wine-search-form__row">
             <label>Hva passer vinen til?</label>
-            <div className="wine-search-form__form__fits-to-grid">
+            <div className="wine-search-form__fits-to-grid">
               {imageKeys.map(imageKey => (
                 <div key={imageKey} className="fits-to-cell">
                   <ImageCheckbox
@@ -149,47 +145,23 @@ const WineSearchFormComponent: React.FunctionComponent<Props> = ({
               ))}
             </div>
           </div>
-        )}
-        <div className="wine-search-form__toggle-filter">
-          <button
-            type="button"
-            className="wine-search-form__button wine-search-form__button-toggle"
-            onClick={() => {
-              setExpandedFilter(!expandedFilter);
-              window.scrollTo(0, 0);
-            }}
+        }
+        <div className="wine-search-form__buttons-container">
+          <div
+            className="wine-search-form__button"
+            onClick={event => onSubmit(event)}
           >
-            {expandedFilter ? "Skjul ekstra filter" : "Vis ekstra filter"}
-          </button>
-        </div>
-        <div className="wine-search-form__form__col-1">
-          <button
-            type="submit"
-            className="wine-search-form__button wine-search-form__button-search"
-          >
+            <SearchIcon />
             Søk
-          </button>
-        </div>
-        <div className="wine-search-form__form__col-2">
-          <button
-            type="submit"
-            onClick={e => onClear(e)}
-            className="wine-search-form__button wine-search-form__button-reset"
-          >
+          </div>
+          <div className="wine-search-form__button" onClick={() => onClear()}>
+            <TrashIcon />
             Tøm søk
-          </button>
+          </div>
         </div>
       </form>
     </div>
   );
 };
 
-const mapStateToProps = state => ({
-  wineItems: state.wineReducer.wineItems,
-  allWines: state.wineReducer.allWines
-});
-
-// TODO TEST USESELECTOR INSTEAD
-export default connect(mapStateToProps, {
-  setWineItems: dispatchers.setWineItems
-})(WineSearchFormComponent);
+export default WineFilterForm;
