@@ -91,22 +91,26 @@
 
 
   &__buttons {
-    display: inline-grid;
-    grid-template-columns: 45% 10% 45%;
+    display: flex;
+    justify-content: space-around;
     width: 100%;
   }
 
+  &__button-label {
+    padding: 2px 4px 0;
+  }
+
   &__button {
-    padding: 0px 32px;
-    justify-self: center;
+    background: none;
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
     &-add {
       grid-column-start: 1;
-      background-color: $button-confirm-color;
       font-size: 1rem;
     }
 
     &-reset {
-      background-color: $button-reset-color;
       grid-column-start: 3;
       font-size: 1rem;
     }

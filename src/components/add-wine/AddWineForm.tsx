@@ -18,6 +18,8 @@ import Wine from "../../models/wine";
 import WineProduct from "../../models/product";
 import { withFirebase } from "firebase/index";
 import CroppedImageUploader from "../image-uploader/CroppedImageUploader";
+import PlusIcon from "../../icons/PlusIcon";
+import CrossIcon from "../../icons/CrossIcon";
 
 const scrollToRef = ref => {
   window.scrollTo(0, ref.current.offsetTop);
@@ -40,7 +42,9 @@ const AddWineForm = ({
   const errorRefMap = {
     sanderRating: useRef(null),
     ineRating: useRef(null),
-    wineYear: useRef(null)
+    wineYear: useRef(null),
+    wineName: useRef(null),
+    wineType: useRef(null)
   };
 
   const executeErrorScroll = errors => {
@@ -157,7 +161,7 @@ const AddWineForm = ({
             />
           )}
           {manualRegistration && (
-            <div className="wine-input-container">
+            <div className="wine-input-container" ref={errorRefMap.wineName}>
               <input
                 value={wineName}
                 onChange={event => setWineName(event.target.value)}
@@ -180,18 +184,24 @@ const AddWineForm = ({
               Finner du ikke vinen? Registrer den manuelt!
             </button>
           )}
+          {errors?.wineName && (
+            <p className="add-wine-error-validation">{errors.wineName}</p>
+          )}
         </div>
         {selectedWine && (
           <div className="add-wine-form__col-2">
             <div className="textfield-label">
               <label>Type</label>
             </div>
-            <div className="wine-input-container">
+            <div className="wine-input-container" ref={errorRefMap.wineType}>
               <input
                 value={wineType}
                 onChange={event => setWineType(event.target.value)}
               />
             </div>
+            {errors?.wineType && (
+              <p className="add-wine-error-validation">{errors.wineType}</p>
+            )}
           </div>
         )}
         {selectedWine && (
@@ -369,13 +379,17 @@ const AddWineForm = ({
                 type="submit"
                 className="add-wine-form__button add-wine-form__button-add"
               >
-                Registrer vin
+                <PlusIcon />{" "}
+                <span className="add-wine-form__button-label">Registrer</span>
               </button>
               <button
                 onClick={resetSearch}
                 className="add-wine-form__button add-wine-form__button-reset"
               >
-                Start på nytt
+                <CrossIcon />{" "}
+                <span className="add-wine-form__button-label">
+                  Start på nytt
+                </span>
               </button>
             </div>
           </div>

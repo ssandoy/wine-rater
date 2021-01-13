@@ -64,6 +64,7 @@ const WineSearch = () => {
           onClick={() => setHasOpenedFilter(!hasOpenedFilter)}
         >
           <FilterIcon height="30" width="30" />
+          <p className="wine-search__paragraph">Filter</p>
         </div>
       </div>
       <div className="wine-list__filter-container">

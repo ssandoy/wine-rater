@@ -3,13 +3,13 @@
   "name": "Vinolini",
   "icons": [
     {
-      "src": "/images/wine-logo.png",
+      "src": "/images/app-logo.png",
       "type": "image/png",
       "sizes": "983x983"
     }
   ],
   "start_url": ".",
-  "background_color": "#4B6566",
+  "background_color": "#20292f",
   "display": "standalone",
-  "theme_color": "#4B6566"
+  "theme_color": "#20292f"
 }

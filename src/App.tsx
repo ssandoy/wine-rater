@@ -9,7 +9,6 @@ import "./App.scss";
 import AddWineForm from "components/add-wine/AddWineForm";
 import NotFoundComponent from "components/notfound/notfound";
 import LookUpComponent from "components/lookup/LookUpComponent";
-import logo from "./logo.png";
 import PropTypes from "prop-types";
 import * as dispatchers from "dispatchers";
 import { withFirebase } from "firebase/index";
@@ -18,6 +17,7 @@ import { connect } from "react-redux";
 import LoginComponent from "./components/login";
 import PrivateRoute from "./routes";
 import { WineSearchPage } from "./components/search/WineSearchPage";
+import LogoIcon from "./icons/LogoIcon";
 
 const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
   document.title = "Vinolini";
@@ -48,7 +48,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
         <div className="App-header">
           <div className="app-header-icon">
             <NavLink to="/">
-              <img src={logo} className="App-logo" alt="logo" />
+              <LogoIcon />
             </NavLink>
           </div>
           <div className="app-navbar">

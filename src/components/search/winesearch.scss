@@ -36,5 +36,16 @@
   &__filter-icon {
     margin-left: 20px;
     padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    :hover {
+      cursor: pointer;
+    }
+  }
+  &__paragraph {
+    color: white;
+    font-size: 12px;
+    margin: 0;
   }
 }
