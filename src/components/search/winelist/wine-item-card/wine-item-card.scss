@@ -87,7 +87,6 @@
     &-line-row {
       grid-column-start: 2;
       grid-column-end: 4;
-      height: 1px;
     }
 
 
@@ -102,6 +101,7 @@
 
 .wine-item-card__label {
   color: black;
+  margin: 0;
   @include for-phone-only {
     font-size: 18px;
   }
@@ -117,6 +117,11 @@
   @include for-phone-only {
     font-size: 22px;
   }
+}
+
+
+.info-text-item {
+  margin-bottom: 16px;
 }
 
 .wine-info-text {
