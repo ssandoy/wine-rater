@@ -2,7 +2,10 @@ import React from "react";
 import WineItemCard from "components/search/winelist/wine-item-card/wine-item-card";
 import "./winelist.scss";
 import Wine from "../../../models/wine";
-import { filteredWines, hasFetchedAllWines } from "../../../selectors/wine-selectors";
+import {
+  filteredWines,
+  hasFetchedAllWines
+} from "../../../selectors/wine-selectors";
 import { useSelector } from "react-redux";
 import Spinner from "../../spinner/Spinner";
 
@@ -23,7 +26,7 @@ const WineList = () => {
       )}
       <div className="wine-list__hits-container">
         <p className="wine-list__hits-paragraph">
-          FANT {wines.length} VINER I SØKET
+          FANT {wines.length} {wines.length === 1 ? "VIN" : "VINER"} I SØKET
         </p>
       </div>
 

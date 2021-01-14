@@ -54,7 +54,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
           <div className="app-navbar">
             <NavLink
               exact
-              to="/search"
+              to="/"
               style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
@@ -81,7 +81,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
         <>
           <Switch>
             <PrivateRoute exact path={"/add"} component={AddWineForm} />
-            <Route exact path={["/", "/search"]} component={WineSearchPage} />
+            <Route exact path={"/"} component={WineSearchPage} />
             <Route exact path={"/login"} component={LoginComponent} />
             <Route exact path={"/lookup"} component={LookUpComponent} />
             <Route component={NotFoundComponent} />
