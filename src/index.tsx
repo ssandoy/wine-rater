@@ -4,13 +4,13 @@ import App from "App";
 import { Provider } from "react-redux";
 import "./styles.scss";
 import store from "./store";
-import FirebaseService, { FirebaseContext } from "./firebase";
+import { FirebaseProvider } from "./firebase";
 
 ReactDOM.render(
   <Provider store={store}>
-    <FirebaseContext.Provider value={new FirebaseService()}>
+    <FirebaseProvider>
       <App />
-    </FirebaseContext.Provider>
+    </FirebaseProvider>
   </Provider>,
   document.getElementById("root")
 );

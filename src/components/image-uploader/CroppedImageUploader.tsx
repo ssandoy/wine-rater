@@ -6,9 +6,9 @@ import { getCroppedImg } from "./utils/getCroppedImg";
 import { executeScrollToRef } from "../../utils/scroll-utils";
 
 import "./styles.scss";
+import { useFirebaseContext } from "../../firebase";
 
 type Props = {
-  firebase: any;
   firebaseStorageRef: string;
   title?: string;
   handleUpdateComplete?: (uploadUrl: string) => void;
@@ -17,13 +17,13 @@ type Props = {
 };
 
 export const CroppedImageUploader: React.FC<Props> = ({
-  firebase,
   firebaseStorageRef,
   handleUpdateComplete,
   title,
   buttonUploadText = "Last opp",
   cropAspectRatio = 9 / 16
 }: Props) => {
+  const firebase = useFirebaseContext();
   const myRef = useRef(null);
 
   const [crop, setCrop] = useState<Crop>({
@@ -42,12 +42,18 @@ export const CroppedImageUploader: React.FC<Props> = ({
   const handleUpload = async () => {
     if (imageElement) {
       const croppedImage = await getCroppedImg(imageElement, crop, fileName);
-      const uploadURL = await firebase.uploadImage(
-        firebaseStorageRef,
-        new Date().getTime() + fileName,
-        croppedImage
+      const imageRef = await firebase.storageRef.child(firebaseStorageRef);
+      const uploadRef = imageRef.child(new Date().getTime() + fileName);
+      const imageUrl = await uploadRef.put(croppedImage).then(
+        success => {
+          return success.ref.getDownloadURL();
+        },
+        error => {
+          // TODO ADD ERRORHANDLING...
+        }
       );
-      return handleUpdateComplete ? handleUpdateComplete(uploadURL) : null;
+
+      return handleUpdateComplete ? handleUpdateComplete(imageUrl) : null;
     }
     return null;
   };

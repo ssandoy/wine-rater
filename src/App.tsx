@@ -11,24 +11,28 @@ import NotFoundComponent from "components/notfound/notfound";
 import LookUpComponent from "components/lookup/LookUpComponent";
 import PropTypes from "prop-types";
 import * as dispatchers from "dispatchers";
-import { withFirebase } from "firebase/index";
 import Wine from "models/wine";
 import { connect } from "react-redux";
 import LoginComponent from "./components/login";
 import PrivateRoute from "./routes";
 import { WineSearchPage } from "./components/search/WineSearchPage";
 import LogoIcon from "./icons/LogoIcon";
+import { useFirebaseContext } from "./firebase";
+import { snapshotToArray } from "./firebase/firebase-setup";
+import { INDICES } from "./firebase/indices";
 
-const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
+
+const App = ({ setAllWines, setWineItems, wineRegistered }) => {
   document.title = "Vinolini";
+
+  const firebase = useFirebaseContext();
 
   useEffect(() => {
     firebase.database
-      .ref("wines")
+      .ref(INDICES.WINES_INDEX)
       .once("value")
       .then((wineItemsSnapshot: any) => {
-        const allWines = firebase
-          .snapshotToArray(wineItemsSnapshot)
+        const allWines = snapshotToArray(wineItemsSnapshot)
           .map((item: Wine) => item)
           .sort(function(obj1: Wine, obj2: Wine) {
             return (
@@ -105,9 +109,7 @@ const mapStateToProps = (state: any) => ({
   wineRegistered: state.wineReducer.wineRegistered
 });
 
-export default withFirebase(
-  connect(mapStateToProps, {
-    setAllWines: dispatchers.setAllWines,
-    setWineItems: dispatchers.setWineItems
-  })(App)
-);
+export default connect(mapStateToProps, {
+  setAllWines: dispatchers.setAllWines,
+  setWineItems: dispatchers.setWineItems
+})(App);

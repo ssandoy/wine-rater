@@ -16,10 +16,11 @@ import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dro
 import { validateForm } from "components/add-wine/form-util";
 import Wine from "../../models/wine";
 import WineProduct from "../../models/product";
-import { withFirebase } from "firebase/index";
 import CroppedImageUploader from "../image-uploader/CroppedImageUploader";
 import PlusIcon from "../../icons/PlusIcon";
 import CrossIcon from "../../icons/CrossIcon";
+import { useFirebaseContext } from "../../firebase";
+import { INDICES } from "../../firebase/indices";
 
 const scrollToRef = ref => {
   window.scrollTo(0, ref.current.offsetTop);
@@ -29,15 +30,13 @@ const scrollToRef = ref => {
 interface Props {
   wineRegistered: boolean;
   resetWineRegistered: () => void;
-  addWineToWineList: (Wine: Wine, firebase: any) => void;
-  firebase: any;
+  addWineToWineList: (wineId: firebase.database.Reference) => void;
 }
 
 const AddWineForm = ({
   wineRegistered,
   resetWineRegistered,
-  addWineToWineList,
-  firebase
+  addWineToWineList
 }: Props) => {
   const errorRefMap = {
     sanderRating: useRef(null),
@@ -46,6 +45,7 @@ const AddWineForm = ({
     wineName: useRef(null),
     wineType: useRef(null)
   };
+  const firebase = useFirebaseContext();
 
   const executeErrorScroll = errors => {
     scrollToRef(errorRefMap[Object.keys(errors)[0]]);
@@ -105,7 +105,7 @@ const AddWineForm = ({
     setProductId(wine.basic.productId);
   };
 
-  const onSubmitForm = event => {
+  const onSubmitForm = async event => {
     event.preventDefault();
     const values: Wine = {
       wineName,
@@ -128,7 +128,14 @@ const AddWineForm = ({
     );
     setErrors(validatedErrors);
     if (!validatedErrors) {
-      addWineToWineList(values, firebase);
+      // todo maybe method
+      firebase.database
+        .ref(`${INDICES.WINES_INDEX}/`)
+        .push(values)
+        .then(createdWineId => {
+          console.log(createdWineId);
+          addWineToWineList(createdWineId);
+        });
     } else {
       executeErrorScroll(validatedErrors);
     }
@@ -361,8 +368,7 @@ const AddWineForm = ({
             )}
             {showImageUploader && (
               <CroppedImageUploader
-                firebase={firebase}
-                firebaseStorageRef="wine-pictures"
+                firebaseStorageRef={INDICES.WINE_PICTURES_INDEX}
                 handleUpdateComplete={fileUrl => {
                   setWinePicture(fileUrl);
                   setShowImageUploader(false);
@@ -410,9 +416,7 @@ const mapStateToProps = state => ({
   wineRegistered: state.wineReducer.wineRegistered
 });
 
-export default withFirebase(
-  connect(mapStateToProps, {
-    addWineToWineList: dispatchers.addWineToWineList,
-    resetWineRegistered: dispatchers.resetRegisteredWine
-  })(AddWineForm)
-);
+export default connect(mapStateToProps, {
+  addWineToWineList: dispatchers.addWineToWineList,
+  resetWineRegistered: dispatchers.resetRegisteredWine
+})(AddWineForm);

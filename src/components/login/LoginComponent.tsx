@@ -15,7 +15,7 @@ const LoginComponent = ({ isLoggedIn, loginFirebase }) => {
   };
 
   return isLoggedIn ? (
-    <Redirect to="/add" />
+    <Redirect to={ADD_WINE_ROUTE} />
   ) : (
     <div className="login-container">
       <h4 className="page-title login-title">
