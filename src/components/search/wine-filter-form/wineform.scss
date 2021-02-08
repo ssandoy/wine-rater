@@ -72,7 +72,11 @@
   }
 
   &__button {
+    align-items: center;
     display: flex;
+    color: black;
+    font-size: 18px;
+    background: none;
   }
 
   &__row {

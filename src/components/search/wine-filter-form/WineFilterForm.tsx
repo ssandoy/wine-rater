@@ -149,17 +149,20 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
           </div>
         }
         <div className="wine-search-form__buttons-container">
-          <div
+          <button
             className="wine-search-form__button"
             onClick={event => onSubmit(event)}
           >
             <SearchIcon />
             Søk
-          </div>
-          <div className="wine-search-form__button" onClick={() => onClear()}>
+          </button>
+          <button
+            className="wine-search-form__button"
+            onClick={() => onClear()}
+          >
             <TrashIcon />
             Tøm søk
-          </div>
+          </button>
         </div>
       </form>
     </div>
