@@ -4,8 +4,14 @@ import "./wine-details.scss";
 import { getWine } from "api/api";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
 
+const MAX_UNEXPANDED_ROWS = 2;
+
 const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
   const [winePicture, setWinePicture] = useState<string>("");
+  const [isGrapesExpanded, setIsGrapesExpanded] = useState(false);
+  const toggleOpen = (): void => {
+    setIsGrapesExpanded(!isGrapesExpanded);
+  };
 
   const getWinePicture = async (wineId: string) => {
     const wineDetails = await getWine(wineId);
@@ -40,11 +46,20 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
       </div>
       <div className="wine-details-item-col-2">
         <label>Druer</label>
-        <p>
-          {wineProduct.ingredients.grapes
-            .map(grape => grape.grapeDesc)
-            .join(",")}
-        </p>
+        <div onClick={toggleOpen}>
+          {wineProduct.ingredients.grapes.map((grape, idx) => {
+            if (!isGrapesExpanded && idx > MAX_UNEXPANDED_ROWS) {
+              return null;
+            }
+            const styles = idx !== 0 ? { margin: 0 } : { marginBottom: 0 };
+            return (
+              <p style={styles} key={grape.grapeId}>
+                {grape.grapeDesc}
+                {idx === MAX_UNEXPANDED_ROWS && !isGrapesExpanded && "..."}
+              </p>
+            );
+          })}
+        </div>
       </div>
       <div className="wine-details-row-item">
         <label>Smak</label>
