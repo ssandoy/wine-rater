@@ -1,21 +1,35 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import * as dispatchers from "dispatchers";
 import "./login.scss";
-import PropTypes from "prop-types";
+import { useAppContext } from "../../context/AppContext";
+import { ADD_WINE_ROUTE } from "../../routes/routes";
+import { useFirebaseContext } from "../../firebase";
+import Spinner from "../spinner/Spinner";
 
-const LoginComponent = ({ isLoggedIn, loginFirebase }) => {
+const LoginComponent = () => {
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
-  const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useAppContext();
+  const { auth } = useFirebaseContext();
   const login = event => {
+    setIsLoggingIn(true);
     event.preventDefault();
-    const isLoggedIn = loginFirebase(inputPassword);
-    setHasError(isLoggedIn);
+    auth
+      .signInWithEmailAndPassword("sanderfsandoy@gmail.com", inputPassword)
+      .then(userCredential => {
+        setIsLoggedIn(true);
+        setIsLoggingIn(false);
+      })
+      .catch(error => {
+        console.log(error);
+        setError(true);
+        setIsLoggingIn(false);
+      });
   };
 
   return isLoggedIn ? (
-    <Redirect to="/add" />
+    <Redirect to={ADD_WINE_ROUTE} />
   ) : (
     <div className="login-container">
       <h4 className="page-title login-title">
@@ -31,23 +45,15 @@ const LoginComponent = ({ isLoggedIn, loginFirebase }) => {
         <button className="login-button" type="submit">
           Logg inn
         </button>
-        {hasError && <p className="login-hasError">Feil passord!</p>}
+        {isLoggingIn && (
+          <div className="login-spinner-container">
+            Logger inn... <Spinner dark={true} />
+          </div>
+        )}
+        {error && <p className="login-hasError">Feil passord!</p>}
       </form>
     </div>
   );
 };
 
-LoginComponent.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  loginFirebase: PropTypes.func
-};
-
-const mapStateToProps = state => {
-  return {
-    isLoggedIn: state.loginReducer.isLoggedIn
-  };
-};
-
-export default connect(mapStateToProps, {
-  loginFirebase: dispatchers.loginFirebase
-})(LoginComponent);
+export default LoginComponent;

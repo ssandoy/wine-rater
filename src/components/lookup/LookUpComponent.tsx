@@ -4,6 +4,7 @@ import { debouncedSearchProductsByNameItem } from "api/api";
 import "./lookup.scss";
 import WineProduct from "models/product";
 import WineDetailsComponent from "./wine-details/WineDetailsComponent";
+import SearchIcon from "../../icons/SearchIcon";
 
 const LookUpComponent = () => {
   const [wineName, setWineName] = useState("");
@@ -41,9 +42,10 @@ const LookUpComponent = () => {
           <div className="wine-details-component">
             <WineDetailsComponent wineProduct={wineProduct} />{" "}
             <button
-              className="lookup__button"
+              className="wine-search-form__button"
               onClick={() => handleSelectedWine(null)}
             >
+              <SearchIcon />
               Søk på nytt
             </button>
           </div>

@@ -1,8 +1,11 @@
 import React from "react";
 import "./styles.scss";
 
-const Spinner = () => {
-  return <div className="spinner"></div>;
+type Props = {
+  dark?: boolean;
+};
+const Spinner = ({ dark = false }: Props) => {
+  return <div className={`spinner ${dark ? "spinner--dark" : ""}`}></div>;
 };
 
 export default Spinner;

@@ -9,26 +9,35 @@ import "./App.scss";
 import AddWineForm from "components/add-wine/AddWineForm";
 import NotFoundComponent from "components/notfound/notfound";
 import LookUpComponent from "components/lookup/LookUpComponent";
-import PropTypes from "prop-types";
-import * as dispatchers from "dispatchers";
-import { withFirebase } from "firebase/index";
 import Wine from "models/wine";
-import { connect } from "react-redux";
 import LoginComponent from "./components/login";
 import PrivateRoute from "./routes";
 import { WineSearchPage } from "./components/search/WineSearchPage";
 import LogoIcon from "./icons/LogoIcon";
+import { useFirebaseContext } from "./firebase";
+import { snapshotToArray } from "./firebase/firebase-setup";
+import { INDICES } from "./firebase/indices";
+import { useAppContext } from "./context/AppContext";
+import {
+  ADD_WINE_ROUTE,
+  DETAILS_ROUTE,
+  LOGIN_ROUTE,
+  SEARCH_ROUTE
+} from "./routes/routes";
 
-const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
+const App = () => {
   document.title = "Vinolini";
 
+  const { setAllWines, setIsFetchingWines, setFilteredWines } = useAppContext();
+  const firebase = useFirebaseContext();
+
   useEffect(() => {
+    setIsFetchingWines(true);
     firebase.database
-      .ref("wines")
+      .ref(INDICES.WINES_INDEX)
       .once("value")
       .then((wineItemsSnapshot: any) => {
-        const allWines = firebase
-          .snapshotToArray(wineItemsSnapshot)
+        const allWines = snapshotToArray(wineItemsSnapshot)
           .map((item: Wine) => item)
           .sort(function(obj1: Wine, obj2: Wine) {
             return (
@@ -38,23 +47,24 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
             );
           });
         setAllWines(allWines);
-        setWineItems(allWines);
+        setFilteredWines(allWines);
+        setIsFetchingWines(false);
       });
-  }, [firebase, setAllWines, setWineItems, wineRegistered]);
+  }, [firebase, setAllWines, setFilteredWines, setIsFetchingWines]);
 
   return (
     <Router>
       <div className="App">
         <div className="App-header">
           <div className="app-header-icon">
-            <NavLink to="/">
+            <NavLink to={SEARCH_ROUTE}>
               <LogoIcon />
             </NavLink>
           </div>
           <div className="app-navbar">
             <NavLink
               exact
-              to="/"
+              to={SEARCH_ROUTE}
               style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
@@ -62,7 +72,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
             </NavLink>
             <NavLink
               exact
-              to="/lookup"
+              to={DETAILS_ROUTE}
               style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
@@ -70,7 +80,7 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
             </NavLink>
             <NavLink
               exact
-              to="/add"
+              to={ADD_WINE_ROUTE}
               style={{ color: "white", textDecoration: "none" }}
               activeStyle={{ color: "white", borderBottom: "1px solid white" }}
             >
@@ -80,10 +90,14 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
         </div>
         <>
           <Switch>
-            <PrivateRoute exact path={"/add"} component={AddWineForm} />
-            <Route exact path={"/"} component={WineSearchPage} />
-            <Route exact path={"/login"} component={LoginComponent} />
-            <Route exact path={"/lookup"} component={LookUpComponent} />
+            <PrivateRoute exact path={ADD_WINE_ROUTE} component={AddWineForm} />
+            <Route
+              exact
+              path={["/", SEARCH_ROUTE]}
+              component={WineSearchPage}
+            />
+            <Route exact path={LOGIN_ROUTE} component={LoginComponent} />
+            <Route exact path={DETAILS_ROUTE} component={LookUpComponent} />
             <Route component={NotFoundComponent} />
           </Switch>
         </>
@@ -92,22 +106,4 @@ const App = ({ firebase, setAllWines, setWineItems, wineRegistered }) => {
   );
 };
 
-App.propTypes = {
-  allWines: PropTypes.array,
-  setWineItems: PropTypes.func,
-  setAllWines: PropTypes.func,
-  wineRegistered: PropTypes.bool,
-  firebase: PropTypes.object
-};
-
-const mapStateToProps = (state: any) => ({
-  allWines: state.wineReducer.allWines,
-  wineRegistered: state.wineReducer.wineRegistered
-});
-
-export default withFirebase(
-  connect(mapStateToProps, {
-    setAllWines: dispatchers.setAllWines,
-    setWineItems: dispatchers.setWineItems
-  })(App)
-);
+export default App;

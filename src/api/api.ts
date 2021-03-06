@@ -12,7 +12,6 @@ const vinmonopoletBaseUrlV1 =
   "https://app.vinmonopolet.no/vmpws/v2/vmp/products";
 
 // TODO: CONSIDER EXPRESS APP IN FRONT TO SERVE AND HIDE HEADERS.
-// TODO: RENAME
 export const searchProductsByNameMapToSelect = async (query: string) => {
   // The api consumes _ instead of spaces
   const trimmedQuery = query.replace(/ /g, "_");

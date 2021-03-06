@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { connect } from "react-redux";
-import * as dispatchers from "dispatchers";
 
 import { debouncedSearchProductsByNameItem, getWine } from "api/api";
 import validationSchema, { Errors } from "./validationSchema";
@@ -16,29 +14,19 @@ import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dro
 import { validateForm } from "components/add-wine/form-util";
 import Wine from "../../models/wine";
 import WineProduct from "../../models/product";
-import { withFirebase } from "firebase/index";
 import CroppedImageUploader from "../image-uploader/CroppedImageUploader";
 import PlusIcon from "../../icons/PlusIcon";
 import CrossIcon from "../../icons/CrossIcon";
+import { useFirebaseContext } from "../../firebase";
+import { INDICES } from "../../firebase/indices";
 
 const scrollToRef = ref => {
   window.scrollTo(0, ref.current.offsetTop);
 };
 // General scroll to element function
 
-interface Props {
-  wineRegistered: boolean;
-  resetWineRegistered: () => void;
-  addWineToWineList: (Wine: Wine, firebase: any) => void;
-  firebase: any;
-}
-
-const AddWineForm = ({
-  wineRegistered,
-  resetWineRegistered,
-  addWineToWineList,
-  firebase
-}: Props) => {
+const AddWineForm: React.FC = () => {
+  const [isWineRegistered, setIsWineRegistered] = useState<boolean>(false);
   const errorRefMap = {
     sanderRating: useRef(null),
     ineRating: useRef(null),
@@ -46,6 +34,7 @@ const AddWineForm = ({
     wineName: useRef(null),
     wineType: useRef(null)
   };
+  const firebase = useFirebaseContext();
 
   const executeErrorScroll = errors => {
     scrollToRef(errorRefMap[Object.keys(errors)[0]]);
@@ -70,11 +59,11 @@ const AddWineForm = ({
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
   useEffect(() => {
-    resetWineRegistered();
-  }, [resetWineRegistered]);
+    setIsWineRegistered(false);
+  }, []);
 
   const resetSearch = () => {
-    resetWineRegistered();
+    setIsWineRegistered(false);
     setWineName("");
     setErrors(null);
     setSelectedWine(false);
@@ -105,7 +94,7 @@ const AddWineForm = ({
     setProductId(wine.basic.productId);
   };
 
-  const onSubmitForm = event => {
+  const onSubmitForm = async event => {
     event.preventDefault();
     const values: Wine = {
       wineName,
@@ -128,7 +117,13 @@ const AddWineForm = ({
     );
     setErrors(validatedErrors);
     if (!validatedErrors) {
-      addWineToWineList(values, firebase);
+      // todo maybe method
+      firebase.database
+        .ref(`${INDICES.WINES_INDEX}/`)
+        .push(values)
+        .then(createdWineId => {
+          setIsWineRegistered(true);
+        });
     } else {
       executeErrorScroll(validatedErrors);
     }
@@ -361,8 +356,7 @@ const AddWineForm = ({
             )}
             {showImageUploader && (
               <CroppedImageUploader
-                firebase={firebase}
-                firebaseStorageRef="wine-pictures"
+                firebaseStorageRef={INDICES.WINE_PICTURES_INDEX}
                 handleUpdateComplete={fileUrl => {
                   setWinePicture(fileUrl);
                   setShowImageUploader(false);
@@ -375,7 +369,7 @@ const AddWineForm = ({
           <div className="add-wine-form__row">
             <div className="add-wine-form__buttons">
               <button
-                disabled={wineRegistered}
+                disabled={isWineRegistered}
                 type="submit"
                 className="add-wine-form__button add-wine-form__button-add"
               >
@@ -394,7 +388,7 @@ const AddWineForm = ({
             </div>
           </div>
         )}
-        {wineRegistered && (
+        {isWineRegistered && (
           <div className="add-wine-form__row">
             <div className="add-wine__wine-registered">
               <p>Vinen ble lagret!</p>
@@ -406,13 +400,4 @@ const AddWineForm = ({
   );
 };
 
-const mapStateToProps = state => ({
-  wineRegistered: state.wineReducer.wineRegistered
-});
-
-export default withFirebase(
-  connect(mapStateToProps, {
-    addWineToWineList: dispatchers.addWineToWineList,
-    resetWineRegistered: dispatchers.resetRegisteredWine
-  })(AddWineForm)
-);
+export default AddWineForm;

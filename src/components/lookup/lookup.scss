@@ -23,6 +23,11 @@
   &__button {
     margin-top: 16px;
     width: 100%;
-    background-color: #87d7f0;
   }
+}
+
+.wine-details-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

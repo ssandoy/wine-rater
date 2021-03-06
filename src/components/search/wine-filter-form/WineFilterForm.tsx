@@ -1,28 +1,24 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
 import "./wineform.scss";
-import * as dispatchers from "dispatchers";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
 import * as images from "images";
 import { imageKeys as imgKeys } from "images";
-import { allWines as wines } from "../../../selectors/wine-selectors";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
 import { useWineFilterContext } from "../../../context/filter-context/WineFilterContext";
 import ExitIcon from "../../../icons/ExitIcon";
 import TrashIcon from "../../../icons/TrashIcon";
 import SearchIcon from "../../../icons/SearchIcon";
+import { useAppContext } from "../../../context/AppContext";
 
 type Props = {
   onFilter: () => void;
 };
 const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
-  const allWines = useSelector(wines);
+  const { allWines, setFilteredWines } = useAppContext();
   const [imageKeys] = useState<string[]>(imgKeys);
 
-  const dispatch = useDispatch();
   const {
     hasOpenedFilter,
     setHasOpenedFilter,
@@ -54,7 +50,7 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
     setSelectedWineGrapes([]);
     setSelectedCountries([]);
     setWineName("");
-    dispatch(dispatchers.setWineItems(allWines));
+    setFilteredWines(allWines);
     setHasOpenedFilter(false);
   };
 

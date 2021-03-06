@@ -1,33 +1,26 @@
-import React from 'react';
-import {Redirect, Route} from 'react-router-dom';
-import {connect} from 'react-redux';
+import React from "react";
+import { Redirect, Route } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
+import { LOGIN_ROUTE } from "./routes";
 
 interface Props {
-  isLoggedIn: boolean;
-  component: React.FunctionComponent;
+  component: React.FC;
   exact: boolean;
   path: string;
 }
 
-const PrivateRoute: React.FunctionComponent<Props> = ({
-  isLoggedIn,
+const PrivateRoute: React.FC<Props> = ({
   component: Component,
   ...rest
 }: Props) => {
+  const { isLoggedIn } = useAppContext();
   return (
-    <Route
-      {...rest}
-      render={props =>
-        isLoggedIn ? <Component {...props} /> : <Redirect to="/login" />
+    <Route {...rest}>
+      {props =>
+        isLoggedIn ? <Component {...props} /> : <Redirect to={LOGIN_ROUTE} />
       }
-    />
+    </Route>
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    isLoggedIn: state.loginReducer.isLoggedIn
-  };
-};
-
-export default connect(mapStateToProps)(PrivateRoute);
+export default PrivateRoute;

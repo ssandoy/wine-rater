@@ -1,6 +1,3 @@
-import FirebaseContext, { withFirebase } from "./firebase-context";
-import FirebaseService from "./firebase-service";
+import { FirebaseProvider, useFirebaseContext } from "./firebase-context";
 
-export default FirebaseService;
-
-export { FirebaseContext, withFirebase };
+export { FirebaseProvider, useFirebaseContext };
