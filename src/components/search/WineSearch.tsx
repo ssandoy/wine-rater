@@ -2,7 +2,6 @@ import React from "react";
 import WineFilterForm from "./wine-filter-form/WineFilterForm";
 import WineList from "./winelist/WineList";
 import "./winesearch.scss";
-import * as dispatchers from "dispatchers";
 import FilterIcon from "../../icons/FilterIcon";
 import { isNative as nativeCheck } from "../../utils/window-utils";
 import {
@@ -10,14 +9,12 @@ import {
   WineType
 } from "../../context/filter-context/WineFilterContext";
 import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { allWines as wines } from "../../selectors/wine-selectors";
 import { isObjectInArray } from "../../utils/array-utils";
+import { useAppContext } from "../../context/AppContext";
 
 const WineSearch = () => {
-  const dispatch = useDispatch();
   const isNative = nativeCheck();
-  const allWines = useSelector(wines);
+  const { allWines, setFilteredWines } = useAppContext();
   const {
     hasOpenedFilter,
     setHasOpenedFilter,
@@ -37,22 +34,20 @@ const WineSearch = () => {
   };
 
   const filterWines = (wineType?: WineType) => {
-    dispatch(
-      dispatchers.setWineItems(
-        allWines
-          .filter(wine =>
-            wine.wineName.toLowerCase().includes(wineName.toLowerCase())
-          )
-          .filter(wine => isObjectInArray(wine.fitsTo, selectedFitsTo))
-          .filter(wine => isObjectInArray(wine.wineGrapes, selectedWineGrapes))
-          .filter(wine => isObjectInArray(wine.wineCountry, selectedCountries))
-          .filter(wine => isObjectInArray(wine.wineRegion, selectedRegions))
-          .filter(wine => {
-            if (wineType === "alle" || wineType === undefined) {
-              return true;
-            } else return wine.wineType === wineType;
-          })
-      )
+    setFilteredWines(
+      allWines
+        .filter(wine =>
+          wine.wineName.toLowerCase().includes(wineName.toLowerCase())
+        )
+        .filter(wine => isObjectInArray(wine.fitsTo, selectedFitsTo))
+        .filter(wine => isObjectInArray(wine.wineGrapes, selectedWineGrapes))
+        .filter(wine => isObjectInArray(wine.wineCountry, selectedCountries))
+        .filter(wine => isObjectInArray(wine.wineRegion, selectedRegions))
+        .filter(wine => {
+          if (wineType === "alle" || wineType === undefined) {
+            return true;
+          } else return wine.wineType === wineType;
+        })
     );
   };
   return (
