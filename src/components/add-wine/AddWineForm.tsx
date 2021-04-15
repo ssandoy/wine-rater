@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { debouncedSearchProductsByNameItem, getWine } from "api/api";
+import { debouncedSearchProductsByNameItem, getWine } from "api";
 import validationSchema, { Errors } from "./validationSchema";
 import * as images from "images";
 import { imageKeys } from "images";

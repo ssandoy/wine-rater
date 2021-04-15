@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
-import { debouncedSearchProductsByNameItem } from "api/api";
+import { debouncedSearchProductsByNameItem } from "api";
 import "./lookup.scss";
 import WineProduct from "models/product";
 import WineDetailsComponent from "./wine-details/WineDetailsComponent";

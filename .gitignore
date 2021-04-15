@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 
+#netlify
+/netlify-functions-build
+
 # testing
 /coverage
 
