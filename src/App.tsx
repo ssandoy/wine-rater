@@ -22,8 +22,10 @@ import {
   ADD_WINE_ROUTE,
   DETAILS_ROUTE,
   LOGIN_ROUTE,
-  SEARCH_ROUTE
+  SEARCH_ROUTE,
+  SUGGESTER_ROUTE
 } from "./routes/routes";
+import WineSuggesterPage from "./features/wine-suggester/WineSuggesterPage";
 
 const App = () => {
   document.title = "Vinolini";
@@ -98,6 +100,7 @@ const App = () => {
             />
             <Route exact path={LOGIN_ROUTE} component={LoginComponent} />
             <Route exact path={DETAILS_ROUTE} component={LookUpComponent} />
+            <Route exact path={SUGGESTER_ROUTE} component={WineSuggesterPage} />
             <Route component={NotFoundComponent} />
           </Switch>
         </>
