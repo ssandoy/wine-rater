@@ -11,10 +11,12 @@ import ExitIcon from "../../../icons/ExitIcon";
 import TrashIcon from "../../../icons/TrashIcon";
 import SearchIcon from "../../../icons/SearchIcon";
 import { useAppContext } from "../../../context/AppContext";
+import { WinePriceRange } from "./WinePriceRange";
 
 type Props = {
   onFilter: () => void;
 };
+
 const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
   const { allWines, setFilteredWines } = useAppContext();
   const [imageKeys] = useState<string[]>(imgKeys);
@@ -33,7 +35,9 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
       selectedCountries: {
         value: selectedCountries,
         setValue: setSelectedCountries
-      }
+      },
+      maxPrice: { setValue: setMaxPrice },
+      minPrice: { setValue: setMinPrice }
     }
   } = useWineFilterContext();
   const wineGrapeItems = Raastoff.values.map(value => value.code);
@@ -51,6 +55,8 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
     setSelectedCountries([]);
     setWineName("");
     setFilteredWines(allWines);
+    setMaxPrice(1000);
+    setMinPrice(0);
     setHasOpenedFilter(false);
   };
 
@@ -72,78 +78,78 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
             />
           </div>
         </div>
-        {
-          <>
-            <div className="wine-search-form__row">
-              <label>Drue</label>
-              <SearchDropDown
-                placeholder="Vindrue"
-                searchItems={wineGrapeItems}
-                selectedItems={selectedWineGrapes.map(grape => ({
-                  label: grape,
-                  value: grape
-                }))}
-                onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
-              />
-            </div>
-            <div className="wine-search-form__row">
-              <label htmlFor="country">Land</label>
-              <SearchDropDown
-                placeholder="Land"
-                selectedItems={selectedCountries.map(country => ({
-                  label: country,
-                  value: country
-                }))}
-                searchItems={[
-                  ...new Set(allWines.map(wine => wine.wineCountry))
-                ]}
-                onClick={countryArray => setSelectedCountries(countryArray)}
-              />
-            </div>
-            <div className="wine-search-form__row">
-              <label>Region</label>
-              <SearchDropDown
-                placeholder="Region"
-                selectedItems={selectedRegions.map(region => ({
-                  label: region,
-                  value: region
-                }))}
-                searchItems={[
-                  ...new Set(
-                    allWines
-                      .map(wine => wine.wineRegion)
-                      .filter(region => region !== null)
-                  )
-                ]}
-                onClick={regionArray => setSelectedRegions(regionArray)}
-              />
-            </div>
-          </>
-        }
-        {
+        <>
           <div className="wine-search-form__row">
-            <label>Hva passer vinen til?</label>
-            <div className="wine-search-form__fits-to-grid">
-              {imageKeys.map(imageKey => (
-                <div key={imageKey} className="fits-to-cell">
-                  <ImageCheckbox
-                    key={imageKey + "searchForm"}
-                    image={images[imageKey]}
-                    htmlFor={imageKey + "searchForm"}
-                    value={imageKey}
-                    name="wineSearchForm"
-                    checked={selectedFitsTo.includes(imageKey)}
-                    onClick={value => {
-                      setSelectedFitsTo(
-                        pushOrRemoveToArray(selectedFitsTo, value)
-                      );
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
+            <label>Drue</label>
+            <SearchDropDown
+              placeholder="Vindrue"
+              searchItems={wineGrapeItems}
+              selectedItems={selectedWineGrapes.map(grape => ({
+                label: grape,
+                value: grape
+              }))}
+              onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
+            />
           </div>
-        }
+          <div className="wine-search-form__row">
+            <label htmlFor="country">Land</label>
+            <SearchDropDown
+              placeholder="Land"
+              selectedItems={selectedCountries.map(country => ({
+                label: country,
+                value: country
+              }))}
+              searchItems={[...new Set(allWines.map(wine => wine.wineCountry))]}
+              onClick={countryArray => setSelectedCountries(countryArray)}
+            />
+          </div>
+          <div className="wine-search-form__row">
+            <label>Region</label>
+            <SearchDropDown
+              placeholder="Region"
+              selectedItems={selectedRegions.map(region => ({
+                label: region,
+                value: region
+              }))}
+              searchItems={[
+                ...new Set(
+                  allWines
+                    .map(wine => wine.wineRegion)
+                    .filter(region => region !== null)
+                )
+              ]}
+              onClick={regionArray => setSelectedRegions(regionArray)}
+            />
+          </div>
+        </>
+        <div className="wine-search-form__row">
+          <label>Hva passer vinen til?</label>
+          <div className="wine-search-form__fits-to-grid">
+            {imageKeys.map(imageKey => (
+              <div key={imageKey} className="fits-to-cell">
+                <ImageCheckbox
+                  key={imageKey + "searchForm"}
+                  image={images[imageKey]}
+                  htmlFor={imageKey + "searchForm"}
+                  value={imageKey}
+                  name="wineSearchForm"
+                  checked={selectedFitsTo.includes(imageKey)}
+                  onClick={value => {
+                    setSelectedFitsTo(
+                      pushOrRemoveToArray(selectedFitsTo, value)
+                    );
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="wine-search-form__row">
+          <label>Pris</label>
+          <div className="wine-search-form__range-container">
+            <WinePriceRange />
+          </div>
+        </div>
         <div className="wine-search-form__buttons-container">
           <button
             className="wine-search-form__button"

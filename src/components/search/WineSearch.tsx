@@ -24,7 +24,9 @@ const WineSearch = () => {
       selectedWineGrapes: { value: selectedWineGrapes },
       selectedRegions: { value: selectedRegions },
       selectedFitsTo: { value: selectedFitsTo },
-      selectedCountries: { value: selectedCountries }
+      selectedCountries: { value: selectedCountries },
+      maxPrice: { value: maxPrice },
+      minPrice: { value: minPrice }
     }
   } = useWineFilterContext();
 
@@ -48,6 +50,8 @@ const WineSearch = () => {
             return true;
           } else return wine.wineType === wineType;
         })
+        .filter(wine => (wine.price ?? 0) <= maxPrice)
+        .filter(wine => (!wine.price ? true : wine.price >= minPrice))
     );
   };
   return (

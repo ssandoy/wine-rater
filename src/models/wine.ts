@@ -1,5 +1,4 @@
 export default interface Wine {
-  // TODO HOW TO HANDLE CASTING TO WINE WHEN KEY IS NOT YET GENERATED?
   key?: string;
   apiId?: string;
   wineName: string;
@@ -12,4 +11,5 @@ export default interface Wine {
   wineRegion: string;
   wineCountry: string;
   winePicture?: string;
+  price?: number;
 }

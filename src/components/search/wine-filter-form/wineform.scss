@@ -100,6 +100,13 @@
     grid-template-rows: 33%33%30%;
     margin-top: 16px;
   }
+  &__price-text {
+    font-size: 16px;
+  }
+
+  &__range-container {
+    margin: 5px 10px;
+  }
 }
 
 label {
