@@ -311,24 +311,29 @@ const AddWineForm: React.FC = () => {
                 <label>Hva passer vinen til?</label>
               </div>
               <div className="add-wine-form__fits-to-grid">
-                {imageKeys.map((imageKey, index) => (
-                  <div
-                    className="add-wine-form__fits-to-cell"
-                    key={index + imageKey}
-                  >
-                    <ImageCheckbox
-                      key={imageKey}
-                      image={images[imageKey]}
-                      htmlFor={imageKey}
-                      value={imageKey}
-                      name="fitsTo"
-                      checked={fitsTo.includes(imageKey)}
-                      onClick={value =>
-                        setFitsTo(pushOrRemoveToArray(fitsTo, value))
-                      }
-                    />
-                  </div>
-                ))}
+                {imageKeys.map((imageKey, index) => {
+                  if (imageKey === "fish" || imageKey === "cake") {
+                    return null;
+                  }
+                  return (
+                    <div
+                      className="add-wine-form__fits-to-cell"
+                      key={index + imageKey}
+                    >
+                      <ImageCheckbox
+                        key={imageKey}
+                        image={images[imageKey]}
+                        htmlFor={imageKey}
+                        value={imageKey}
+                        name="fitsTo"
+                        checked={fitsTo.includes(imageKey)}
+                        onClick={value =>
+                          setFitsTo(pushOrRemoveToArray(fitsTo, value))
+                        }
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </>

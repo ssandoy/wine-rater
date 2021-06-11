@@ -10,10 +10,22 @@ import {
 import * as images from "images";
 import Spinner from "../../components/spinner/Spinner";
 import { css } from "@emotion/css";
+import styled from "@emotion/styled";
 
 const loadingLabelCss = css`
   font-size: 22px;
   color: #023950;
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ButtonContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 `;
 
 const buttonCss = css`
@@ -34,6 +46,16 @@ const WineSuggesterPage: React.FC = () => {
         return { foodId: "G", foodDescription: "Småvilt og fugl" };
       case "bull":
         return { foodId: "E", foodDescription: "Storfe" };
+      case "ost":
+        return { foodId: "L", foodDescription: "Ost" };
+      case "svin":
+        return { foodId: "Q", foodDescription: "Svinekjøtt" };
+      case "vilt":
+        return { foodId: "H", foodDescription: "Storvilt" };
+      case "kake":
+        return { foodId: "N", foodDescription: "Dessert, kake, frukt" };
+      case "fisk":
+        return { foodId: "C", foodDescription: "Fisk" };
       default:
         return { foodId: "E", foodDescription: "Storfe" };
     }
@@ -66,43 +88,80 @@ const WineSuggesterPage: React.FC = () => {
       <h1 className="page-title ">Finn meg en vin!</h1>
       <div className="lookup-details-container">
         {!wineProduct && (
-          <div>
+          <FormContainer>
             <p>Velg hvilken type mat du skal spise</p>
-            <button
-              value="okse"
-              className={buttonCss}
-              onClick={handleSelectedFood}
-            >
-              <img src={images["bull"]} className="image" alt="okse" />
-            </button>
-            <button
-              value="fugl"
-              className={buttonCss}
-              onClick={handleSelectedFood}
-            >
-              <img src={images["chicken"]} className="image" alt="kylling" />
-            </button>
-            <button
-              value="apetirif"
-              className={buttonCss}
-              onClick={handleSelectedFood}
-            >
-              <img src={images["apetirif"]} className="image" alt="pasta" />
-            </button>
-            <button
-              value="skalldyr"
-              className={buttonCss}
-              onClick={handleSelectedFood}
-            >
-              <img src={images["seafood"]} className="image" alt="pizza" />
-            </button>
-          </div>
-        )}
-        {isLoading && (
-          <div style={{ display: "flex" }}>
-            <span className={loadingLabelCss}>Henter en vin</span>
-            <Spinner dark={true} />
-          </div>
+            <ButtonContainer>
+              <button
+                value="okse"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["bull"]} className="image" alt="okse" />
+              </button>
+              <button
+                value="fugl"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["chicken"]} className="image" alt="kylling" />
+              </button>
+              <button
+                value="apetirif"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["apetirif"]} className="image" alt="pasta" />
+              </button>
+              <button
+                value="skalldyr"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["seafood"]} className="image" alt="pizza" />
+              </button>
+              <button
+                value="ost"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["cheese"]} className="image" alt="ost" />
+              </button>
+              <button
+                value="svin"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["pig"]} className="image" alt="svin" />
+              </button>
+              <button
+                value="vilt"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["deer"]} className="image" alt="vilt" />
+              </button>
+              <button
+                value="fisk"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["fish"]} className="image" alt="fisk" />
+              </button>
+              <button
+                value="kake"
+                className={buttonCss}
+                onClick={handleSelectedFood}
+              >
+                <img src={images["cake"]} className="image" alt="kake" />
+              </button>
+            </ButtonContainer>
+            {isLoading && (
+              <div style={{ display: "flex" }}>
+                <span className={loadingLabelCss}>Henter en vin</span>
+                <Spinner dark={true} />
+              </div>
+            )}
+          </FormContainer>
         )}
         {wineProduct && (
           <div className="wine-details-component">

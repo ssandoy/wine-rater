@@ -125,23 +125,28 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
         <div className="wine-search-form__row">
           <label>Hva passer vinen til?</label>
           <div className="wine-search-form__fits-to-grid">
-            {imageKeys.map(imageKey => (
-              <div key={imageKey} className="fits-to-cell">
-                <ImageCheckbox
-                  key={imageKey + "searchForm"}
-                  image={images[imageKey]}
-                  htmlFor={imageKey + "searchForm"}
-                  value={imageKey}
-                  name="wineSearchForm"
-                  checked={selectedFitsTo.includes(imageKey)}
-                  onClick={value => {
-                    setSelectedFitsTo(
-                      pushOrRemoveToArray(selectedFitsTo, value)
-                    );
-                  }}
-                />
-              </div>
-            ))}
+            {imageKeys.map(imageKey => {
+              if (imageKey === "fish" || imageKey === "cake") {
+                return null;
+              }
+              return (
+                <div key={imageKey} className="fits-to-cell">
+                  <ImageCheckbox
+                    key={imageKey + "searchForm"}
+                    image={images[imageKey]}
+                    htmlFor={imageKey + "searchForm"}
+                    value={imageKey}
+                    name="wineSearchForm"
+                    checked={selectedFitsTo.includes(imageKey)}
+                    onClick={value => {
+                      setSelectedFitsTo(
+                        pushOrRemoveToArray(selectedFitsTo, value)
+                      );
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className="wine-search-form__row">

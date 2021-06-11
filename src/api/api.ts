@@ -41,11 +41,11 @@ export type RecommendedFood =
   | { foodId: "E"; foodDescription: "Storfe" }
   | { foodId: "F"; foodDescription: "Lam og sau" }
   | { foodId: "G"; foodDescription: "Småvilt og fugl" }
-  | { foodId: "H"; foodDescription: "Storilt" }
-  | { foodId: "I"; foodDescription: "Ost" }
-  | { foodId: "J"; foodDescription: "Dessert, kake, frukt" }
-  | { foodId: "K"; foodDescription: "Svinekjøtt" }
-  | { foodId: "L"; foodDescription: "Grønnsaker" };
+  | { foodId: "H"; foodDescription: "Storvilt" }
+  | { foodId: "L"; foodDescription: "Ost" }
+  | { foodId: "N"; foodDescription: "Dessert, kake, frukt" }
+  | { foodId: "Q"; foodDescription: "Svinekjøtt" }
+  | { foodId: "R"; foodDescription: "Grønnsaker" };
 
 const buildRecommendedFoodURI = (recommendedFood: RecommendedFood): string => {
   const foodDescriptionTrimmedQuery = recommendedFood.foodDescription.replace(
