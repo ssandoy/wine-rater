@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Squash as Hamburger } from "hamburger-react";
 import {
   BrowserRouter as Router,
   NavLink,
@@ -26,12 +27,18 @@ import {
   SUGGESTER_ROUTE
 } from "./routes/routes";
 import WineSuggesterPage from "./features/wine-suggester/WineSuggesterPage";
+import { WineNavLink } from "./WineNavLink";
+import { isNative } from "./utils/window-utils";
 
 const App = () => {
   document.title = "Vinolini";
 
   const { setAllWines, setIsFetchingWines, setFilteredWines } = useAppContext();
   const firebase = useFirebaseContext();
+  // todo isNative
+  const [shouldShowNavbar, setShouldShowNavbar] = useState(
+    isNative() ? false : true
+  );
 
   useEffect(() => {
     setIsFetchingWines(true);
@@ -64,30 +71,21 @@ const App = () => {
             </NavLink>
           </div>
           <div className="app-navbar">
-            <NavLink
-              exact
-              to={SEARCH_ROUTE}
-              style={{ color: "white", textDecoration: "none" }}
-              activeStyle={{ color: "white", borderBottom: "1px solid white" }}
-            >
-              Søk
-            </NavLink>
-            <NavLink
-              exact
-              to={DETAILS_ROUTE}
-              style={{ color: "white", textDecoration: "none" }}
-              activeStyle={{ color: "white", borderBottom: "1px solid white" }}
-            >
-              Detaljer
-            </NavLink>
-            <NavLink
-              exact
-              to={ADD_WINE_ROUTE}
-              style={{ color: "white", textDecoration: "none" }}
-              activeStyle={{ color: "white", borderBottom: "1px solid white" }}
-            >
-              Legg til
-            </NavLink>
+            {isNative() && (
+              <Hamburger
+                color="white"
+                toggled={shouldShowNavbar}
+                toggle={setShouldShowNavbar}
+              />
+            )}
+            {shouldShowNavbar ? (
+              <>
+                <WineNavLink route={SEARCH_ROUTE} title="Våre viner" />
+                <WineNavLink route={DETAILS_ROUTE} title="Søk" />
+                <WineNavLink route={SUGGESTER_ROUTE} title="Vinforslag" />
+                <WineNavLink route={ADD_WINE_ROUTE} title="Legg til" />
+              </>
+            ) : null}
           </div>
         </div>
         <>
