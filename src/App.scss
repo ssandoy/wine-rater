@@ -19,7 +19,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 170px;
 }
 
 .app-navbar {
@@ -29,6 +28,8 @@
 
   @include for-phone-only {
     font-size: 18px;
+    flex-direction: column;
+    align-items: center;
   }
 
   a {
