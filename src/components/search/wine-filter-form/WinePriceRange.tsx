@@ -43,7 +43,7 @@ export const WinePriceRange: React.FC = () => {
       max={1000}
       min={0}
       step={20}
-      style={{ marginTop: 28 }}
+      style={{ marginTop: 16 }}
       onChange={([min, max]) => {
         setMinPrice(min);
         setMaxPrice(max);
