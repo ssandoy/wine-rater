@@ -50,6 +50,7 @@
     border-radius: 14px;
     background-color: white;
     padding-bottom: 20px;
+    width: inherit;
 
     display: grid;
     grid-template-rows: auto;
@@ -127,7 +128,6 @@
 .wine-info-text {
   color: grey;
   font-size: 1em;
-  max-width: 90px;
   margin: 6px 0;
   @include for-phone-only {
     font-size: 18px !important;

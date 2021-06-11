@@ -17,6 +17,8 @@ type State = {
     selectedRegions: FilterValue<string[]>;
     selectedFitsTo: FilterValue<string[]>;
     wineType: FilterValue<WineType>;
+    maxPrice: FilterValue<number>;
+    minPrice: FilterValue<number>;
   };
 };
 
@@ -32,6 +34,9 @@ const WineFilterProvider = props => {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedFitsTo, setSelectedFitsTo] = useState<string[]>([]);
+  // todo max should be 1000 or greater than whatever
+  const [maxPrice, setMaxPrice] = useState<number>(1000);
+  const [minPrice, setMinPrice] = useState<number>(0);
   const value = useMemo(() => {
     const val: State = {
       hasOpenedFilter,
@@ -60,6 +65,14 @@ const WineFilterProvider = props => {
         selectedRegions: {
           value: selectedRegions,
           setValue: setSelectedRegions
+        },
+        maxPrice: {
+          value: maxPrice,
+          setValue: setMaxPrice
+        },
+        minPrice: {
+          value: minPrice,
+          setValue: setMinPrice
         }
       }
     };
@@ -71,7 +84,9 @@ const WineFilterProvider = props => {
     selectedWineGrapes,
     selectedCountries,
     selectedFitsTo,
-    selectedRegions
+    selectedRegions,
+    maxPrice,
+    minPrice
   ]);
   return <WineFilterContext.Provider value={value} {...props} />;
 };

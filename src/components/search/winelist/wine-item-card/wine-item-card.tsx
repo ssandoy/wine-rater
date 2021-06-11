@@ -4,6 +4,7 @@ import noIconRed from "images/no_icon_red.png";
 import Wine from "models/wine";
 import "./wine-item-card.scss";
 import WineItemCardInfoTextItem from "./wine-item-card-info-text-item";
+import { formatAmount } from "../../../../utils/formatAmount";
 
 interface WineItemCardProps {
   wine: Wine;
@@ -29,7 +30,11 @@ const WineItemCard: React.FunctionComponent<WineItemCardProps> = ({
           <WineItemCardInfoTextItem label="Region" value={wine.wineRegion} />
           <WineItemCardInfoTextItem
             label="Druer"
-            value={wine.wineGrapes && wine.wineGrapes.join(", ")}
+            value={wine?.wineGrapes.join(", ")}
+          />
+          <WineItemCardInfoTextItem
+            label="Pris"
+            value={wine.price ? formatAmount(wine.price) : "Ukjent"}
           />
         </div>
         <div className="wine-item-card__card-body-wine-row">
