@@ -51,6 +51,7 @@
     background-color: white;
     padding-bottom: 20px;
     width: inherit;
+    min-height: 650px;
 
     display: grid;
     grid-template-rows: auto;
@@ -70,7 +71,6 @@
 
     &-col-2 {
       grid-column: 3;
-      justify-self: center;
     }
 
     &-row-1 {
@@ -123,6 +123,10 @@
 
 .info-text-item {
   margin-bottom: 16px;
+}
+
+.info-text-item--no-margin {
+  margin: 0;
 }
 
 .wine-info-text {
