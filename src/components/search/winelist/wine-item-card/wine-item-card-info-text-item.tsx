@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 interface Props {
   label: string;
-  value: string | number;
+  value?: string | number;
 }
 
 const WineItemCardInfoTextItem: React.FunctionComponent<Props> = ({
@@ -16,12 +16,16 @@ const WineItemCardInfoTextItem: React.FunctionComponent<Props> = ({
 
   const closedOrOpen = isInfoTextOpen ? "" : "wine-info-text--closed";
 
+  const marginCss = value ? "" : "info-text-item--no-margin";
+
   return (
-    <div className="info-text-item">
+    <div className={`info-text-item ${marginCss}`}>
       <p className="wine-item-card__label">{label}</p>
-      <p onClick={toggleOpen} className={`wine-info-text ${closedOrOpen}`}>
-        {value}
-      </p>
+      {value && (
+        <p onClick={toggleOpen} className={`wine-info-text ${closedOrOpen}`}>
+          {value}
+        </p>
+      )}
     </div>
   );
 };
