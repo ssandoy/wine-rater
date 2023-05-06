@@ -28,7 +28,7 @@
     "react-dom": "^16.8.6",
     "react-image-crop": "^8.6.4",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "^3.4.1",
+    "react-scripts": "^5.0.1",
     "react-select": "^3.0.8",
     "reselect": "^4.0.0",
     "ts-node": "^9.1.1",
