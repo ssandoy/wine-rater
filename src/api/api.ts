@@ -5,7 +5,7 @@ const MAX_RESULTS = 20;
 export const MAX_RECOMMENDED_RESULTS = 500;
 const DEBOUCE_TIME = 500;
 
-const API_ENDPOINT = "/wine-api/api";
+const API_ENDPOINT = "https://wine-rater-api.sanderfsandoy.workers.dev/";
 const vinmonopoletBaseUrlV1 =
   "https://app.vinmonopolet.no/vmpws/v2/vmp/products";
 

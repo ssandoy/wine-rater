@@ -1,0 +1,9 @@
+name = "wine-rater-api"
+account_id = "11883aaf8012db59e52e5d815d6bce8a"
+compatibility_date = "2023-12-14"
+workers_dev = true
+route = ""
+main = "./cloudfare/worker.js"
+
+[env.production]
+route = "wine-rater.pages.dev/*"
