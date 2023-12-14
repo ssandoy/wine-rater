@@ -1,14 +1,13 @@
 import React from "react";
-import firebase from "@firebase/app";
-import "@firebase/database";
-import "@firebase/storage";
-import "@firebase/auth";
-import { db, storage, auth } from "./firebase-setup";
+import {Database}from  "firebase/database";
+import {StorageReference}from  "firebase/storage";
+import {Auth} from "firebase/auth";
+import { db, auth } from "./firebase-setup";
 
 type State = {
-  database: firebase.database.Database;
-  storageRef: firebase.storage.Reference;
-  auth: firebase.auth.Auth;
+  database: Database;
+  storageRef: StorageReference;
+  auth: Auth;
 };
 
 const FirebaseContext = React.createContext<State | undefined>(undefined);
@@ -16,7 +15,6 @@ const FirebaseContext = React.createContext<State | undefined>(undefined);
 const FirebaseProvider = props => {
   const value = {
     database: db,
-    storageRef: storage.ref(),
     auth: auth
   };
   return <FirebaseContext.Provider value={value} {...props} />;

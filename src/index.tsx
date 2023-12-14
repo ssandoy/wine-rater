@@ -1,15 +1,18 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import App from "App";
 import "./styles.scss";
 import { FirebaseProvider } from "./firebase";
 import { AppProvider } from "./context/AppContext";
+import {createRoot} from "react-dom/client";
 
-ReactDOM.render(
+const domNode = document.getElementById('root');
+
+
+// @ts-expect-error err FIXME
+createRoot(domNode).render(
   <AppProvider>
     <FirebaseProvider>
       <App />
     </FirebaseProvider>
   </AppProvider>,
-  document.getElementById("root")
 );

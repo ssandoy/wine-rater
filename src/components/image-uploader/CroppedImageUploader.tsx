@@ -1,12 +1,13 @@
-import React, { useRef, useState } from "react";
-import ReactCrop, { Crop } from "react-image-crop";
-import "react-image-crop/lib/ReactCrop.scss";
+import React, {useRef, useState} from "react";
+import ReactCrop, {Crop} from "react-image-crop";
+import 'react-image-crop/dist/ReactCrop.css'
+import {ref, uploadBytes} from "firebase/storage";
 
-import { getCroppedImg } from "./utils/getCroppedImg";
-import { executeScrollToRef } from "../../utils/scroll-utils";
+
+import {getCroppedImg} from "./utils/getCroppedImg";
 
 import "./styles.scss";
-import { useFirebaseContext } from "../../firebase";
+import {useFirebaseContext} from "../../firebase";
 
 type Props = {
   firebaseStorageRef: string;
@@ -17,7 +18,6 @@ type Props = {
 };
 
 export const CroppedImageUploader: React.FC<Props> = ({
-  firebaseStorageRef,
   handleUpdateComplete,
   title,
   buttonUploadText = "Last opp",
@@ -27,30 +27,29 @@ export const CroppedImageUploader: React.FC<Props> = ({
   const myRef = useRef(null);
 
   const [crop, setCrop] = useState<Crop>({
-    aspect: cropAspectRatio,
+    height: cropAspectRatio * 150,
     width: 150,
     x: 1,
-    y: 1
+    y: 1,
+    unit: "px"
   });
   const [fileName, setFileName] = useState<string>("");
   const [fileLocation, setFileLocation] = useState<string>("");
 
-  const [imageElement, setImageElement] = useState<HTMLImageElement | null>(
+  const [imageElement] = useState<HTMLImageElement | null>(
     null
   );
 
   const handleUpload = async () => {
     if (imageElement) {
       const croppedImage = await getCroppedImg(imageElement, crop, fileName);
-      const imageRef = await firebase.storageRef.child(firebaseStorageRef);
-      const uploadRef = imageRef.child(new Date().getTime() + fileName);
-      const imageUrl = await uploadRef.put(croppedImage).then(
+      const storageRef = ref(firebase.storageRef);
+      const imageRef = ref(storageRef, "images");
+      const uploadRef = ref(imageRef, new Date().getTime() + fileName);
+      const imageUrl = await uploadBytes(uploadRef,croppedImage).then(
         success => {
-          return success.ref.getDownloadURL();
+          return success.ref.fullPath; // testme
         },
-        error => {
-          // TODO ADD ERRORHANDLING...
-        }
       );
 
       return handleUpdateComplete ? handleUpdateComplete(imageUrl) : null;
@@ -73,17 +72,14 @@ export const CroppedImageUploader: React.FC<Props> = ({
         {fileLocation && (
           <div className="image-uploader__image-preview-container">
             <ReactCrop
-              onImageLoaded={image => {
-                executeScrollToRef(myRef);
-                setImageElement(image);
-              }}
               className="image-uploader__image-preview"
-              src={fileLocation}
               crop={crop}
               onChange={(newCrop: Crop) => {
                 setCrop(newCrop);
               }}
-            />
+            >
+              <img  src={fileLocation} alt="preview" />
+            </ReactCrop>
           </div>
         )}
         {fileName && <p>{fileName}</p>}

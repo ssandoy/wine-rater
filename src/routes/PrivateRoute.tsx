@@ -1,11 +1,10 @@
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import {Navigate, redirect, Route} from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { LOGIN_ROUTE } from "./routes";
 
 interface Props {
   component: React.FC;
-  exact: boolean;
   path: string;
 }
 
@@ -14,11 +13,14 @@ const PrivateRoute: React.FC<Props> = ({
   ...rest
 }: Props) => {
   const { isLoggedIn } = useAppContext();
+
+  if (!isLoggedIn) {
+     return <Navigate to={LOGIN_ROUTE} />;
+  }
+
   return (
     <Route {...rest}>
-      {props =>
-        isLoggedIn ? <Component {...props} /> : <Redirect to={LOGIN_ROUTE} />
-      }
+      <Component  />
     </Route>
   );
 };

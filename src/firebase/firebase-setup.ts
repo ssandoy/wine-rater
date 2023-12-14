@@ -1,26 +1,23 @@
 import * as firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/database";
-import "firebase/storage";
+import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import { getStorage} from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_DATABASE_URL,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID
+  apiKey: "AIzaSyDDl4Kcd-d4kATdkrSGNagtECvespVrxkI",
+  authDomain: "wine-ratings-45951.firebaseapp.com",
+  databaseURL: "https://wine-ratings-45951.firebaseio.com",
+  projectId: "wine-ratings-45951",
+  storageBucket: "wine-ratings-45951.appspot.com",
+  messagingSenderId: "479320116691",
+  appId: "1:479320116691:web:55648538dcb26410"
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-  firebase.database();
-}
+const app = firebase.initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
-export const db = firebase.database();
-export const storage = firebase.storage();
+export const auth = getAuth(app);
+export const db =  getDatabase(app);
+export const storage = getStorage(app);
 
 export const snapshotToArray = snapshot => {
   const returnArr = [];
@@ -28,9 +25,7 @@ export const snapshotToArray = snapshot => {
   snapshot.forEach(function(childSnapshot) {
     const item = childSnapshot.val();
     item.key = childSnapshot.key;
-    // fixme
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
+    // @ts-expect-error err
     returnArr.push(item);
   });
 

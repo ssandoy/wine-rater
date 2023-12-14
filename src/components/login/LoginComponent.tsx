@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, {useState} from "react";
 import "./login.scss";
-import { useAppContext } from "../../context/AppContext";
-import { ADD_WINE_ROUTE } from "../../routes/routes";
-import { useFirebaseContext } from "../../firebase";
+import {useAppContext} from "../../context/AppContext";
+import {ADD_WINE_ROUTE} from "../../routes/routes";
+import {useFirebaseContext} from "../../firebase";
 import Spinner from "../spinner/Spinner";
+import {signInWithEmailAndPassword} from "firebase/auth";
+import {Navigate} from "react-router-dom";
 
 const LoginComponent = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -15,9 +16,8 @@ const LoginComponent = () => {
   const login = event => {
     setIsLoggingIn(true);
     event.preventDefault();
-    auth
-      .signInWithEmailAndPassword("sanderfsandoy@gmail.com", inputPassword)
-      .then(userCredential => {
+      signInWithEmailAndPassword(auth,"sanderfsandoy@gmail.com", inputPassword)
+      .then(() => {
         setIsLoggedIn(true);
         setIsLoggingIn(false);
       })
@@ -28,9 +28,11 @@ const LoginComponent = () => {
       });
   };
 
-  return isLoggedIn ? (
-    <Redirect to={ADD_WINE_ROUTE} />
-  ) : (
+  if (isLoggedIn) {
+    return <Navigate to={ADD_WINE_ROUTE}/>
+  }
+
+  return (
     <div className="login-container">
       <h4 className="page-title login-title">
         Du må logge inn for å legge til nye viner!

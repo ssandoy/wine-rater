@@ -10,6 +10,7 @@ import { SearchDropDown } from "../search-dropdown/search-dropdown";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
 import "./add-wine-form.scss";
 import { pushOrRemoveToArray } from "utils/array-utils";
+import { ref, set } from "firebase/database";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { validateForm } from "components/add-wine/form-util";
 import Wine from "../../models/wine";
@@ -19,6 +20,9 @@ import PlusIcon from "../../icons/PlusIcon";
 import CrossIcon from "../../icons/CrossIcon";
 import { useFirebaseContext } from "../../firebase";
 import { INDICES } from "../../firebase/indices";
+import {useAppContext} from "../../context/AppContext";
+import {Navigate} from "react-router-dom";
+import {LOGIN_ROUTE} from "../../routes/routes";
 
 const scrollToRef = ref => {
   window.scrollTo(0, ref.current.offsetTop);
@@ -35,6 +39,13 @@ const AddWineForm: React.FC = () => {
     wineType: useRef(null)
   };
   const firebase = useFirebaseContext();
+
+  const { isLoggedIn } = useAppContext();
+
+  if (!isLoggedIn) {
+    return <Navigate to={LOGIN_ROUTE}/>
+  }
+
 
   const executeErrorScroll = errors => {
     scrollToRef(errorRefMap[Object.keys(errors)[0]]);
@@ -117,13 +128,10 @@ const AddWineForm: React.FC = () => {
     );
     setErrors(validatedErrors);
     if (!validatedErrors) {
-      // todo maybe method
-      firebase.database
-        .ref(`${INDICES.WINES_INDEX}/`)
-        .push(values)
-        .then(createdWineId => {
-          setIsWineRegistered(true);
-        });
+      const r = ref(firebase.database, INDICES.WINES_INDEX)
+      set(r, values).then(() => {
+        setIsWineRegistered(true);
+      });
     } else {
       executeErrorScroll(validatedErrors);
     }
@@ -152,6 +160,7 @@ const AddWineForm: React.FC = () => {
                 handleSelectedWine(value);
               }}
               noOptionPlaceholder={noOptionText}
+              // @ts-expect-error no TS
               setValue={setWineName}
             />
           )}

@@ -4,9 +4,7 @@ export function getCroppedImg(image: HTMLImageElement, crop: Crop, fileName: str
   const canvas = document.createElement("canvas");
   const scaleX = image.naturalWidth / image.width;
   const scaleY = image.naturalHeight / image.height;
-  // @ts-ignore
   canvas.width = crop.width;
-  // @ts-ignore
   canvas.height = crop.height;
   const ctx = canvas.getContext("2d");
   if (ctx && crop && crop.x && crop.y && crop.width && crop.height) {
@@ -32,7 +30,7 @@ export function getCroppedImg(image: HTMLImageElement, crop: Crop, fileName: str
       canvas.toBlob(
         (blob) => {
           if (blob) {
-            // @ts-ignore
+            // @ts-expect-error err
             blob.name = fileName; // eslint-disable-line no-param-reassign
             resolve(blob);
           }

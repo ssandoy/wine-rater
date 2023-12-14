@@ -8,7 +8,9 @@ import {
   useWineFilterContext,
   WineType
 } from "../../context/filter-context/WineFilterContext";
-import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { isObjectInArray } from "../../utils/array-utils";
 import { useAppContext } from "../../context/AppContext";
 

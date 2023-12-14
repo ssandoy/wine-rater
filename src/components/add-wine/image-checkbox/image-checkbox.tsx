@@ -5,6 +5,7 @@ interface Props {
   htmlFor: string;
   name: string;
   value: string | number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick: (event?: any) => void;
   image: string;
   checked: boolean;

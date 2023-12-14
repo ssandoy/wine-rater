@@ -11,7 +11,7 @@ export const colourStyles = {
     border: "1px solid grey",
     borderRadius: "24px"
   }),
-  multiValue: (provided, state) => {
+  multiValue: (provided) => {
     const transition = "opacity 300ms";
 
     return { ...provided, backgroundColor: "#add8e6", transition };
@@ -32,7 +32,7 @@ export const dropdownDisabledColourStyles = {
   }),
   multiValueRemove: base => ({ ...base, display: "none" }),
   indicatorsContainer: base => ({ ...base, display: "none" }),
-  multiValue: (provided, state) => {
+  multiValue: (provided) => {
     const transition = "opacity 300ms";
     return {
       ...provided,

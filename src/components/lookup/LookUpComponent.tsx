@@ -34,6 +34,7 @@ const LookUpComponent = () => {
                 handleSelectedWine(value);
               }}
               noOptionPlaceholder={noOptionText}
+              // @ts-expect-error err
               setValue={setWineName}
             />
           </div>

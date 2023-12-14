@@ -1,34 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Squash as Hamburger } from "hamburger-react";
-import {
-  BrowserRouter as Router,
-  NavLink,
-  Route,
-  Switch
-} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Squash as Hamburger} from "hamburger-react";
+import {BrowserRouter as Router, NavLink, Route, Routes,} from "react-router-dom";
 import "./App.scss";
+import {onValue, ref} from "firebase/database";
 import AddWineForm from "components/add-wine/AddWineForm";
 import NotFoundComponent from "components/notfound/notfound";
 import LookUpComponent from "components/lookup/LookUpComponent";
 import Wine from "models/wine";
 import LoginComponent from "./components/login";
-import PrivateRoute from "./routes";
-import { WineSearchPage } from "./components/search/WineSearchPage";
+import {WineSearchPage} from "./components/search/WineSearchPage";
 import LogoIcon from "./icons/LogoIcon";
-import { useFirebaseContext } from "./firebase";
-import { snapshotToArray } from "./firebase/firebase-setup";
-import { INDICES } from "./firebase/indices";
-import { useAppContext } from "./context/AppContext";
-import {
-  ADD_WINE_ROUTE,
-  DETAILS_ROUTE,
-  LOGIN_ROUTE,
-  SEARCH_ROUTE,
-  SUGGESTER_ROUTE
-} from "./routes/routes";
+import {useFirebaseContext} from "./firebase";
+import {snapshotToArray} from "./firebase/firebase-setup";
+import {INDICES} from "./firebase/indices";
+import {useAppContext} from "./context/AppContext";
+import {ADD_WINE_ROUTE, DETAILS_ROUTE, LOGIN_ROUTE, SEARCH_ROUTE, SUGGESTER_ROUTE} from "./routes/routes";
 import WineSuggesterPage from "./features/wine-suggester/WineSuggesterPage";
-import { WineNavLink } from "./WineNavLink";
-import { isNative } from "./utils/window-utils";
+import {WineNavLink} from "./WineNavLink";
+import {isNative} from "./utils/window-utils";
 
 const App = () => {
   document.title = "Vinolini";
@@ -42,23 +31,22 @@ const App = () => {
 
   useEffect(() => {
     setIsFetchingWines(true);
-    firebase.database
-      .ref(INDICES.WINES_INDEX)
-      .once("value")
-      .then((wineItemsSnapshot: any) => {
-        const allWines = snapshotToArray(wineItemsSnapshot)
-          .map((item: Wine) => item)
-          .sort(function(obj1: Wine, obj2: Wine) {
+    const dbRef = ref(firebase.database, INDICES.WINES_INDEX)
+
+    onValue(dbRef, (snapshot) => {
+        const allWines = snapshotToArray(snapshot)
+            .map((item: Wine) => item)
+            .sort(function(obj1: Wine, obj2: Wine) {
             return (
-              +obj2.sanderRating +
-              +obj2.ineRating -
-              (+obj1.sanderRating + +obj1.ineRating)
+                +obj2.sanderRating +
+                +obj2.ineRating -
+                (+obj1.sanderRating + +obj1.ineRating)
             );
-          });
+            });
         setAllWines(allWines);
         setFilteredWines(allWines);
         setIsFetchingWines(false);
-      });
+    })
   }, [firebase, setAllWines, setFilteredWines, setIsFetchingWines]);
 
   return (
@@ -89,18 +77,17 @@ const App = () => {
           </div>
         </div>
         <>
-          <Switch>
-            <PrivateRoute exact path={ADD_WINE_ROUTE} component={AddWineForm} />
+          <Routes>
+            <Route  path={ADD_WINE_ROUTE} element={<AddWineForm/>} />
             <Route
-              exact
-              path={["/", SEARCH_ROUTE]}
-              component={WineSearchPage}
+              path="/"
+              element={<WineSearchPage/>}
             />
-            <Route exact path={LOGIN_ROUTE} component={LoginComponent} />
-            <Route exact path={DETAILS_ROUTE} component={LookUpComponent} />
-            <Route exact path={SUGGESTER_ROUTE} component={WineSuggesterPage} />
-            <Route component={NotFoundComponent} />
-          </Switch>
+            <Route  path={LOGIN_ROUTE} element={<LoginComponent/>} />
+            <Route  path={DETAILS_ROUTE} element={<LookUpComponent/>} />
+            <Route  path={SUGGESTER_ROUTE} element={<WineSuggesterPage/>} />
+            <Route element={<NotFoundComponent/>} />
+          </Routes>
         </>
       </div>
     </Router>

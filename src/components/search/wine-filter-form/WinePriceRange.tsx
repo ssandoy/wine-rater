@@ -1,6 +1,5 @@
 import React from "react";
-import { Handle, Range } from "rc-slider";
-import { formatAmount } from "../../../utils/formatAmount";
+import Slider from "rc-slider";
 import { useWineFilterContext } from "../../../context/filter-context/WineFilterContext";
 import "rc-slider/assets/index.css";
 
@@ -20,16 +19,6 @@ const railStyle = {
   height: BAR_HEIGHT
 };
 
-const getLefAlignment = (value: number): number => {
-  if (value > 999) {
-    return -12;
-  }
-  if (value < 100) {
-    return 2;
-  }
-  return -6;
-};
-
 export const WinePriceRange: React.FC = () => {
   const {
     filters: {
@@ -38,32 +27,15 @@ export const WinePriceRange: React.FC = () => {
     }
   } = useWineFilterContext();
   return (
-    <Range
+    <Slider
       value={[minPrice, maxPrice]}
       max={1000}
       min={0}
       step={20}
       style={{ marginTop: 16 }}
-      onChange={([min, max]) => {
-        setMinPrice(min);
-        setMaxPrice(max);
-      }}
-      handle={handleProps => {
-        return (
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          //  @ts-ignore
-          <Handle {...handleProps}>
-            <p
-              style={{
-                position: "absolute",
-                bottom: handleProps.index === 0 ? -40 : 6,
-                left: getLefAlignment(handleProps.value)
-              }}
-            >
-              {formatAmount(handleProps.value)}
-            </p>
-          </Handle>
-        );
+      onChange={(value) => {
+        setMinPrice(value[0]);
+        setMaxPrice(value[1]);
       }}
       handleStyle={[handleStyle, handleStyle]}
       railStyle={railStyle}
