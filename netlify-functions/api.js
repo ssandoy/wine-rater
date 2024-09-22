@@ -13,10 +13,7 @@ const apiSubscriptionKey =
 // "context" has information about the lambda environment and user details
 // The "callback" ends the execution of the function and returns a response back to the caller
 export const handler = async (event, context, callback) => {
-  console.log("HIT");
   try {
-    console.log("event", event);
-    console.log("FETCHING RESPONSE");
     const response = await fetch(
       vinmonopoletBaseUrl +
         "/press-products/v1/details-normal?" +

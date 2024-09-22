@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { debouncedSearchProductsByNameItem, getWine } from "api";
+import { debouncedSearchProductsByNameItem } from "api";
 import validationSchema, { Errors } from "./validationSchema";
 import * as images from "images";
 import { imageKeys } from "images";
@@ -80,10 +80,12 @@ const AddWineForm: React.FC = () => {
   };
 
   const fillFormFromWine = async (wine: WineProduct) => {
-    const wineDetails = await getWine(wine.basic.productId);
     setWineName(wine.basic.productShortName);
     setWinePicture(
-      convertVinmonopoletPictureSize(wineDetails.images[1].url, 800)
+      convertVinmonopoletPictureSize(
+        `https://bilder.vinmonopolet.no/cache/1200x1200-0/${wine.basic.productId}-1.jpg`,
+        800
+      )
     );
     const { country, region } = wine.origins.origin;
     setWineCountry(country);

@@ -6,9 +6,6 @@ export const MAX_RECOMMENDED_RESULTS = 500;
 const DEBOUCE_TIME = 500;
 
 const API_ENDPOINT = "/wine-api/api";
-const vinmonopoletBaseUrlV1 =
-  "https://app.vinmonopolet.no/vmpws/v2/vmp/products";
-
 // fixme return types etc.
 const searchProductsByNameMapToSelect = async (
   query: string
@@ -75,9 +72,14 @@ export const fetchWineByRecommendedFood = async (
 };
 
 export const getWine = async (id: string) => {
-  const response = await fetch(vinmonopoletBaseUrlV1 + `/${id}`);
+  const response = await fetch(API_ENDPOINT + `?productId=${id}`);
   return response.json();
 };
+
+export const getWineImage = async (id: string) => {
+    const response = await fetch(`https://bilder.vinmonopolet.no/cache/1200x1200-0/${id}-1.jpg`);
+    return response.json();
+}
 
 export const debouncedSearchProductsByNameItem = AwesomeDebouncePromise(
   searchProductsByNameMapToSelect,
