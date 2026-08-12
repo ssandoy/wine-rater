@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./wineform.scss";
+import styles from "./wineform.module.css";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
 import * as images from "images";
@@ -61,13 +61,13 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
   };
 
   return (
-    <div className="wine-search-form__container">
-      <div className="wine-search-form__exit-icon">
+    <div className={styles["wine-search-form__container"]}>
+      <div className={styles["wine-search-form__exit-icon"]}>
         <ExitIcon onClick={() => setHasOpenedFilter(!hasOpenedFilter)} />
       </div>
-      <form className="wine-search-form" onSubmit={e => onSubmit(e)}>
-        <div className="wine-search-form__row">
-          <label htmlFor="wineName">Navn</label>
+      <form className={styles["wine-search-form"]} onSubmit={e => onSubmit(e)}>
+        <div className={styles["wine-search-form__row"]}>
+          <label className={styles.label} htmlFor="wineName">Navn</label>
           <div className="wine-input-container">
             <input
               type="text"
@@ -79,8 +79,8 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
           </div>
         </div>
         <>
-          <div className="wine-search-form__row">
-            <label>Drue</label>
+          <div className={styles["wine-search-form__row"]}>
+            <label className={styles.label}>Drue</label>
             <SearchDropDown
               placeholder="Vindrue"
               searchItems={wineGrapeItems}
@@ -91,8 +91,8 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
               onClick={grapeArray => setSelectedWineGrapes(grapeArray)}
             />
           </div>
-          <div className="wine-search-form__row">
-            <label htmlFor="country">Land</label>
+          <div className={styles["wine-search-form__row"]}>
+            <label className={styles.label} htmlFor="country">Land</label>
             <SearchDropDown
               placeholder="Land"
               selectedItems={selectedCountries.map(country => ({
@@ -103,8 +103,8 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
               onClick={countryArray => setSelectedCountries(countryArray)}
             />
           </div>
-          <div className="wine-search-form__row">
-            <label>Region</label>
+          <div className={styles["wine-search-form__row"]}>
+            <label className={styles.label}>Region</label>
             <SearchDropDown
               placeholder="Region"
               selectedItems={selectedRegions.map(region => ({
@@ -122,15 +122,15 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
             />
           </div>
         </>
-        <div className="wine-search-form__row">
-          <label>Hva passer vinen til?</label>
-          <div className="wine-search-form__fits-to-grid">
+        <div className={styles["wine-search-form__row"]}>
+          <label className={styles.label}>Hva passer vinen til?</label>
+          <div className={styles["wine-search-form__fits-to-grid"]}>
             {imageKeys.map(imageKey => {
               if (imageKey === "fish" || imageKey === "cake") {
                 return null;
               }
               return (
-                <div key={imageKey} className="fits-to-cell">
+                <div key={imageKey} className={styles["fits-to-cell"]}>
                   <ImageCheckbox
                     key={imageKey + "searchForm"}
                     image={images[imageKey]}
@@ -149,13 +149,13 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
             })}
           </div>
         </div>
-        <div className="wine-search-form__row">
-          <label>Pris</label>
-          <div className="wine-search-form__range-container">
+        <div className={styles["wine-search-form__row"]}>
+          <label className={styles.label}>Pris</label>
+          <div className={styles["wine-search-form__range-container"]}>
             <WinePriceRange />
           </div>
         </div>
-        <div className="wine-search-form__buttons-container">
+        <div className={styles["wine-search-form__buttons-container"]}>
           <button
             className="wine-search-form__button"
             onClick={event => onSubmit(event)}
