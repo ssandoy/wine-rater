@@ -2,23 +2,23 @@
   "name": "wine-rater",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.12 <23"
+  },
   "dependencies": {
     "@emotion/css": "^11.1.3",
     "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^4.6.1",
     "@types/node": "^22.12.0",
-    "@types/node-fetch": "^2.5.10",
     "@types/rc-slider": "^9.3.1",
     "@types/react": "16.8.22",
     "@types/react-dom": "16.8.4",
     "awesome-debounce-promise": "^2.1.0",
-    "dotenv": "^16.4.7",
     "eslint-config-react-app": "^5.0.2",
     "firebase": "^8.10.1",
     "hamburger-react": "^2.4.1",
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",
-    "node-fetch": "^2.6.1",
     "rc-slider": "^9.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
@@ -28,24 +28,20 @@
     "typescript": "^5.0.0"
   },
   "devDependencies": {
+    "@netlify/vite-plugin": "^2.12.9",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
     "@vitejs/plugin-react": "^6.0.5",
-    "concurrently": "^6.0.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.1.2",
-    "netlify-lambda": "^2.0.3",
     "prettier": "^1.19.1",
-    "vite": "^8.2.1",
-    "vite-tsconfig-paths": "^6.1.1"
+    "vite": "^8.2.1"
   },
   "scripts": {
-    "dev": "concurrently \"vite\" \"npm run start-server\"",
-    "build": "concurrently \"vite build\" \"npm run build-server\"",
-    "start-server": "NODE_OPTIONS=--openssl-legacy-provider netlify-lambda serve netlify-functions",
-    "build-server": "NODE_OPTIONS=--openssl-legacy-provider netlify-lambda build netlify-functions"
+    "dev": "node --env-file-if-exists=.env ./node_modules/vite/bin/vite.js",
+    "build": "vite build"
   },
   "husky": {
     "hooks": {
