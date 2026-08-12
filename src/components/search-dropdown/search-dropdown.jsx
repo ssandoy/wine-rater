@@ -4,7 +4,7 @@
 // file has been staged since lint-staged was set up.
 /* eslint-disable react/prop-types */
 import React from "react";
-import "./search-dropdown.scss";
+import styles from "./search-dropdown.module.css";
 import Select from "react-select";
 import { colourStyles, dropdownDisabledColourStyles } from "./styles";
 
