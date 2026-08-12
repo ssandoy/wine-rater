@@ -174,12 +174,12 @@ Replace the `"scripts"` block:
 "scripts": {
   "dev": "concurrently \"vite\" \"npm run start-server\"",
   "build": "concurrently \"vite build\" \"npm run build-server\"",
-  "start-server": "netlify-lambda serve netlify-functions",
+  "start-server": "NODE_OPTIONS=--openssl-legacy-provider netlify-lambda serve netlify-functions",
   "build-server": "NODE_OPTIONS=--openssl-legacy-provider netlify-lambda build netlify-functions"
 },
 ```
 
-The `NODE_OPTIONS=--openssl-legacy-provider` prefix on `build-server` fixes a pre-existing, unrelated failure: `netlify-lambda`'s bundled webpack 4 uses a legacy OpenSSL API call that Node 17+'s OpenSSL 3 rejects (`ERR_OSSL_EVP_UNSUPPORTED`). This reproduces identically on the original, unmigrated codebase — it's not caused by anything else in this task — but since `npm run build` must exit 0 end-to-end, it's fixed here rather than left as a known issue. `start-server` (webpack-dev-server based) doesn't hit this at all and is left unchanged.
+The `NODE_OPTIONS=--openssl-legacy-provider` prefix fixes a pre-existing, unrelated failure that hits both scripts identically: `netlify-lambda`'s bundled webpack 4 uses a legacy OpenSSL API call that Node 17+'s OpenSSL 3 rejects (`ERR_OSSL_EVP_UNSUPPORTED`). This reproduces identically on the original, unmigrated codebase — it's not caused by anything else in this task — but since both `npm run build` and `npm run dev` must work end-to-end, it's fixed on both scripts rather than left as a known issue.
 
 Remove these dependencies (no longer used): `react-scripts`, `case-sensitive-paths-webpack-plugin`, `http-proxy-middleware`.
 
