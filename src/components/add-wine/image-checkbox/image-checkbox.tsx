@@ -1,5 +1,5 @@
 import React from "react";
-import "./image-checkbox.scss";
+import "./image-checkbox.module.css";
 
 interface Props {
   htmlFor: string;

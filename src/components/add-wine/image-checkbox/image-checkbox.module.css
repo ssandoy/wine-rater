@@ -1,0 +1,18 @@
+/* HIDE CHECKBOX */
+[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=checkbox] + img {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+[type=checkbox]:checked + img {
+  background-color: var(--image-checkbox-checked-background-color);
+  border-radius: 10%;
+}
