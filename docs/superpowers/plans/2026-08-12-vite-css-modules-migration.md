@@ -1843,10 +1843,12 @@ git commit -m "style: convert login styles to CSS Modules"
 **Files:**
 - Create: `src/components/search-dropdown/search-dropdown.module.css`
 - Delete: `src/components/search-dropdown/search-dropdown.scss`
-- Modify: `src/components/search-dropdown/search-dropdown.js`
-- Modify: `src/components/search-dropdown/async-search-dropdown.js`
+- Modify: `src/components/search-dropdown/search-dropdown.jsx`
+- Modify: `src/components/search-dropdown/async-search-dropdown.jsx`
 
-Note: the original `search-dropdown.scss` also defined `.react-select__multi-value__remove`, which targets a class the `react-select` library generates internally (not something in our JSX). That rule was already moved to `global.css` in Task 2, since it can never be a CSS Module. Neither `search-dropdown.js` nor `async-search-dropdown.js` reference it directly (react-select applies it internally), so no JSX changes are needed for it here.
+Note: Task 1 renamed `search-dropdown.js` → `search-dropdown.jsx` and `async-search-dropdown.js` → `async-search-dropdown.jsx` (content unchanged) — the installed Vite version doesn't parse JSX in plain `.js` files by default. Edit the `.jsx` files; no consumer imports needed updating for the rename since they all use extension-less bare specifiers.
+
+Note: the original `search-dropdown.scss` also defined `.react-select__multi-value__remove`, which targets a class the `react-select` library generates internally (not something in our JSX). That rule was already moved to `global.css` in Task 2, since it can never be a CSS Module. Neither `search-dropdown.jsx` nor `async-search-dropdown.jsx` reference it directly (react-select applies it internally), so no JSX changes are needed for it here.
 
 - [ ] **Step 1: Create `src/components/search-dropdown/search-dropdown.module.css`**
 
@@ -1858,7 +1860,7 @@ Note: the original `search-dropdown.scss` also defined `.react-select__multi-val
 }
 ```
 
-- [ ] **Step 2: Update `src/components/search-dropdown/search-dropdown.js`**
+- [ ] **Step 2: Update `src/components/search-dropdown/search-dropdown.jsx`**
 
 Replace import (line 2):
 
@@ -1868,7 +1870,7 @@ import styles from "./search-dropdown.module.css";
 
 This module's only class, `.search-dropdown__select`, isn't referenced by a literal `className` in either consumer today (confirmed via full-codebase search) — it's dead CSS, same situation as the other unused rules found during this migration. Import the module for its side effect (so the CSS ships) but no JSX change is needed. `className="react-select"` on line 18 is unchanged (global class).
 
-- [ ] **Step 3: Update `src/components/search-dropdown/async-search-dropdown.js`**
+- [ ] **Step 3: Update `src/components/search-dropdown/async-search-dropdown.jsx`**
 
 Replace import (line 2):
 
