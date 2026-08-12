@@ -44,7 +44,6 @@
     "netlify-lambda": "^2.0.3",
     "prettier": "^1.19.1",
     "redux-devtools-extension": "^2.13.8",
-    "sass": "^1.102.0",
     "vite": "^8.2.1",
     "vite-tsconfig-paths": "^6.1.1"
   },
