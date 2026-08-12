@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import "./login.scss";
+import styles from "./login.module.css";
 import { useAppContext } from "../../context/AppContext";
 import { ADD_WINE_ROUTE } from "../../routes/routes";
 import { useFirebaseContext } from "../../firebase";
@@ -31,26 +31,26 @@ const LoginComponent = () => {
   return isLoggedIn ? (
     <Redirect to={ADD_WINE_ROUTE} />
   ) : (
-    <div className="login-container">
-      <h4 className="page-title login-title">
+    <div className={styles["login-container"]}>
+      <h4 className={`page-title ${styles["login-title"]}`}>
         Du må logge inn for å legge til nye viner!
       </h4>
-      <form className="login-form-container" onSubmit={login}>
+      <form className={styles["login-form-container"]} onSubmit={login}>
         <label>Passord </label>
         <input
-          className="login-input"
+          className={styles["login-input"]}
           type="password"
           onChange={event => setInputPassword(event.target.value)}
         />
-        <button className="login-button" type="submit">
+        <button className={styles["login-button"]} type="submit">
           Logg inn
         </button>
         {isLoggingIn && (
-          <div className="login-spinner-container">
+          <div className={styles["login-spinner-container"]}>
             Logger inn... <Spinner dark={true} />
           </div>
         )}
-        {error && <p className="login-hasError">Feil passord!</p>}
+        {error && <p className={styles["login-hasError"]}>Feil passord!</p>}
       </form>
     </div>
   );
