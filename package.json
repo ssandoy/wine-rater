@@ -41,7 +41,8 @@
   },
   "scripts": {
     "dev": "node --env-file-if-exists=.env ./node_modules/vite/bin/vite.js",
-    "build": "vite build"
+    "build": "vite build",
+    "typecheck": "tsc --noEmit"
   },
   "husky": {
     "hooks": {
