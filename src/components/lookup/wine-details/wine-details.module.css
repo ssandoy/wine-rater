@@ -1,0 +1,36 @@
+.wine-details-container {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 5% 45% 45% 5%;
+}
+
+.wine-details-row-item {
+  grid-column-start: 2;
+  grid-column-end: 4;
+}
+.wine-details-row-item p {
+  color: grey;
+}
+
+.wine-details-item-col-1 {
+  grid-column: 2;
+}
+.wine-details-item-col-1 p {
+  color: grey;
+}
+
+.wine-details-item-col-2 {
+  grid-column: 3;
+}
+.wine-details-item-col-2 p {
+  color: grey;
+}
+
+.wine-details-title {
+  grid-column-start: 2;
+  grid-column-end: span 4;
+  font-size: 20px;
+}
+.wine-details-title p {
+  color: black;
+}
