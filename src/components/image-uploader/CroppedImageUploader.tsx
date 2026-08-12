@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import ReactCrop, { Crop } from "react-image-crop";
-import "react-image-crop/lib/ReactCrop.scss";
+import "react-image-crop/dist/ReactCrop.css";
 
 import { getCroppedImg } from "./utils/getCroppedImg";
 import { executeScrollToRef } from "../../utils/scroll-utils";
 
-import "./styles.scss";
+import styles from "./styles.module.css";
 import { useFirebaseContext } from "../../firebase";
 
 type Props = {
@@ -59,9 +59,9 @@ export const CroppedImageUploader: React.FC<Props> = ({
   };
 
   return (
-    <div className="image-uploader__container">
+    <div className={styles.container}>
       {title && <h3>{title}</h3>}
-      <div className="image-uploader__file-input">
+      <div className={styles["file-input"]}>
         <label htmlFor="file-upload">
           <p>
             <span role="img" aria-label="folder-icon">
@@ -71,13 +71,13 @@ export const CroppedImageUploader: React.FC<Props> = ({
           </p>
         </label>
         {fileLocation && (
-          <div className="image-uploader__image-preview-container">
+          <div className={styles["image-preview-container"]}>
             <ReactCrop
               onImageLoaded={image => {
                 executeScrollToRef(myRef);
                 setImageElement(image);
               }}
-              className="image-uploader__image-preview"
+              className={styles["image-preview"]}
               src={fileLocation}
               crop={crop}
               onChange={(newCrop: Crop) => {
@@ -88,7 +88,7 @@ export const CroppedImageUploader: React.FC<Props> = ({
         )}
         {fileName && <p>{fileName}</p>}
         <input
-          className="image-uploader__file-input"
+          className={styles["file-input"]}
           id="file-upload"
           type="file"
           accept="image/*;capture=camera"
