@@ -1,0 +1,110 @@
+body, button {
+  margin: 0;
+  padding: 0;
+  font-family: HelveticaNeue, serif;
+  background-color: var(--base-background-color);
+}
+
+form {
+  background-color: var(--form-background-color);
+  color: var(--form-text-color);
+  font-size: 1.2em;
+  padding: 0.5em;
+  margin: 1em 0;
+  border-radius: 14px;
+}
+@media (max-width: 599px) {
+  form {
+    font-size: 1.1em;
+  }
+}
+
+button {
+  font-size: 20px;
+  background: none;
+  color: var(--button-text-color);
+  padding: 4px 16px;
+  border-radius: 14px;
+  border-color: transparent;
+}
+
+.error {
+  color: var(--form-error-color);
+  font-size: 0.8em;
+}
+
+.wine-input-container {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  background-color: var(--form-input-color);
+  width: 100%;
+  height: 35px;
+  margin-top: 10px;
+  font-size: 1em;
+  border-radius: 24px;
+  border: 1px solid grey;
+  color: hsl(0, 0%, 20%);
+}
+.wine-input-container p {
+  padding: 0px 0px 0px var(--input_padding);
+}
+.wine-input-container input {
+  font-size: 1em;
+  padding: 0px 0px 0px var(--input_padding);
+  border: none;
+  background: none !important;
+  width: 100%;
+  height: 90%;
+}
+
+.page-title {
+  color: white;
+  font-weight: normal;
+}
+
+.react-select {
+  margin-top: 10px;
+}
+
+.react-select__multi-value__remove {
+  display: none !important;
+}
+
+@font-face {
+  font-family: HelveticaNeue;
+  src: url("../fonts/HelveticaNeueMed.ttf");
+}
+
+/* Used by AddWineForm.tsx (add-wine-form.scss) and WineDetailsComponent.tsx
+   (wine-details.scss) — promoted here because both unrelated component
+   trees render a wine product photo with this exact class. */
+.wine-picture {
+  width: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Used by WineFilterForm.tsx (wine-search-form.scss), LookUpComponent.tsx,
+   and WineSuggesterPage.tsx for a small icon+text button — promoted here
+   because it's shared across three unrelated component trees. */
+.wine-search-form__button {
+  align-items: center;
+  display: flex;
+  color: black;
+  font-size: 18px;
+  background: none;
+}
+
+/* Used by image-checkbox.tsx (image-checkbox.scss) and
+   WineSuggesterPage.tsx for small food-category icons — promoted here
+   because it's shared across two unrelated component trees. */
+.image {
+  width: 50px;
+}
+@media (min-width: 600px) {
+  .image {
+    width: 60px;
+  }
+}
