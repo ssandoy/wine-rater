@@ -219,5 +219,13 @@ No automated tests exist today, so verification is manual, per `superpowers:veri
 
 ## Out of scope
 
-React version bump, ESLint config changes, netlify-lambda/functions setup, Material-UI
-/Emotion usage, `react-select`/`rc-slider` internal styling, adding test tooling.
+React version bump, ESLint config changes, netlify-lambda/functions functional changes,
+Material-UI/Emotion usage, `react-select`/`rc-slider` internal styling, adding test
+tooling.
+
+Exception found during Task 1 review: `netlify-lambda build` was discovered to fail on
+Node 22 with `ERR_OSSL_EVP_UNSUPPORTED` (webpack 4's legacy OpenSSL API usage) —
+reproduced identically on the pre-migration codebase, so it isn't caused by this
+migration, but since `npm run build` must exit 0 end-to-end, this narrow fix (prefixing
+the `build-server` script with `NODE_OPTIONS=--openssl-legacy-provider`) was brought
+in scope. No other netlify-lambda/functions changes are made.
