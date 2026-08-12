@@ -4,6 +4,8 @@ import Wine from "../models/wine";
 type AppState = {
   isLoggedIn: boolean;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  isAuthReady: boolean;
+  setIsAuthReady: Dispatch<SetStateAction<boolean>>;
   allWines: Wine[];
   setAllWines: Dispatch<SetStateAction<Wine[]>>;
   filteredWines: Wine[];
@@ -16,6 +18,7 @@ export const AppContext = React.createContext<AppState | undefined>(undefined);
 
 const AppProvider = props => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthReady, setIsAuthReady] = useState(false);
   const [allWines, setAllWines] = useState<Wine[]>([]);
   const [filteredWines, setFilteredWines] = useState<Wine[]>([]);
   const [isFetchingWines, setIsFetchingWines] = useState(false);
@@ -24,6 +27,8 @@ const AppProvider = props => {
     () => ({
       isLoggedIn,
       setIsLoggedIn,
+      isAuthReady,
+      setIsAuthReady,
       allWines,
       setAllWines,
       filteredWines,
@@ -31,7 +36,7 @@ const AppProvider = props => {
       isFetchingWines,
       setIsFetchingWines
     }),
-    [allWines, filteredWines, isFetchingWines, isLoggedIn]
+    [allWines, filteredWines, isAuthReady, isFetchingWines, isLoggedIn]
   );
 
   return <AppContext.Provider value={value} {...props} />;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { Redirect } from "react-router-dom";
 import styles from "./login.module.css";
 import { useAppContext } from "../../context/AppContext";
@@ -10,7 +11,7 @@ const LoginComponent = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const { isLoggedIn, setIsLoggedIn } = useAppContext();
+  const { isAuthReady, isLoggedIn } = useAppContext();
   const { auth } = useFirebaseContext();
   const login = async event => {
     setIsLoggingIn(true);
@@ -18,11 +19,11 @@ const LoginComponent = () => {
     event.preventDefault();
 
     try {
-      await auth.signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
+        auth,
         "sanderfsandoy@gmail.com",
         inputPassword
       );
-      setIsLoggedIn(true);
     } catch (loginError) {
       console.error("Login failed", loginError);
       const errorCode = (loginError as { code?: string }).code;
@@ -36,6 +37,14 @@ const LoginComponent = () => {
       setIsLoggingIn(false);
     }
   };
+
+  if (!isAuthReady) {
+    return (
+      <div className={styles["login-spinner-container"]} role="status">
+        Sjekker innlogging... <Spinner />
+      </div>
+    );
+  }
 
   return isLoggedIn ? (
     <Redirect to={ADD_WINE_ROUTE} />

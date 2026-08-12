@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
@@ -51,10 +52,12 @@ export const CroppedImageUploader: React.FC<Props> = ({
 
     try {
       const croppedImage = await getCroppedImg(imageElement, crop, fileName);
-      const imageRef = firebase.storageRef.child(firebaseStorageRef);
-      const uploadRef = imageRef.child(new Date().getTime() + fileName);
-      const upload = await uploadRef.put(croppedImage);
-      const imageUrl = await upload.ref.getDownloadURL();
+      const uploadRef = ref(
+        firebase.storage,
+        `${firebaseStorageRef}/${Date.now()}${fileName}`
+      );
+      const upload = await uploadBytes(uploadRef, croppedImage);
+      const imageUrl = await getDownloadURL(upload.ref);
 
       return handleUpdateComplete ? handleUpdateComplete(imageUrl) : null;
     } catch (error) {

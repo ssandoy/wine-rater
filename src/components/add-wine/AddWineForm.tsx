@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { push, ref } from "firebase/database";
 
 import { debouncedSearchProductsByNameItem } from "api";
 import validationSchema, { Errors } from "./validationSchema";
@@ -127,7 +128,7 @@ const AddWineForm: React.FC = () => {
       setIsSaving(true);
       setSaveError(false);
       try {
-        await firebase.database.ref(`${INDICES.WINES_INDEX}/`).push(values);
+        await push(ref(firebase.database, INDICES.WINES_INDEX), values);
         setIsWineRegistered(true);
       } catch (error) {
         console.error("Failed to save wine", error);

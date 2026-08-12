@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { DataSnapshot, get, ref } from "firebase/database";
 import { Squash as Hamburger } from "hamburger-react";
 import {
   BrowserRouter as Router,
@@ -70,25 +71,24 @@ const App = () => {
       WINE_FETCH_TIMEOUT_MS
     );
 
-    firebase.database
-      .ref(INDICES.WINES_INDEX)
-      .once("value")
-      .then((wineItemsSnapshot: any) => {
+    get(ref(firebase.database, INDICES.WINES_INDEX))
+      .then((wineItemsSnapshot: DataSnapshot) => {
         if (!isCurrentRequest || hasFinished) {
           return;
         }
 
         hasFinished = true;
         clearTimeout(timeoutId);
-        const allWines = snapshotToArray(wineItemsSnapshot)
-          .map((item: Wine) => item)
-          .sort(function(obj1: Wine, obj2: Wine) {
-            return (
-              +obj2.sanderRating +
-              +obj2.ineRating -
-              (+obj1.sanderRating + +obj1.ineRating)
-            );
-          });
+        const allWines = snapshotToArray<Wine>(wineItemsSnapshot).sort(function(
+          obj1: Wine,
+          obj2: Wine
+        ) {
+          return (
+            +obj2.sanderRating +
+            +obj2.ineRating -
+            (+obj1.sanderRating + +obj1.ineRating)
+          );
+        });
         setAllWines(allWines);
         setFilteredWines(allWines);
         setIsFetchingWines(false);
