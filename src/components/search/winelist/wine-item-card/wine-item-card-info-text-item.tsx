@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./wine-item-card.module.css";
 
 interface Props {
   label: string;
@@ -14,15 +15,15 @@ const WineItemCardInfoTextItem: React.FunctionComponent<Props> = ({
     setIsInfoTextOpen(!isInfoTextOpen);
   };
 
-  const closedOrOpen = isInfoTextOpen ? "" : "wine-info-text--closed";
+  const closedOrOpen = isInfoTextOpen ? "" : styles["wine-info-text--closed"];
 
-  const marginCss = value ? "" : "info-text-item--no-margin";
+  const marginCss = value ? "" : styles["info-text-item--no-margin"];
 
   return (
-    <div className={`info-text-item ${marginCss}`}>
-      <p className="wine-item-card__label">{label}</p>
+    <div className={`${styles["info-text-item"]} ${marginCss}`}>
+      <p className={styles["wine-item-card__label"]}>{label}</p>
       {value && (
-        <p onClick={toggleOpen} className={`wine-info-text ${closedOrOpen}`}>
+        <p onClick={toggleOpen} className={`${styles["wine-info-text"]} ${closedOrOpen}`}>
           {value}
         </p>
       )}
