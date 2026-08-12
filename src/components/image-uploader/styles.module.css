@@ -38,3 +38,7 @@
   height: 100%;
   width: 100%;
 }
+
+.upload-error {
+  color: var(--form-error-color);
+}

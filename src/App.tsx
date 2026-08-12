@@ -30,6 +30,8 @@ import WineSuggesterPage from "./features/wine-suggester/WineSuggesterPage";
 import { WineNavLink } from "./WineNavLink";
 import { isNative } from "./utils/window-utils";
 
+const WINE_FETCH_TIMEOUT_MS = 10_000;
+
 const App = () => {
   document.title = "Vinolini";
 
@@ -39,13 +41,45 @@ const App = () => {
   const [shouldShowNavbar, setShouldShowNavbar] = useState(
     isNative() ? false : true
   );
+  const [wineFetchError, setWineFetchError] = useState(false);
+  const [wineFetchAttempt, setWineFetchAttempt] = useState(0);
 
   useEffect(() => {
+    let isCurrentRequest = true;
+    let hasFinished = false;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    const finishWithError = (error: unknown) => {
+      if (!isCurrentRequest || hasFinished) {
+        return;
+      }
+
+      hasFinished = true;
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      console.error("Failed to fetch saved wines", error);
+      setWineFetchError(true);
+      setIsFetchingWines(false);
+    };
+
     setIsFetchingWines(true);
+    setWineFetchError(false);
+    timeoutId = setTimeout(
+      () => finishWithError(new Error("Wine request timed out")),
+      WINE_FETCH_TIMEOUT_MS
+    );
+
     firebase.database
       .ref(INDICES.WINES_INDEX)
       .once("value")
       .then((wineItemsSnapshot: any) => {
+        if (!isCurrentRequest || hasFinished) {
+          return;
+        }
+
+        hasFinished = true;
+        clearTimeout(timeoutId);
         const allWines = snapshotToArray(wineItemsSnapshot)
           .map((item: Wine) => item)
           .sort(function(obj1: Wine, obj2: Wine) {
@@ -58,8 +92,20 @@ const App = () => {
         setAllWines(allWines);
         setFilteredWines(allWines);
         setIsFetchingWines(false);
-      });
-  }, [firebase, setAllWines, setFilteredWines, setIsFetchingWines]);
+      })
+      .catch(finishWithError);
+
+    return () => {
+      isCurrentRequest = false;
+      clearTimeout(timeoutId);
+    };
+  }, [
+    firebase,
+    setAllWines,
+    setFilteredWines,
+    setIsFetchingWines,
+    wineFetchAttempt
+  ]);
 
   return (
     <Router>
@@ -94,7 +140,54 @@ const App = () => {
             <Route
               exact
               path={["/", SEARCH_ROUTE]}
-              component={WineSearchPage}
+              render={() =>
+                wineFetchError ? (
+                  <div className={styles["app-request-error-page"]}>
+                    <h1 className="page-title">Lagrede viner</h1>
+                    <section
+                      className={styles["app-request-error"]}
+                      role="alert"
+                      aria-labelledby="wine-fetch-error-title"
+                    >
+                      <h2
+                        id="wine-fetch-error-title"
+                        className={styles["app-request-error__title"]}
+                      >
+                        Kunne ikke hente vinene
+                      </h2>
+                      <p className={styles["app-request-error__message"]}>
+                        Sjekk nettverkstilkoblingen din og prøv på nytt.
+                      </p>
+                      <button
+                        type="button"
+                        className={styles["app-request-error__retry"]}
+                        onClick={() =>
+                          setWineFetchAttempt(attempt => attempt + 1)
+                        }
+                      >
+                        <svg
+                          width="22"
+                          height="22"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M20 11a8 8 0 1 0-2.34 5.66M20 5v6h-6"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        Prøv igjen
+                      </button>
+                    </section>
+                  </div>
+                ) : (
+                  <WineSearchPage />
+                )
+              }
             />
             <Route exact path={LOGIN_ROUTE} component={LoginComponent} />
             <Route exact path={DETAILS_ROUTE} component={LookUpComponent} />

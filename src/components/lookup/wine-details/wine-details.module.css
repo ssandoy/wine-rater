@@ -34,3 +34,7 @@
 .wine-details-title p {
   color: black;
 }
+
+.wine-details-error {
+  color: var(--form-error-color);
+}

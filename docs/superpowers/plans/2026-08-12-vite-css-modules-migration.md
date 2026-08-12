@@ -1077,6 +1077,7 @@ git commit -m "style: convert lookup styles to CSS Modules"
   width: 60vw;
   min-width: 270px;
   max-width: 300px;
+  padding: 16px;
 }
 @media (max-width: 599px) {
   .wine-list__filter-container {

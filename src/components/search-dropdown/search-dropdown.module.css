@@ -3,3 +3,8 @@
   background-color: #023950;
   color: #FFFFFF;
 }
+
+.search-dropdown__error {
+  color: var(--form-error-color);
+  margin: 8px 0 0;
+}

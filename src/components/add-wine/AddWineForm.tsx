@@ -55,6 +55,8 @@ const AddWineForm: React.FC = () => {
   const [showImageUploader, setShowImageUploader] = useState(false);
   const [manualRegistration, setManualRegistration] = useState(false);
   const [errors, setErrors] = useState<Errors | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
 
   const wineGrapeItems = Raastoff.values.map(value => value.code);
 
@@ -66,6 +68,7 @@ const AddWineForm: React.FC = () => {
     setIsWineRegistered(false);
     setWineName("");
     setErrors(null);
+    setSaveError(false);
     setSelectedWine(false);
     setSanderRating("");
     setIneRating("");
@@ -119,13 +122,17 @@ const AddWineForm: React.FC = () => {
     );
     setErrors(validatedErrors);
     if (!validatedErrors) {
-      // todo maybe method
-      firebase.database
-        .ref(`${INDICES.WINES_INDEX}/`)
-        .push(values)
-        .then(createdWineId => {
-          setIsWineRegistered(true);
-        });
+      setIsSaving(true);
+      setSaveError(false);
+      try {
+        await firebase.database.ref(`${INDICES.WINES_INDEX}/`).push(values);
+        setIsWineRegistered(true);
+      } catch (error) {
+        console.error("Failed to save wine", error);
+        setSaveError(true);
+      } finally {
+        setIsSaving(false);
+      }
     } else {
       executeErrorScroll(validatedErrors);
     }
@@ -182,7 +189,9 @@ const AddWineForm: React.FC = () => {
             </button>
           )}
           {errors?.wineName && (
-            <p className={styles["add-wine-error-validation"]}>{errors.wineName}</p>
+            <p className={styles["add-wine-error-validation"]}>
+              {errors.wineName}
+            </p>
           )}
         </div>
         {selectedWine && (
@@ -197,13 +206,18 @@ const AddWineForm: React.FC = () => {
               />
             </div>
             {errors?.wineType && (
-              <p className={styles["add-wine-error-validation"]}>{errors.wineType}</p>
+              <p className={styles["add-wine-error-validation"]}>
+                {errors.wineType}
+              </p>
             )}
           </div>
         )}
         {selectedWine && (
           <div className={styles["add-wine-form__col-1"]}>
-            <div className={styles["textfield-label"]} ref={errorRefMap.wineYear}>
+            <div
+              className={styles["textfield-label"]}
+              ref={errorRefMap.wineYear}
+            >
               <label htmlFor="wineYear">Årgang</label>
             </div>
             <div className="wine-input-container">
@@ -213,7 +227,9 @@ const AddWineForm: React.FC = () => {
               />
             </div>
             {errors?.wineYear && (
-              <p className={styles["add-wine-error-validation"]}>{errors.wineYear}</p>
+              <p className={styles["add-wine-error-validation"]}>
+                {errors.wineYear}
+              </p>
             )}
           </div>
         )}
@@ -248,7 +264,9 @@ const AddWineForm: React.FC = () => {
               />
             </div>
             {errors?.wineCountry && (
-              <p className={styles["add-wine-error-validation"]}>{errors.wineCountry}</p>
+              <p className={styles["add-wine-error-validation"]}>
+                {errors.wineCountry}
+              </p>
             )}
           </div>
         )}
@@ -264,12 +282,17 @@ const AddWineForm: React.FC = () => {
               />
             </div>
             {errors?.wineRegion && (
-              <p className={styles["add-wine-error-validation"]}>{errors.wineRegion}</p>
+              <p className={styles["add-wine-error-validation"]}>
+                {errors.wineRegion}
+              </p>
             )}
           </div>
         )}
         {selectedWine && (
-          <div className={styles["add-wine-form__col-1"]} ref={errorRefMap.sanderRating}>
+          <div
+            className={styles["add-wine-form__col-1"]}
+            ref={errorRefMap.sanderRating}
+          >
             <div className={styles["textfield-label"]}>
               <label htmlFor="sanderRating">Rating Sander</label>{" "}
             </div>
@@ -289,7 +312,10 @@ const AddWineForm: React.FC = () => {
           </div>
         )}
         {selectedWine && (
-          <div className={styles["add-wine-form__col-2"]} ref={errorRefMap.ineRating}>
+          <div
+            className={styles["add-wine-form__col-2"]}
+            ref={errorRefMap.ineRating}
+          >
             <div className={styles["textfield-label"]}>
               <label htmlFor="ineRating">Rating Ine</label>
             </div>
@@ -301,7 +327,9 @@ const AddWineForm: React.FC = () => {
             </div>
             {!!errors && errors.ineRating && (
               <div>
-                <p className={styles["add-wine-error-validation"]}>{errors.ineRating}</p>
+                <p className={styles["add-wine-error-validation"]}>
+                  {errors.ineRating}
+                </p>
               </div>
             )}
           </div>
@@ -376,14 +404,17 @@ const AddWineForm: React.FC = () => {
           <div className={styles["add-wine-form__row"]}>
             <div className={styles["add-wine-form__buttons"]}>
               <button
-                disabled={isWineRegistered}
+                disabled={isWineRegistered || isSaving}
                 type="submit"
                 className={`${styles["add-wine-form__button"]} ${styles["add-wine-form__button-add"]}`}
               >
                 <PlusIcon />{" "}
-                <span className={styles["add-wine-form__button-label"]}>Registrer</span>
+                <span className={styles["add-wine-form__button-label"]}>
+                  {isSaving ? "Lagrer..." : "Registrer"}
+                </span>
               </button>
               <button
+                type="button"
                 onClick={resetSearch}
                 className={`${styles["add-wine-form__button"]} ${styles["add-wine-form__button-reset"]}`}
               >
@@ -401,6 +432,15 @@ const AddWineForm: React.FC = () => {
               <p>Vinen ble lagret!</p>
             </div>
           </div>
+        )}
+        {saveError && (
+          <p
+            className={`${styles["add-wine-form__row"]} ${styles["add-wine-error-request"]}`}
+            role="alert"
+          >
+            Kunne ikke lagre vinen. Kontroller nettverkstilkoblingen og prøv
+            igjen.
+          </p>
         )}
       </form>
     </div>

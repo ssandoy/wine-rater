@@ -9,23 +9,32 @@ import Spinner from "../spinner/Spinner";
 const LoginComponent = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { isLoggedIn, setIsLoggedIn } = useAppContext();
   const { auth } = useFirebaseContext();
-  const login = event => {
+  const login = async event => {
     setIsLoggingIn(true);
+    setError(null);
     event.preventDefault();
-    auth
-      .signInWithEmailAndPassword("sanderfsandoy@gmail.com", inputPassword)
-      .then(userCredential => {
-        setIsLoggedIn(true);
-        setIsLoggingIn(false);
-      })
-      .catch(error => {
-        console.log(error);
-        setError(true);
-        setIsLoggingIn(false);
-      });
+
+    try {
+      await auth.signInWithEmailAndPassword(
+        "sanderfsandoy@gmail.com",
+        inputPassword
+      );
+      setIsLoggedIn(true);
+    } catch (loginError) {
+      console.error("Login failed", loginError);
+      const errorCode = (loginError as { code?: string }).code;
+      setError(
+        errorCode === "auth/wrong-password" ||
+          errorCode === "auth/invalid-credential"
+          ? "Feil passord!"
+          : "Kunne ikke logge inn. Kontroller nettverkstilkoblingen og prøv igjen."
+      );
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
 
   return isLoggedIn ? (
@@ -42,7 +51,11 @@ const LoginComponent = () => {
           type="password"
           onChange={event => setInputPassword(event.target.value)}
         />
-        <button className={styles["login-button"]} type="submit">
+        <button
+          className={styles["login-button"]}
+          type="submit"
+          disabled={isLoggingIn}
+        >
           Logg inn
         </button>
         {isLoggingIn && (
@@ -50,7 +63,11 @@ const LoginComponent = () => {
             Logger inn... <Spinner dark={true} />
           </div>
         )}
-        {error && <p className={styles["login-hasError"]}>Feil passord!</p>}
+        {error && (
+          <p className={styles["login-hasError"]} role="alert">
+            {error}
+          </p>
+        )}
       </form>
     </div>
   );

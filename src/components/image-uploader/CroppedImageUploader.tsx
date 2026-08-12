@@ -34,28 +34,36 @@ export const CroppedImageUploader: React.FC<Props> = ({
   });
   const [fileName, setFileName] = useState<string>("");
   const [fileLocation, setFileLocation] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(false);
 
   const [imageElement, setImageElement] = useState<HTMLImageElement | null>(
     null
   );
 
   const handleUpload = async () => {
-    if (imageElement) {
+    if (!imageElement) {
+      return null;
+    }
+
+    setIsUploading(true);
+    setUploadError(false);
+
+    try {
       const croppedImage = await getCroppedImg(imageElement, crop, fileName);
-      const imageRef = await firebase.storageRef.child(firebaseStorageRef);
+      const imageRef = firebase.storageRef.child(firebaseStorageRef);
       const uploadRef = imageRef.child(new Date().getTime() + fileName);
-      const imageUrl = await uploadRef.put(croppedImage).then(
-        success => {
-          return success.ref.getDownloadURL();
-        },
-        error => {
-          // TODO ADD ERRORHANDLING...
-        }
-      );
+      const upload = await uploadRef.put(croppedImage);
+      const imageUrl = await upload.ref.getDownloadURL();
 
       return handleUpdateComplete ? handleUpdateComplete(imageUrl) : null;
+    } catch (error) {
+      console.error("Failed to upload wine picture", error);
+      setUploadError(true);
+      return null;
+    } finally {
+      setIsUploading(false);
     }
-    return null;
   };
 
   return (
@@ -100,9 +108,19 @@ export const CroppedImageUploader: React.FC<Props> = ({
           }}
         />
         {imageElement && (
-          <button ref={myRef} type="button" onClick={handleUpload}>
-            {buttonUploadText}
+          <button
+            ref={myRef}
+            type="button"
+            onClick={handleUpload}
+            disabled={isUploading}
+          >
+            {isUploading ? "Laster opp..." : buttonUploadText}
           </button>
+        )}
+        {uploadError && (
+          <p className={styles["upload-error"]} role="alert">
+            Kunne ikke laste opp bildet. Prøv igjen.
+          </p>
         )}
       </div>
     </div>

@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import WineProduct from "models/product";
 import SearchIcon from "../../icons/SearchIcon";
 import WineDetailsComponent from "../../components/lookup/wine-details/WineDetailsComponent";
-import {
-  fetchWineByRecommendedFood,
-  MAX_RECOMMENDED_RESULTS,
-  RecommendedFood
-} from "../../api/api";
+import { fetchWineByRecommendedFood, RecommendedFood } from "../../api/api";
 import * as images from "images";
 import Spinner from "../../components/spinner/Spinner";
 import styles from "../../components/lookup/lookup.module.css";
@@ -36,6 +32,7 @@ const buttonCss = css`
 const WineSuggesterPage: React.FC = () => {
   const [wineProduct, setWineProduct] = useState<WineProduct | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [requestError, setRequestError] = useState<string | null>(null);
 
   const getRecommendedFood = (rec: string): RecommendedFood => {
     switch (rec) {
@@ -66,21 +63,34 @@ const WineSuggesterPage: React.FC = () => {
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     // todo hook with loadingState and isFetching so that we can render a spinner
-    console.log(event.currentTarget.value);
     setIsLoading(true);
-    const wineWithRecommendedFoodResponse = await fetchWineByRecommendedFood(
-      getRecommendedFood(event.currentTarget.value)
-    );
-    setWineProduct(
-      wineWithRecommendedFoodResponse[
-        Math.floor(Math.random() * MAX_RECOMMENDED_RESULTS)
-      ]
-    );
-    setIsLoading(false);
+    setRequestError(null);
+
+    try {
+      const wines = await fetchWineByRecommendedFood(
+        getRecommendedFood(event.currentTarget.value)
+      );
+      if (wines.length === 0) {
+        setRequestError("Fant ingen viner som passer. Prøv et annet matvalg.");
+        return;
+      }
+
+      setWineProduct(wines[Math.floor(Math.random() * wines.length)]);
+    } catch (error) {
+      console.error("Failed to fetch a wine recommendation", error);
+      setRequestError(
+        error instanceof Error
+          ? error.message
+          : "Kunne ikke hente en vinanbefaling. Prøv igjen."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleReset = () => {
     setIsLoading(false);
+    setRequestError(null);
     setWineProduct(null);
   };
 
@@ -161,6 +171,11 @@ const WineSuggesterPage: React.FC = () => {
                 <span className={loadingLabelCss}>Henter en vin</span>
                 <Spinner dark={true} />
               </div>
+            )}
+            {requestError && (
+              <p className={styles["request-error"]} role="alert">
+                {requestError}
+              </p>
             )}
           </FormContainer>
         )}

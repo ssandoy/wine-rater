@@ -8,20 +8,37 @@ const MAX_UNEXPANDED_ROWS = 2;
 
 const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
   const [winePicture, setWinePicture] = useState<string>("");
+  const [pictureError, setPictureError] = useState(false);
   const [isGrapesExpanded, setIsGrapesExpanded] = useState(false);
   const toggleOpen = (): void => {
     setIsGrapesExpanded(!isGrapesExpanded);
   };
 
-  const getWinePicture = async (wineId: string) => {
-    const wineDetails = await getWine(wineId);
-    setWinePicture(
-      convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
-    );
-  };
-
   useEffect(() => {
-    getWinePicture(wineProduct.basic.productId);
+    let isCurrent = true;
+    setWinePicture("");
+    setPictureError(false);
+
+    getWine(wineProduct.basic.productId)
+      .then(wineDetails => {
+        if (!isCurrent) {
+          return;
+        }
+
+        setWinePicture(
+          convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
+        );
+      })
+      .catch(error => {
+        console.error("Failed to fetch wine picture", error);
+        if (isCurrent) {
+          setPictureError(true);
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [wineProduct.basic.productId]);
 
   return (
@@ -94,6 +111,11 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
             className="wine-picture"
             alt="wine"
           />
+        )}
+        {pictureError && (
+          <p className={styles["wine-details-error"]} role="alert">
+            Kunne ikke laste vinbildet.
+          </p>
         )}
       </div>
     </div>

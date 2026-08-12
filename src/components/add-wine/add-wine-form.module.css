@@ -129,6 +129,11 @@
   color: var(--form-error-color);
 }
 
+.add-wine-error-request {
+  color: var(--form-error-color);
+  text-align: center;
+}
+
 .form-control {
   background-color: #e8eeef !important;
 }

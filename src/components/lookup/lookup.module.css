@@ -23,3 +23,9 @@
   flex-direction: column;
   align-items: center;
 }
+
+.request-error {
+  color: var(--form-error-color);
+  max-width: 320px;
+  text-align: center;
+}

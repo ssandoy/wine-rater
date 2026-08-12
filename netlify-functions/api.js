@@ -1,43 +1,90 @@
 import fetch from "node-fetch";
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 
 const vinmonopoletBaseUrl = "https://apis.vinmonopolet.no";
 const config = dotenv.config();
+const REQUEST_TIMEOUT_MS = 10000;
 
-// todo TS
 const apiSubscriptionKey =
-  config?.parsed?.["REACT_APP_OCP_APIM_SUBSCRIPTION_KEY"] ||
-  process.env.REACT_APP_OCP_APIM_SUBSCRIPTION_KEY2;
+  process.env.VINMONOPOLET_API_SUBSCRIPTION_KEY ||
+  process.env.REACT_APP_OCP_APIM_SUBSCRIPTION_KEY ||
+  process.env.REACT_APP_OCP_APIM_SUBSCRIPTION_KEY2 ||
+  config?.parsed?.["VINMONOPOLET_API_SUBSCRIPTION_KEY"] ||
+  config?.parsed?.["REACT_APP_OCP_APIM_SUBSCRIPTION_KEY"];
 
-// "event" has information about the path, body, headers, etc. of the request
-// "context" has information about the lambda environment and user details
-// The "callback" ends the execution of the function and returns a response back to the caller
-export const handler = async (event, context, callback) => {
+const jsonResponse = (statusCode, body, additionalHeaders = {}) => ({
+  statusCode,
+  headers: {
+    "Content-Type": "application/json; charset=utf-8",
+    ...additionalHeaders
+  },
+  body: JSON.stringify(body)
+});
+
+const parseJsonResponse = async response => {
+  const body = await response.text();
+  if (!body) {
+    throw new Error("Vinmonopolet returned an empty response");
+  }
+
+  try {
+    return JSON.parse(body);
+  } catch (error) {
+    throw new Error("Vinmonopolet returned invalid JSON");
+  }
+};
+
+export const handler = async event => {
+  if (event.httpMethod && event.httpMethod !== "GET") {
+    return jsonResponse(405, { error: "Method not allowed" }, { Allow: "GET" });
+  }
+
+  if (!apiSubscriptionKey) {
+    console.error("Vinmonopolet API subscription key is not configured");
+    return jsonResponse(500, { error: "Wine service is not configured" });
+  }
+
+  const query = new URLSearchParams(event.queryStringParameters || {});
+
   try {
     const response = await fetch(
       vinmonopoletBaseUrl +
         "/press-products/v1/details-normal?" +
-        new URLSearchParams(event.queryStringParameters).toString(),
+        query.toString(),
       {
         method: "GET",
         headers: {
           Accept: "application/json",
           "Ocp-Apim-Subscription-Key": apiSubscriptionKey
-        }
+        },
+        timeout: REQUEST_TIMEOUT_MS
       }
     );
-    console.log("FETCHED RESPONSE:", response);
-    const data = await response.json();
-    console.log("FETCHED DATA:", data);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(data)
-    };
+
+    if (!response.ok) {
+      await response.text().catch(() => undefined);
+      console.error("Vinmonopolet API request failed", {
+        status: response.status,
+        statusText: response.statusText
+      });
+      return jsonResponse(response.status, {
+        error: "Vinmonopolet API request failed",
+        upstreamStatus: response.status
+      });
+    }
+
+    const data = await parseJsonResponse(response);
+    return jsonResponse(200, data);
   } catch (err) {
-    console.log("Error from wine-fetching: ", err); // output to netlify function log
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ msg: err.message }) // Could be a custom message or object i.e. JSON.stringify(err)
-    };
+    const timedOut = err?.type === "request-timeout";
+    console.error("Vinmonopolet API request failed", {
+      type: err?.type,
+      message: err instanceof Error ? err.message : String(err)
+    });
+    return jsonResponse(timedOut ? 504 : 502, {
+      error: timedOut
+        ? "Wine service request timed out"
+        : "Wine service is temporarily unavailable"
+    });
   }
 };
