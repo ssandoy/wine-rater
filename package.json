@@ -51,7 +51,7 @@
   "scripts": {
     "dev": "concurrently \"vite\" \"npm run start-server\"",
     "build": "concurrently \"vite build\" \"npm run build-server\"",
-    "start-server": "netlify-lambda serve netlify-functions",
+    "start-server": "NODE_OPTIONS=--openssl-legacy-provider netlify-lambda serve netlify-functions",
     "build-server": "NODE_OPTIONS=--openssl-legacy-provider netlify-lambda build netlify-functions"
   },
   "husky": {
