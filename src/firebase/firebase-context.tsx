@@ -1,8 +1,8 @@
 import React from "react";
-import firebase from "@firebase/app";
-import "@firebase/database";
-import "@firebase/storage";
-import "@firebase/auth";
+import firebase from "firebase/app";
+import "firebase/database";
+import "firebase/storage";
+import "firebase/auth";
 import { db, storage, auth } from "./firebase-setup";
 
 type State = {

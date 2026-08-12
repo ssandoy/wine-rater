@@ -14,7 +14,7 @@ export const AsyncSearchDropdown = ({
   placeholder,
   noOptionPlaceholder,
   onClick,
-  setValue = null
+  setValue = value => value
 }) => {
   const [hasRequestError, setHasRequestError] = useState(false);
   const latestRequest = useRef(0);
