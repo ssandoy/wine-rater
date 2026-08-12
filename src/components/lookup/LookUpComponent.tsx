@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { debouncedSearchProductsByNameItem } from "api";
-import "./lookup.scss";
+import styles from "./lookup.module.css";
 import WineProduct from "models/product";
 import WineDetailsComponent from "./wine-details/WineDetailsComponent";
 import SearchIcon from "../../icons/SearchIcon";
@@ -20,9 +20,9 @@ const LookUpComponent = () => {
   }
 
   return (
-    <div className="lookup-container">
+    <div className={styles["lookup-container"]}>
       <h1 className="page-title ">Vindetaljer</h1>
-      <div className="lookup-details-container">
+      <div className={styles["lookup-details-container"]}>
         {!wineProduct && (
           <div>
             <label htmlFor="wineName">Søk opp en vin</label>
@@ -39,7 +39,7 @@ const LookUpComponent = () => {
           </div>
         )}
         {wineProduct && (
-          <div className="wine-details-component">
+          <div className={styles["wine-details-component"]}>
             <WineDetailsComponent wineProduct={wineProduct} />{" "}
             <button
               className="wine-search-form__button"

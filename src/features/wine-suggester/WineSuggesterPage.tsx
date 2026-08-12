@@ -9,6 +9,7 @@ import {
 } from "../../api/api";
 import * as images from "images";
 import Spinner from "../../components/spinner/Spinner";
+import styles from "../../components/lookup/lookup.module.css";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 
@@ -84,9 +85,9 @@ const WineSuggesterPage: React.FC = () => {
   };
 
   return (
-    <div className="lookup-container">
+    <div className={styles["lookup-container"]}>
       <h1 className="page-title ">Finn meg en vin!</h1>
-      <div className="lookup-details-container">
+      <div className={styles["lookup-details-container"]}>
         {!wineProduct && (
           <FormContainer>
             <p>Velg hvilken type mat du skal spise</p>
@@ -164,7 +165,7 @@ const WineSuggesterPage: React.FC = () => {
           </FormContainer>
         )}
         {wineProduct && (
-          <div className="wine-details-component">
+          <div className={styles["wine-details-component"]}>
             <WineDetailsComponent wineProduct={wineProduct} />{" "}
             <button className="wine-search-form__button" onClick={handleReset}>
               <SearchIcon />
