@@ -8,7 +8,7 @@ import { Raastoff } from "data/raastoff";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 import { SearchDropDown } from "../search-dropdown/search-dropdown";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
-import "./add-wine-form.scss";
+import styles from "./add-wine-form.module.css";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { validateForm } from "components/add-wine/form-util";
@@ -131,18 +131,18 @@ const AddWineForm: React.FC = () => {
     }
   };
   const nameContainerWidth = selectedWine
-    ? "add-wine-form__col-1"
-    : "add-wine-form__row";
+    ? styles["add-wine-form__col-1"]
+    : styles["add-wine-form__row"];
   let noOptionText = "Tast inn navnet på vinen";
   if (wineName) {
     noOptionText = "Fant ingen treff på dette navnet";
   }
   return (
-    <div className="add-wine">
+    <div className={styles["add-wine"]}>
       <h1 className="page-title">Legg til ny vin</h1>
-      <form onSubmit={onSubmitForm} className="add-wine-form">
+      <form onSubmit={onSubmitForm} className={styles["add-wine-form"]}>
         <div className={nameContainerWidth}>
-          <div className="textfield-label">
+          <div className={styles["textfield-label"]}>
             <label htmlFor="wineName">Navn</label>
           </div>
           {!manualRegistration && (
@@ -168,7 +168,7 @@ const AddWineForm: React.FC = () => {
           {!manualRegistration && !selectedWine && (
             <button
               type="button"
-              className="add-wine-form__button--manual-reg"
+              className={styles["add-wine-form__button--manual-reg"]}
               onClick={() => {
                 if (!manualRegistration) {
                   setSelectedWine(true);
@@ -182,12 +182,12 @@ const AddWineForm: React.FC = () => {
             </button>
           )}
           {errors?.wineName && (
-            <p className="add-wine-error-validation">{errors.wineName}</p>
+            <p className={styles["add-wine-error-validation"]}>{errors.wineName}</p>
           )}
         </div>
         {selectedWine && (
-          <div className="add-wine-form__col-2">
-            <div className="textfield-label">
+          <div className={styles["add-wine-form__col-2"]}>
+            <div className={styles["textfield-label"]}>
               <label>Type</label>
             </div>
             <div className="wine-input-container" ref={errorRefMap.wineType}>
@@ -197,13 +197,13 @@ const AddWineForm: React.FC = () => {
               />
             </div>
             {errors?.wineType && (
-              <p className="add-wine-error-validation">{errors.wineType}</p>
+              <p className={styles["add-wine-error-validation"]}>{errors.wineType}</p>
             )}
           </div>
         )}
         {selectedWine && (
-          <div className="add-wine-form__col-1">
-            <div className="textfield-label" ref={errorRefMap.wineYear}>
+          <div className={styles["add-wine-form__col-1"]}>
+            <div className={styles["textfield-label"]} ref={errorRefMap.wineYear}>
               <label htmlFor="wineYear">Årgang</label>
             </div>
             <div className="wine-input-container">
@@ -213,13 +213,13 @@ const AddWineForm: React.FC = () => {
               />
             </div>
             {errors?.wineYear && (
-              <p className="add-wine-error-validation">{errors.wineYear}</p>
+              <p className={styles["add-wine-error-validation"]}>{errors.wineYear}</p>
             )}
           </div>
         )}
         {selectedWine && (
-          <div className="add-wine-form__col-2">
-            <div className="textfield-label">
+          <div className={styles["add-wine-form__col-2"]}>
+            <div className={styles["textfield-label"]}>
               <label>Drue</label>
             </div>
             <SearchDropDown
@@ -237,8 +237,8 @@ const AddWineForm: React.FC = () => {
           </div>
         )}
         {selectedWine && (
-          <div className="add-wine-form__col-1">
-            <div className="textfield-label">
+          <div className={styles["add-wine-form__col-1"]}>
+            <div className={styles["textfield-label"]}>
               <label htmlFor="sanderRating">Land</label>
             </div>
             <div className="wine-input-container">
@@ -248,13 +248,13 @@ const AddWineForm: React.FC = () => {
               />
             </div>
             {errors?.wineCountry && (
-              <p className="add-wine-error-validation">{errors.wineCountry}</p>
+              <p className={styles["add-wine-error-validation"]}>{errors.wineCountry}</p>
             )}
           </div>
         )}
         {selectedWine && (
-          <div className="add-wine-form__col-2">
-            <div className="textfield-label">
+          <div className={styles["add-wine-form__col-2"]}>
+            <div className={styles["textfield-label"]}>
               <label htmlFor="sanderRating">Region</label>
             </div>
             <div className="wine-input-container">
@@ -264,13 +264,13 @@ const AddWineForm: React.FC = () => {
               />
             </div>
             {errors?.wineRegion && (
-              <p className="add-wine-error-validation">{errors.wineRegion}</p>
+              <p className={styles["add-wine-error-validation"]}>{errors.wineRegion}</p>
             )}
           </div>
         )}
         {selectedWine && (
-          <div className="add-wine-form__col-1" ref={errorRefMap.sanderRating}>
-            <div className="textfield-label">
+          <div className={styles["add-wine-form__col-1"]} ref={errorRefMap.sanderRating}>
+            <div className={styles["textfield-label"]}>
               <label htmlFor="sanderRating">Rating Sander</label>{" "}
             </div>
             <div className="wine-input-container">
@@ -281,7 +281,7 @@ const AddWineForm: React.FC = () => {
             </div>
             {!!errors && errors.sanderRating && (
               <div>
-                <p className="add-wine-error-validation">
+                <p className={styles["add-wine-error-validation"]}>
                   {errors.sanderRating}
                 </p>
               </div>
@@ -289,8 +289,8 @@ const AddWineForm: React.FC = () => {
           </div>
         )}
         {selectedWine && (
-          <div className="add-wine-form__col-2" ref={errorRefMap.ineRating}>
-            <div className="textfield-label">
+          <div className={styles["add-wine-form__col-2"]} ref={errorRefMap.ineRating}>
+            <div className={styles["textfield-label"]}>
               <label htmlFor="ineRating">Rating Ine</label>
             </div>
             <div className="wine-input-container">
@@ -301,25 +301,25 @@ const AddWineForm: React.FC = () => {
             </div>
             {!!errors && errors.ineRating && (
               <div>
-                <p className="add-wine-error-validation">{errors.ineRating}</p>
+                <p className={styles["add-wine-error-validation"]}>{errors.ineRating}</p>
               </div>
             )}
           </div>
         )}
         {selectedWine && (
           <>
-            <div className="add-wine-form__col-1">
-              <div className="textfield-label">
+            <div className={styles["add-wine-form__col-1"]}>
+              <div className={styles["textfield-label"]}>
                 <label>Hva passer vinen til?</label>
               </div>
-              <div className="add-wine-form__fits-to-grid">
+              <div className={styles["add-wine-form__fits-to-grid"]}>
                 {imageKeys.map((imageKey, index) => {
                   if (imageKey === "fish" || imageKey === "cake") {
                     return null;
                   }
                   return (
                     <div
-                      className="add-wine-form__fits-to-cell"
+                      className={styles["add-wine-form__fits-to-cell"]}
                       key={index + imageKey}
                     >
                       <ImageCheckbox
@@ -341,14 +341,14 @@ const AddWineForm: React.FC = () => {
           </>
         )}
         {selectedWine && (
-          <div className="add-wine-form__col-2">
-            <div className="add-wine-form__label-button-container">
-              <div className="textfield-label">
+          <div className={styles["add-wine-form__col-2"]}>
+            <div className={styles["add-wine-form__label-button-container"]}>
+              <div className={styles["textfield-label"]}>
                 <label htmlFor="winePicture">Bilde</label>
               </div>
               <button
                 type="button"
-                className="add-wine-form__button--upload"
+                className={styles["add-wine-form__button--upload"]}
                 onClick={() => setShowImageUploader(!showImageUploader)}
               >
                 Laste opp eget bilde?
@@ -373,22 +373,22 @@ const AddWineForm: React.FC = () => {
           </div>
         )}
         {selectedWine && (
-          <div className="add-wine-form__row">
-            <div className="add-wine-form__buttons">
+          <div className={styles["add-wine-form__row"]}>
+            <div className={styles["add-wine-form__buttons"]}>
               <button
                 disabled={isWineRegistered}
                 type="submit"
-                className="add-wine-form__button add-wine-form__button-add"
+                className={`${styles["add-wine-form__button"]} ${styles["add-wine-form__button-add"]}`}
               >
                 <PlusIcon />{" "}
-                <span className="add-wine-form__button-label">Registrer</span>
+                <span className={styles["add-wine-form__button-label"]}>Registrer</span>
               </button>
               <button
                 onClick={resetSearch}
-                className="add-wine-form__button add-wine-form__button-reset"
+                className={`${styles["add-wine-form__button"]} ${styles["add-wine-form__button-reset"]}`}
               >
                 <CrossIcon />{" "}
-                <span className="add-wine-form__button-label">
+                <span className={styles["add-wine-form__button-label"]}>
                   Start på nytt
                 </span>
               </button>
@@ -396,8 +396,8 @@ const AddWineForm: React.FC = () => {
           </div>
         )}
         {isWineRegistered && (
-          <div className="add-wine-form__row">
-            <div className="add-wine__wine-registered">
+          <div className={styles["add-wine-form__row"]}>
+            <div className={styles["add-wine__wine-registered"]}>
               <p>Vinen ble lagret!</p>
             </div>
           </div>
