@@ -6,6 +6,7 @@ const config = dotenv.config();
 const REQUEST_TIMEOUT_MS = 10000;
 
 const apiSubscriptionKey =
+  process.env.VINMONOPOLET_API_SUBSCRIPTION_KEY2 ||
   process.env.VINMONOPOLET_API_SUBSCRIPTION_KEY ||
   process.env.REACT_APP_OCP_APIM_SUBSCRIPTION_KEY ||
   process.env.REACT_APP_OCP_APIM_SUBSCRIPTION_KEY2 ||

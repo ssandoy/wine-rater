@@ -9,7 +9,8 @@ export default defineConfig({
     proxy: {
       "/wine-api": {
         target: "http://localhost:9000",
-        changeOrigin: true
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/wine-api/, "")
       }
     }
   },
