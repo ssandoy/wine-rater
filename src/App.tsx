@@ -6,7 +6,7 @@ import {
   Route,
   Switch
 } from "react-router-dom";
-import "./App.scss";
+import styles from "./App.module.css";
 import AddWineForm from "components/add-wine/AddWineForm";
 import NotFoundComponent from "components/notfound/notfound";
 import LookUpComponent from "components/lookup/LookUpComponent";
@@ -63,14 +63,14 @@ const App = () => {
 
   return (
     <Router>
-      <div className="App">
-        <div className="App-header">
+      <div className={styles.App}>
+        <div className={styles["App-header"]}>
           <div className="app-header-icon">
             <NavLink to={SEARCH_ROUTE}>
               <LogoIcon />
             </NavLink>
           </div>
-          <div className="app-navbar">
+          <div className={styles["app-navbar"]}>
             {isNative() && (
               <Hamburger
                 color="white"

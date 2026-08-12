@@ -1,14 +1,13 @@
-@import "./styles/variables.scss";
-@import './styles/mixins.scss';
-
 .App {
   min-height: 100vh;
-  margin-bottom:50px;
+  margin-bottom: 50px;
 }
 
 .App-logo {
   height: 130px;
-  @include for-phone-only {
+}
+@media (max-width: 599px) {
+  .App-logo {
     height: 130px;
     width: 80vw;
   }
@@ -25,16 +24,16 @@
   display: flex;
   justify-content: center;
   font-size: 24px;
-
-  @include for-phone-only {
+}
+@media (max-width: 599px) {
+  .app-navbar {
     font-size: 18px;
     flex-direction: column;
     align-items: center;
   }
-
-  a {
-    margin: 0 11px;
-  }
+}
+.app-navbar a {
+  margin: 0 11px;
 }
 
 .app-header-text {
