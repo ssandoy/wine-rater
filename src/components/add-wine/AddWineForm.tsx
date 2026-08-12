@@ -110,11 +110,13 @@ const AddWineForm: React.FC = () => {
       wineRegion,
       ineRating,
       sanderRating,
-      fitsTo,
-      winePicture
+      fitsTo
     };
     if (productId) {
       values.apiId = productId;
+    }
+    if (winePicture) {
+      values.winePicture = winePicture;
     }
     const validatedErrors: Errors | null = validateForm(
       validationSchema,
