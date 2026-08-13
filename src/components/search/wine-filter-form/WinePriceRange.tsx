@@ -1,5 +1,5 @@
 import React from "react";
-import { Handle, Range } from "rc-slider";
+import Slider from "rc-slider";
 import { formatAmount } from "../../../utils/formatAmount";
 import { useWineFilterContext } from "../../../context/filter-context/WineFilterContext";
 import "rc-slider/assets/index.css";
@@ -38,21 +38,28 @@ export const WinePriceRange: React.FC = () => {
     }
   } = useWineFilterContext();
   return (
-    <Range
+    <Slider
+      range
       value={[minPrice, maxPrice]}
       max={1000}
       min={0}
       step={20}
       style={{ marginTop: 16 }}
-      onChange={([min, max]) => {
+      ariaLabelForHandle={["Minimumspris", "Maksimumspris"]}
+      onChange={values => {
+        if (!Array.isArray(values)) {
+          return;
+        }
+
+        const [min, max] = values;
         setMinPrice(min);
         setMaxPrice(max);
       }}
-      handle={handleProps => {
-        return (
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          //  @ts-ignore
-          <Handle {...handleProps}>
+      handleRender={(handle, handleProps) =>
+        React.cloneElement(
+          handle,
+          undefined,
+          <>
             <p
               style={{
                 position: "absolute",
@@ -62,12 +69,14 @@ export const WinePriceRange: React.FC = () => {
             >
               {formatAmount(handleProps.value)}
             </p>
-          </Handle>
-        );
+          </>
+        )
+      }
+      styles={{
+        handle: handleStyle,
+        rail: railStyle,
+        track: { backgroundColor: "#69183F", height: BAR_HEIGHT }
       }}
-      handleStyle={[handleStyle, handleStyle]}
-      railStyle={railStyle}
-      trackStyle={[{ backgroundColor: "#69183F", height: BAR_HEIGHT }]}
     />
   );
 };

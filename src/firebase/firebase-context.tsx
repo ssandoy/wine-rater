@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 import { Auth, onAuthStateChanged } from "firebase/auth";
 import { Database } from "firebase/database";
 import { FirebaseStorage } from "firebase/storage";
@@ -14,7 +14,7 @@ type State = {
 const FirebaseContext = React.createContext<State | undefined>(undefined);
 const firebaseServices: State = { database: db, storage, auth };
 
-const FirebaseProvider: React.FC = ({ children }) => {
+const FirebaseProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { setIsAuthReady, setIsLoggedIn } = useAppContext();
 
   useEffect(

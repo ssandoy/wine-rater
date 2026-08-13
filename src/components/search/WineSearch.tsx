@@ -9,9 +9,14 @@ import {
   useWineFilterContext,
   WineType
 } from "../../context/filter-context/WineFilterContext";
-import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import { isObjectInArray } from "../../utils/array-utils";
 import { useAppContext } from "../../context/AppContext";
+
+const WINE_TYPE_OPTIONS: Array<{ label: string; value: WineType }> = [
+  { label: "Alle", value: "alle" },
+  { label: "Rød", value: "Rødvin" },
+  { label: "Hvit", value: "Hvitvin" }
+];
 
 const WineSearch = () => {
   const isNative = nativeCheck();
@@ -31,9 +36,10 @@ const WineSearch = () => {
     }
   } = useWineFilterContext();
 
-  const handleChange = event => {
-    setWineFilterType(event.target.value);
-    filterWines(event.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextWineType = event.target.value as WineType;
+    setWineFilterType(nextWineType);
+    filterWines(nextWineType);
   };
 
   const filterWines = (wineType?: WineType) => {
@@ -58,7 +64,9 @@ const WineSearch = () => {
   return (
     <div className={styles["wine-search__container"]}>
       <div className={styles["wine-search__filter-bar"]}>
-        <h1 className={`page-title ${styles["wine-search__title"]}`}>Lagrede viner</h1>
+        <h1 className={`page-title ${styles["wine-search__title"]}`}>
+          Lagrede viner
+        </h1>
         <div
           className={styles["wine-search__filter-icon"]}
           onClick={() => setHasOpenedFilter(!hasOpenedFilter)}
@@ -67,34 +75,25 @@ const WineSearch = () => {
           <p className={styles["wine-search__paragraph"]}>Filter</p>
         </div>
       </div>
-      <div className={winelistStyles["wine-list__filter-container"]}>
-        <label>Filtrer på type</label>
-        <RadioGroup
-          aria-label="filter wines"
-          name="filterWines"
-          value={wineType}
-          onChange={handleChange}
-          className={winelistStyles["wine-list__radio-group"]}
-        >
+      <fieldset className={winelistStyles["wine-list__filter-container"]}>
+        <legend>Filtrer på type</legend>
+        <div className={winelistStyles["wine-list__radio-group"]}>
           <div className={winelistStyles["wine-list__radio-group-children"]}>
-            <FormControlLabel
-              value="alle"
-              control={<Radio color="primary" />}
-              label="Alle"
-            />
-            <FormControlLabel
-              value="Rødvin"
-              control={<Radio color="primary" />}
-              label="Rød"
-            />
-            <FormControlLabel
-              value="Hvitvin"
-              control={<Radio color="primary" />}
-              label="Hvit"
-            />
+            {WINE_TYPE_OPTIONS.map(option => (
+              <label key={option.value}>
+                <input
+                  type="radio"
+                  name="filterWines"
+                  value={option.value}
+                  checked={wineType === option.value}
+                  onChange={handleChange}
+                />
+                {option.label}
+              </label>
+            ))}
           </div>
-        </RadioGroup>
-      </div>
+        </div>
+      </fieldset>
       {hasOpenedFilter && isNative && (
         <WineFilterForm onFilter={() => filterWines()} />
       )}

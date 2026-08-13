@@ -1,6 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import ReactCrop, { Crop } from "react-image-crop";
+import ReactCrop, {
+  centerCrop,
+  makeAspectCrop,
+  PixelCrop
+} from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
 import { getCroppedImg } from "./utils/getCroppedImg";
@@ -25,14 +29,9 @@ export const CroppedImageUploader: React.FC<Props> = ({
   cropAspectRatio = 9 / 16
 }: Props) => {
   const firebase = useFirebaseContext();
-  const myRef = useRef(null);
+  const myRef = useRef<HTMLButtonElement>(null);
 
-  const [crop, setCrop] = useState<Crop>({
-    aspect: cropAspectRatio,
-    width: 150,
-    x: 1,
-    y: 1
-  });
+  const [crop, setCrop] = useState<PixelCrop>();
   const [fileName, setFileName] = useState<string>("");
   const [fileLocation, setFileLocation] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
@@ -42,8 +41,17 @@ export const CroppedImageUploader: React.FC<Props> = ({
     null
   );
 
+  useEffect(
+    () => () => {
+      if (fileLocation) {
+        URL.revokeObjectURL(fileLocation);
+      }
+    },
+    [fileLocation]
+  );
+
   const handleUpload = async () => {
-    if (!imageElement) {
+    if (!imageElement || !crop) {
       return null;
     }
 
@@ -84,17 +92,33 @@ export const CroppedImageUploader: React.FC<Props> = ({
         {fileLocation && (
           <div className={styles["image-preview-container"]}>
             <ReactCrop
-              onImageLoaded={image => {
-                executeScrollToRef(myRef);
-                setImageElement(image);
-              }}
               className={styles["image-preview"]}
-              src={fileLocation}
               crop={crop}
-              onChange={(newCrop: Crop) => {
-                setCrop(newCrop);
-              }}
-            />
+              aspect={cropAspectRatio}
+              onChange={newCrop => setCrop(newCrop)}
+            >
+              <img
+                src={fileLocation}
+                alt="Forhåndsvisning av vinbilde"
+                onLoad={event => {
+                  const image = event.currentTarget;
+                  const initialCrop = centerCrop(
+                    makeAspectCrop(
+                      { unit: "px", width: Math.min(150, image.width) },
+                      cropAspectRatio,
+                      image.width,
+                      image.height
+                    ),
+                    image.width,
+                    image.height
+                  );
+
+                  setCrop(initialCrop);
+                  setImageElement(image);
+                  executeScrollToRef(myRef);
+                }}
+              />
+            </ReactCrop>
           </div>
         )}
         {fileName && <p>{fileName}</p>}

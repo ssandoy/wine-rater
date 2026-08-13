@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router";
 import styles from "./login.module.css";
 import { useAppContext } from "../../context/AppContext";
 import { ADD_WINE_ROUTE } from "../../routes/routes";
@@ -47,7 +47,7 @@ const LoginComponent = () => {
   }
 
   return isLoggedIn ? (
-    <Redirect to={ADD_WINE_ROUTE} />
+    <Navigate to={ADD_WINE_ROUTE} replace />
   ) : (
     <div className={styles["login-container"]}>
       <h4 className={`page-title ${styles["login-title"]}`}>

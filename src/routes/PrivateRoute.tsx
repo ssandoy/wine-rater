@@ -1,30 +1,20 @@
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Navigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import { LOGIN_ROUTE } from "./routes";
 
 interface Props {
-  component: React.FC;
-  exact: boolean;
-  path: string;
+  children: React.ReactNode;
 }
 
-const PrivateRoute: React.FC<Props> = ({
-  component: Component,
-  ...rest
-}: Props) => {
+const PrivateRoute: React.FC<Props> = ({ children }) => {
   const { isAuthReady, isLoggedIn } = useAppContext();
-  return (
-    <Route {...rest}>
-      {props =>
-        !isAuthReady ? null : isLoggedIn ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={LOGIN_ROUTE} />
-        )
-      }
-    </Route>
-  );
+
+  if (!isAuthReady) {
+    return null;
+  }
+
+  return isLoggedIn ? <>{children}</> : <Navigate to={LOGIN_ROUTE} replace />;
 };
 
 export default PrivateRoute;

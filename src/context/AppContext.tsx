@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
+import React, {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useMemo,
+  useState
+} from "react";
 import Wine from "../models/wine";
 
 type AppState = {
@@ -16,7 +22,7 @@ type AppState = {
 
 export const AppContext = React.createContext<AppState | undefined>(undefined);
 
-const AppProvider = props => {
+const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [allWines, setAllWines] = useState<Wine[]>([]);
@@ -39,7 +45,7 @@ const AppProvider = props => {
     [allWines, filteredWines, isAuthReady, isFetchingWines, isLoggedIn]
   );
 
-  return <AppContext.Provider value={value} {...props} />;
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
 const useAppContext = () => {

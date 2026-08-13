@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataSnapshot, get, ref } from "firebase/database";
 import { Squash as Hamburger } from "hamburger-react";
-import {
-  BrowserRouter as Router,
-  NavLink,
-  Route,
-  Switch
-} from "react-router-dom";
+import { BrowserRouter as Router, NavLink, Route, Routes } from "react-router";
 import styles from "./App.module.css";
 import AddWineForm from "components/add-wine/AddWineForm";
 import NotFoundComponent from "components/notfound/notfound";
@@ -107,6 +102,51 @@ const App = () => {
     wineFetchAttempt
   ]);
 
+  const wineSearchRoute = wineFetchError ? (
+    <div className={styles["app-request-error-page"]}>
+      <h1 className="page-title">Lagrede viner</h1>
+      <section
+        className={styles["app-request-error"]}
+        role="alert"
+        aria-labelledby="wine-fetch-error-title"
+      >
+        <h2
+          id="wine-fetch-error-title"
+          className={styles["app-request-error__title"]}
+        >
+          Kunne ikke hente vinene
+        </h2>
+        <p className={styles["app-request-error__message"]}>
+          Sjekk nettverkstilkoblingen din og prøv på nytt.
+        </p>
+        <button
+          type="button"
+          className={styles["app-request-error__retry"]}
+          onClick={() => setWineFetchAttempt(attempt => attempt + 1)}
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M20 11a8 8 0 1 0-2.34 5.66M20 5v6h-6"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          Prøv igjen
+        </button>
+      </section>
+    </div>
+  ) : (
+    <WineSearchPage />
+  );
+
   return (
     <Router>
       <div className={styles.App}>
@@ -134,67 +174,22 @@ const App = () => {
             ) : null}
           </div>
         </div>
-        <>
-          <Switch>
-            <PrivateRoute exact path={ADD_WINE_ROUTE} component={AddWineForm} />
-            <Route
-              exact
-              path={["/", SEARCH_ROUTE]}
-              render={() =>
-                wineFetchError ? (
-                  <div className={styles["app-request-error-page"]}>
-                    <h1 className="page-title">Lagrede viner</h1>
-                    <section
-                      className={styles["app-request-error"]}
-                      role="alert"
-                      aria-labelledby="wine-fetch-error-title"
-                    >
-                      <h2
-                        id="wine-fetch-error-title"
-                        className={styles["app-request-error__title"]}
-                      >
-                        Kunne ikke hente vinene
-                      </h2>
-                      <p className={styles["app-request-error__message"]}>
-                        Sjekk nettverkstilkoblingen din og prøv på nytt.
-                      </p>
-                      <button
-                        type="button"
-                        className={styles["app-request-error__retry"]}
-                        onClick={() =>
-                          setWineFetchAttempt(attempt => attempt + 1)
-                        }
-                      >
-                        <svg
-                          width="22"
-                          height="22"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M20 11a8 8 0 1 0-2.34 5.66M20 5v6h-6"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        Prøv igjen
-                      </button>
-                    </section>
-                  </div>
-                ) : (
-                  <WineSearchPage />
-                )
-              }
-            />
-            <Route exact path={LOGIN_ROUTE} component={LoginComponent} />
-            <Route exact path={DETAILS_ROUTE} component={LookUpComponent} />
-            <Route exact path={SUGGESTER_ROUTE} component={WineSuggesterPage} />
-            <Route component={NotFoundComponent} />
-          </Switch>
-        </>
+        <Routes>
+          <Route
+            path={ADD_WINE_ROUTE}
+            element={
+              <PrivateRoute>
+                <AddWineForm />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/" element={wineSearchRoute} />
+          <Route path={SEARCH_ROUTE} element={wineSearchRoute} />
+          <Route path={LOGIN_ROUTE} element={<LoginComponent />} />
+          <Route path={DETAILS_ROUTE} element={<LookUpComponent />} />
+          <Route path={SUGGESTER_ROUTE} element={<WineSuggesterPage />} />
+          <Route path="*" element={<NotFoundComponent />} />
+        </Routes>
       </div>
     </Router>
   );

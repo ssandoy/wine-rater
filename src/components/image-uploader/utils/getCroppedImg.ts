@@ -1,8 +1,8 @@
-import { Crop } from "react-image-crop";
+import { PixelCrop } from "react-image-crop";
 
 export function getCroppedImg(
   image: HTMLImageElement,
-  crop: Crop,
+  crop: PixelCrop,
   fileName: string
 ): Promise<Blob> {
   const canvas = document.createElement("canvas");

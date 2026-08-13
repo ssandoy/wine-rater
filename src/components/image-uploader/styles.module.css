@@ -35,8 +35,12 @@
 }
 
 .image-preview {
-  height: 100%;
   width: 100%;
+}
+
+.image-preview img {
+  display: block;
+  max-width: 100%;
 }
 
 .upload-error {

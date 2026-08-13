@@ -1,5 +1,5 @@
 // src/count-context.js
-import React, { useMemo, useState } from "react";
+import React, { PropsWithChildren, useMemo, useState } from "react";
 
 type FilterValue<T> = {
   value: T;
@@ -26,7 +26,7 @@ export const WineFilterContext = React.createContext<State | undefined>(
   undefined
 );
 
-const WineFilterProvider = props => {
+const WineFilterProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [hasOpenedFilter, setHasOpenedFilter] = useState(false);
   const [wineType, setWineType] = useState<WineType>("alle");
   const [wineName, setWineName] = useState<string>("");
@@ -88,7 +88,11 @@ const WineFilterProvider = props => {
     maxPrice,
     minPrice
   ]);
-  return <WineFilterContext.Provider value={value} {...props} />;
+  return (
+    <WineFilterContext.Provider value={value}>
+      {children}
+    </WineFilterContext.Provider>
+  );
 };
 
 const useWineFilterContext = () => {

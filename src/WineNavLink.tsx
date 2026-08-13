@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 
 type Props = {
   route: string;
@@ -9,13 +9,14 @@ type Props = {
 export const WineNavLink: React.FC<Props> = ({ route, title }: Props) => {
   return (
     <NavLink
-      exact
+      end
       to={route}
-      style={{ color: "white", textDecoration: "none", marginTop: 8 }}
-      activeStyle={{
+      style={({ isActive }) => ({
         color: "white",
-        borderBottom: "1px solid white"
-      }}
+        textDecoration: "none",
+        marginTop: 8,
+        borderBottom: isActive ? "1px solid white" : undefined
+      })}
     >
       {title}
     </NavLink>
