@@ -1,4 +1,4 @@
-export const validationSchema = {
+const validationSchema = {
   wineName: {
     required: true,
   },

@@ -22,7 +22,7 @@ type Props = {
   cropAspectRatio?: number;
 };
 
-export const CroppedImageUploader: React.FC<Props> = ({
+const CroppedImageUploader: React.FC<Props> = ({
   firebaseStorageRef,
   handleUpdateComplete,
   title,

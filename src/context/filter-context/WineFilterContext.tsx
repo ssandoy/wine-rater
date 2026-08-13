@@ -22,9 +22,7 @@ type State = {
   };
 };
 
-export const WineFilterContext = React.createContext<State | undefined>(
-  undefined
-);
+const WineFilterContext = React.createContext<State | undefined>(undefined);
 
 const WineFilterProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [hasOpenedFilter, setHasOpenedFilter] = useState(false);

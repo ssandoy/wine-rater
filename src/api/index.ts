@@ -1,1 +1,1 @@
-export { debouncedSearchProductsByNameItem, getWine } from "./api";
+export { debouncedSearchProductsByNameItem } from "./api";

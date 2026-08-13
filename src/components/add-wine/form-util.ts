@@ -12,7 +12,7 @@ export const validateForm = (validationSchema, values): Errors | null => {
   return Object.entries(errors).length === 0 ? null : errors;
 };
 
-export const checkError = (validationSchema, key, value) => {
+const checkError = (validationSchema, key, value) => {
   let error: string | undefined;
   const field = validationSchema[key];
   if (field.required && !value) {

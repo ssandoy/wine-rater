@@ -35,6 +35,9 @@ jobs:
       - name: Check formatting and lint
         run: npm run check:ci
 
+      - name: Check unused code and dependencies
+        run: npm run knip
+
       - name: Typecheck
         run: npm run typecheck
 

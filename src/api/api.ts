@@ -3,7 +3,7 @@ import type WineProduct from "models/product";
 import type WineProductV1 from "models/product-v1";
 
 const MAX_RESULTS = 20;
-export const MAX_RECOMMENDED_RESULTS = 500;
+const MAX_RECOMMENDED_RESULTS = 500;
 const DEBOUNCE_TIME = 500;
 const REQUEST_TIMEOUT_MS = 10_000;
 
@@ -11,7 +11,7 @@ const API_ENDPOINT = "/wine-api/api";
 
 type ApiErrorKind = "http" | "invalid-response" | "network" | "timeout";
 
-export class ApiError extends Error {
+class ApiError extends Error {
   readonly kind: ApiErrorKind;
   readonly status?: number;
 
@@ -206,13 +206,6 @@ export const fetchWineByRecommendedFood = async (
 
 export const getWine = (id: string): Promise<WineProductV1> =>
   requestJson<WineProductV1>(buildApiUrl({ productId: id }));
-
-export const getWineImage = (id: string): Promise<Blob> =>
-  request(
-    `https://bilder.vinmonopolet.no/cache/1200x1200-0/${encodeURIComponent(id)}-1.jpg`,
-    (response) => response.blob(),
-    "image/*"
-  );
 
 export const debouncedSearchProductsByNameItem = AwesomeDebouncePromise(
   searchProductsByNameMapToSelect,

@@ -20,7 +20,7 @@ type AppState = {
   setIsFetchingWines: Dispatch<SetStateAction<boolean>>;
 };
 
-export const AppContext = React.createContext<AppState | undefined>(undefined);
+const AppContext = React.createContext<AppState | undefined>(undefined);
 
 const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
