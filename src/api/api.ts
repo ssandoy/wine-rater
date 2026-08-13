@@ -1,6 +1,6 @@
 import AwesomeDebouncePromise from "awesome-debounce-promise";
-import WineProduct from "models/product";
-import WineProductV1 from "models/product-v1";
+import type WineProduct from "models/product";
+import type WineProductV1 from "models/product-v1";
 
 const MAX_RESULTS = 20;
 export const MAX_RECOMMENDED_RESULTS = 500;
@@ -66,7 +66,7 @@ const request = async <T>(
     const response = await fetch(url, {
       method: "GET",
       headers: { Accept: accept },
-      signal: controller.signal
+      signal: controller.signal,
     });
 
     if (!response.ok) {
@@ -102,7 +102,7 @@ const request = async <T>(
 };
 
 const requestJson = <T>(url: string): Promise<T> =>
-  request(url, async response => {
+  request(url, async (response) => {
     const body = await response.text();
     if (!body) {
       throw new ApiError(
@@ -155,14 +155,14 @@ const searchProductsByNameMapToSelect = async (
     await requestJson<unknown>(
       buildApiUrl({
         productShortNameContains: trimmedQuery,
-        maxResults: MAX_RESULTS
+        maxResults: MAX_RESULTS,
       })
     )
   );
 
-  return result.map(item => ({
+  return result.map((item) => ({
     value: item,
-    label: item.basic.productShortName + " " + item.basic.vintage
+    label: `${item.basic.productShortName} ${item.basic.vintage}`,
   }));
 };
 
@@ -198,7 +198,7 @@ export const fetchWineByRecommendedFood = async (
     await requestJson<unknown>(
       buildApiUrl({
         freeText: recommendedFoodURI,
-        maxResults: MAX_RECOMMENDED_RESULTS
+        maxResults: MAX_RECOMMENDED_RESULTS,
       })
     )
   );
@@ -209,10 +209,8 @@ export const getWine = (id: string): Promise<WineProductV1> =>
 
 export const getWineImage = (id: string): Promise<Blob> =>
   request(
-    `https://bilder.vinmonopolet.no/cache/1200x1200-0/${encodeURIComponent(
-      id
-    )}-1.jpg`,
-    response => response.blob(),
+    `https://bilder.vinmonopolet.no/cache/1200x1200-0/${encodeURIComponent(id)}-1.jpg`,
+    (response) => response.blob(),
     "image/*"
   );
 

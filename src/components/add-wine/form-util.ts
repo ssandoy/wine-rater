@@ -1,8 +1,8 @@
-import { Errors } from "./validationSchema";
+import type { Errors } from "./validationSchema";
 
 export const validateForm = (validationSchema, values): Errors | null => {
   const errors = {} as Errors;
-  Object.keys(validationSchema).forEach(key => {
+  Object.keys(validationSchema).forEach((key) => {
     const error = checkError(validationSchema, key, values[key]);
     if (error[0]) {
       errors[key] = error[1];
@@ -13,7 +13,7 @@ export const validateForm = (validationSchema, values): Errors | null => {
 };
 
 export const checkError = (validationSchema, key, value) => {
-  let error;
+  let error: string | undefined;
   const field = validationSchema[key];
   if (field.required && !value) {
     error = "Dette feltet må fylles inn.";

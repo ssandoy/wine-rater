@@ -1,11 +1,11 @@
-import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
 import { Navigate } from "react-router";
-import styles from "./login.module.css";
 import { useAppContext } from "../../context/AppContext";
-import { ADD_WINE_ROUTE } from "../../routes/routes";
 import { useFirebaseContext } from "../../firebase";
+import { ADD_WINE_ROUTE } from "../../routes/routes";
 import Spinner from "../spinner/Spinner";
+import styles from "./login.module.css";
 
 const LoginComponent = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -13,7 +13,7 @@ const LoginComponent = () => {
   const [error, setError] = useState<string | null>(null);
   const { isAuthReady, isLoggedIn } = useAppContext();
   const { auth } = useFirebaseContext();
-  const login = async event => {
+  const login = async (event) => {
     setIsLoggingIn(true);
     setError(null);
     event.preventDefault();
@@ -54,11 +54,12 @@ const LoginComponent = () => {
         Du må logge inn for å legge til nye viner!
       </h4>
       <form className={styles["login-form-container"]} onSubmit={login}>
-        <label>Passord </label>
+        <label htmlFor="password">Passord </label>
         <input
+          id="password"
           className={styles["login-input"]}
           type="password"
-          onChange={event => setInputPassword(event.target.value)}
+          onChange={(event) => setInputPassword(event.target.value)}
         />
         <button
           className={styles["login-button"]}

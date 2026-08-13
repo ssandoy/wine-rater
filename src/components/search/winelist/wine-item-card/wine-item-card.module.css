@@ -75,8 +75,6 @@
   grid-column: 3;
 }
 
-.wine-item-card__card-body-row-1 {
-}
 @media (min-width: 600px) {
   .wine-item-card__card-body-row-1 {
     min-height: 400px;
@@ -132,9 +130,15 @@
 }
 
 .wine-info-text {
+  padding: 0;
   color: grey;
   font-size: 1em;
   margin: 6px 0;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
 }
 @media (max-width: 599px) {
   .wine-info-text {

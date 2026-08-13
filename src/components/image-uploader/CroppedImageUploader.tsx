@@ -1,17 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactCrop, {
   centerCrop,
   makeAspectCrop,
-  PixelCrop
+  type PixelCrop,
 } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
-import { getCroppedImg } from "./utils/getCroppedImg";
+import { useFirebaseContext } from "../../firebase";
 import { executeScrollToRef } from "../../utils/scroll-utils";
 
 import styles from "./styles.module.css";
-import { useFirebaseContext } from "../../firebase";
+import { getCroppedImg } from "./utils/getCroppedImg";
 
 type Props = {
   firebaseStorageRef: string;
@@ -26,7 +27,7 @@ export const CroppedImageUploader: React.FC<Props> = ({
   handleUpdateComplete,
   title,
   buttonUploadText = "Last opp",
-  cropAspectRatio = 9 / 16
+  cropAspectRatio = 9 / 16,
 }: Props) => {
   const firebase = useFirebaseContext();
   const myRef = useRef<HTMLButtonElement>(null);
@@ -95,12 +96,12 @@ export const CroppedImageUploader: React.FC<Props> = ({
               className={styles["image-preview"]}
               crop={crop}
               aspect={cropAspectRatio}
-              onChange={newCrop => setCrop(newCrop)}
+              onChange={(newCrop) => setCrop(newCrop)}
             >
               <img
                 src={fileLocation}
                 alt="Forhåndsvisning av vinbilde"
-                onLoad={event => {
+                onLoad={(event) => {
                   const image = event.currentTarget;
                   const initialCrop = centerCrop(
                     makeAspectCrop(
@@ -127,7 +128,7 @@ export const CroppedImageUploader: React.FC<Props> = ({
           id="file-upload"
           type="file"
           accept="image/*;capture=camera"
-          onChange={event => {
+          onChange={(event) => {
             if (event.target?.files?.[0]) {
               setFileLocation(URL.createObjectURL(event.target.files?.[0]));
               setFileName(event.target.files?.[0].name);

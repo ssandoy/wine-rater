@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, useEffect } from "react";
-import { Auth, onAuthStateChanged } from "firebase/auth";
-import { Database } from "firebase/database";
-import { FirebaseStorage } from "firebase/storage";
+import { type Auth, onAuthStateChanged } from "firebase/auth";
+import type { Database } from "firebase/database";
+import type { FirebaseStorage } from "firebase/storage";
+import React, { type PropsWithChildren, useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
-import { db, storage, auth } from "./firebase-setup";
+import { auth, db, storage } from "./firebase-setup";
 
 type State = {
   database: Database;
@@ -21,11 +21,11 @@ const FirebaseProvider: React.FC<PropsWithChildren> = ({ children }) => {
     () =>
       onAuthStateChanged(
         auth,
-        user => {
+        (user) => {
           setIsLoggedIn(Boolean(user));
           setIsAuthReady(true);
         },
-        error => {
+        (error) => {
           console.error("Failed to determine authentication state", error);
           setIsLoggedIn(false);
           setIsAuthReady(true);

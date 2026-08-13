@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import WineProduct from "models/product";
-import styles from "./wine-details.module.css";
 import { getWine } from "api/api";
+import type WineProduct from "models/product";
+import { useEffect, useState } from "react";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
+import styles from "./wine-details.module.css";
 
 const MAX_UNEXPANDED_ROWS = 2;
 
@@ -20,7 +20,7 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
     setPictureError(false);
 
     getWine(wineProduct.basic.productId)
-      .then(wineDetails => {
+      .then((wineDetails) => {
         if (!isCurrent) {
           return;
         }
@@ -29,7 +29,7 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
           convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
         );
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Failed to fetch wine picture", error);
         if (isCurrent) {
           setPictureError(true);
@@ -47,55 +47,59 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
         <p>{wineProduct.basic.productShortName}</p>
       </div>
       <div className={styles["wine-details-item-col-1"]}>
-        <label>Type</label>
+        <span>Type</span>
         <p>{wineProduct.classification.productTypeName}</p>
       </div>
       <div className={styles["wine-details-item-col-2"]}>
-        <label>Årgang</label>
+        <span>Årgang</span>
         <p>{wineProduct.basic.vintage}</p>
       </div>
       <div className={styles["wine-details-item-col-1"]}>
-        <label>Land, region</label>
+        <span>Land, region</span>
         <p>
           {wineProduct.origins.origin.country},{" "}
           {wineProduct.origins.origin.region}
         </p>
       </div>
       <div className={styles["wine-details-item-col-2"]}>
-        <label>Druer</label>
-        <div onClick={toggleOpen}>
+        <span>Druer</span>
+        <button
+          type="button"
+          className={styles["wine-details-grapes"]}
+          onClick={toggleOpen}
+        >
           {wineProduct.ingredients.grapes.map((grape, idx) => {
             if (!isGrapesExpanded && idx > MAX_UNEXPANDED_ROWS) {
               return null;
             }
             const styles = idx !== 0 ? { margin: 0 } : { marginBottom: 0 };
             return (
-              <p style={styles} key={grape.grapeId}>
+              <span style={styles} key={grape.grapeId}>
                 {grape.grapeDesc}
                 {idx === MAX_UNEXPANDED_ROWS && !isGrapesExpanded && "..."}
-              </p>
+              </span>
             );
           })}
-        </div>
+        </button>
       </div>
       <div className={styles["wine-details-row-item"]}>
-        <label>Smak</label>
+        <span>Smak</span>
         <p>{wineProduct.description.characteristics.taste}</p>
       </div>
       <div className={styles["wine-details-row-item"]}>
-        <label>Lukt</label>
+        <span>Lukt</span>
         <p>{wineProduct.description.characteristics.odour}</p>
       </div>
       <div className={styles["wine-details-item-col-1"]}>
-        <label>Alkoholprosent</label>
+        <span>Alkoholprosent</span>
         <p>{wineProduct.basic.alcoholContent}%</p>
       </div>
       <div className={styles["wine-details-item-col-2"]}>
-        <label>Pris</label>
+        <span>Pris</span>
         <p>{Math.ceil(wineProduct.prices[0]?.salesPrice)} kr</p>
       </div>
       <div className={styles["wine-details-row-item"]}>
-        <label>Passer til</label>
+        <span>Passer til</span>
         <p>
           {wineProduct.description.recommendedFood
             .map((food, idx) =>

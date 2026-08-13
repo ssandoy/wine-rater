@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { Navigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import { LOGIN_ROUTE } from "./routes";
@@ -14,7 +14,7 @@ const PrivateRoute: React.FC<Props> = ({ children }) => {
     return null;
   }
 
-  return isLoggedIn ? <>{children}</> : <Navigate to={LOGIN_ROUTE} replace />;
+  return isLoggedIn ? children : <Navigate to={LOGIN_ROUTE} replace />;
 };
 
 export default PrivateRoute;

@@ -1,7 +1,7 @@
-import React from "react";
 import Slider from "rc-slider";
-import { formatAmount } from "../../../utils/formatAmount";
+import React from "react";
 import { useWineFilterContext } from "../../../context/filter-context/WineFilterContext";
+import { formatAmount } from "../../../utils/formatAmount";
 import "rc-slider/assets/index.css";
 
 const BAR_HEIGHT = 16;
@@ -12,12 +12,12 @@ const handleStyle = {
   width: HANDLE_SIZE,
   borderColor: "#69183F",
   backgroundColor: "#69183F",
-  marginTop: -4
+  marginTop: -4,
 };
 
 const railStyle = {
   backgroundColor: "lightgrey",
-  height: BAR_HEIGHT
+  height: BAR_HEIGHT,
 };
 
 const getLefAlignment = (value: number): number => {
@@ -34,8 +34,8 @@ export const WinePriceRange: React.FC = () => {
   const {
     filters: {
       maxPrice: { value: maxPrice, setValue: setMaxPrice },
-      minPrice: { value: minPrice, setValue: setMinPrice }
-    }
+      minPrice: { value: minPrice, setValue: setMinPrice },
+    },
   } = useWineFilterContext();
   return (
     <Slider
@@ -46,7 +46,7 @@ export const WinePriceRange: React.FC = () => {
       step={20}
       style={{ marginTop: 16 }}
       ariaLabelForHandle={["Minimumspris", "Maksimumspris"]}
-      onChange={values => {
+      onChange={(values) => {
         if (!Array.isArray(values)) {
           return;
         }
@@ -59,23 +59,21 @@ export const WinePriceRange: React.FC = () => {
         React.cloneElement(
           handle,
           undefined,
-          <>
-            <p
-              style={{
-                position: "absolute",
-                bottom: handleProps.index === 0 ? -40 : 6,
-                left: getLefAlignment(handleProps.value)
-              }}
-            >
-              {formatAmount(handleProps.value)}
-            </p>
-          </>
+          <p
+            style={{
+              position: "absolute",
+              bottom: handleProps.index === 0 ? -40 : 6,
+              left: getLefAlignment(handleProps.value),
+            }}
+          >
+            {formatAmount(handleProps.value)}
+          </p>
         )
       }
       styles={{
         handle: handleStyle,
         rail: railStyle,
-        track: { backgroundColor: "#69183F", height: BAR_HEIGHT }
+        track: { backgroundColor: "#69183F", height: BAR_HEIGHT },
       }}
     />
   );

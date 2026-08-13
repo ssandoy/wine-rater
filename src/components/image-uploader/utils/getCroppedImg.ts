@@ -1,4 +1,4 @@
-import { PixelCrop } from "react-image-crop";
+import type { PixelCrop } from "react-image-crop";
 
 export function getCroppedImg(
   image: HTMLImageElement,
@@ -42,7 +42,7 @@ export function getCroppedImg(
   return new Promise((resolve, reject) => {
     try {
       canvas.toBlob(
-        blob => {
+        (blob) => {
           if (blob) {
             resolve(new File([blob], fileName, { type: blob.type }));
           } else {

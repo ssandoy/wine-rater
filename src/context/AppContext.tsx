@@ -1,11 +1,11 @@
 import React, {
-  Dispatch,
-  PropsWithChildren,
-  SetStateAction,
+  type Dispatch,
+  type PropsWithChildren,
+  type SetStateAction,
   useMemo,
-  useState
+  useState,
 } from "react";
-import Wine from "../models/wine";
+import type Wine from "../models/wine";
 
 type AppState = {
   isLoggedIn: boolean;
@@ -40,7 +40,7 @@ const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
       filteredWines,
       setFilteredWines,
       isFetchingWines,
-      setIsFetchingWines
+      setIsFetchingWines,
     }),
     [allWines, filteredWines, isAuthReady, isFetchingWines, isLoggedIn]
   );

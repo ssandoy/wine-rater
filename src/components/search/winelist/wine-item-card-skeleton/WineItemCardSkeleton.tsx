@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "@emotion/styled";
-import WineItemCardInfoTextItem from "../wine-item-card/wine-item-card-info-text-item";
 import { keyframes } from "@emotion/css";
+import styled from "@emotion/styled";
+import type React from "react";
 import styles from "../wine-item-card/wine-item-card.module.css";
+import WineItemCardInfoTextItem from "../wine-item-card/wine-item-card-info-text-item";
 
 type ShimmerTextProps = {
   dropMargin?: boolean;
@@ -26,7 +26,7 @@ const ShimmerStyle = styled.div<ShimmerTextProps>`
 const ShimmerText = styled(ShimmerStyle)`
   width: 50px;
   height: 20px;
-  margin-bottom: ${props => (props.dropMargin ? `0` : `20px`)};
+  margin-bottom: ${(props) => (props.dropMargin ? `0` : `20px`)};
 `;
 
 const ShimmerIcon = styled(ShimmerStyle)`
@@ -50,10 +50,14 @@ const WineItemCardSkeleton: React.FC = () => {
         <ShimmerTitle />
       </div>
       <div className={styles["wine-item-card__card-body"]}>
-        <div className={`${styles["wine-item-card__card-body-col-1"]} ${styles["wine-item-card__card-body-row-1"]}`}>
+        <div
+          className={`${styles["wine-item-card__card-body-col-1"]} ${styles["wine-item-card__card-body-row-1"]}`}
+        >
           <ShimmerIcon />
         </div>
-        <div className={`${styles["wine-item-card__card-body-col-2"]} ${styles["wine-item-card__card-body-row-1"]}`}>
+        <div
+          className={`${styles["wine-item-card__card-body-col-2"]} ${styles["wine-item-card__card-body-row-1"]}`}
+        >
           <WineItemCardInfoTextItem label="Type" />
           <ShimmerText />
           <WineItemCardInfoTextItem label="Årgang" />
@@ -79,13 +83,17 @@ const WineItemCardSkeleton: React.FC = () => {
         <div className={styles["wine-item-card__card-body-wine-row"]}>
           <p className={styles["wine-item-card__label"]}>Rating</p>
         </div>
-        <div className={`${styles["wine-item-card__card-body-col-1"]} ${styles["wine-item-card__card-body-rating-col"]}`}>
+        <div
+          className={`${styles["wine-item-card__card-body-col-1"]} ${styles["wine-item-card__card-body-rating-col"]}`}
+        >
           <p className={styles["wine-item-card__rating-label"]}>Ine</p>
           <div className={styles["wine-item-card__rating-number"]}>
             <ShimmerText dropMargin={true} />
           </div>
         </div>
-        <div className={`${styles["wine-item-card__card-body-col-2"]} ${styles["wine-item-card__card-body-rating-col"]}`}>
+        <div
+          className={`${styles["wine-item-card__card-body-col-2"]} ${styles["wine-item-card__card-body-rating-col"]}`}
+        >
           <p className={styles["wine-item-card__rating-label"]}>Sander</p>
           <div className={styles["wine-item-card__rating-number"]}>
             <ShimmerText dropMargin={true} />

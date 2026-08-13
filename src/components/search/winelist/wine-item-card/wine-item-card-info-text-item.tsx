@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import styles from "./wine-item-card.module.css";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 
 const WineItemCardInfoTextItem: React.FunctionComponent<Props> = ({
   label,
-  value
+  value,
 }: Props) => {
   const [isInfoTextOpen, setIsInfoTextOpen] = useState(false);
   const toggleOpen = (): void => {
@@ -23,9 +24,13 @@ const WineItemCardInfoTextItem: React.FunctionComponent<Props> = ({
     <div className={`${styles["info-text-item"]} ${marginCss}`}>
       <p className={styles["wine-item-card__label"]}>{label}</p>
       {value && (
-        <p onClick={toggleOpen} className={`${styles["wine-info-text"]} ${closedOrOpen}`}>
+        <button
+          type="button"
+          onClick={toggleOpen}
+          className={`${styles["wine-info-text"]} ${closedOrOpen}`}
+        >
           {value}
-        </p>
+        </button>
       )}
     </div>
   );

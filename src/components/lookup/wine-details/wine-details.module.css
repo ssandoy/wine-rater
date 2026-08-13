@@ -38,3 +38,15 @@
 .wine-details-error {
   color: var(--form-error-color);
 }
+
+.wine-details-grapes {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  color: grey;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}

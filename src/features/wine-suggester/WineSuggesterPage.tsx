@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import WineProduct from "models/product";
-import SearchIcon from "../../icons/SearchIcon";
-import WineDetailsComponent from "../../components/lookup/wine-details/WineDetailsComponent";
-import { fetchWineByRecommendedFood, RecommendedFood } from "../../api/api";
-import * as images from "images";
-import Spinner from "../../components/spinner/Spinner";
-import styles from "../../components/lookup/lookup.module.css";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
+import { imageSources } from "images";
+import type WineProduct from "models/product";
+import type React from "react";
+import { useState } from "react";
+import {
+  fetchWineByRecommendedFood,
+  type RecommendedFood,
+} from "../../api/api";
+import styles from "../../components/lookup/lookup.module.css";
+import WineDetailsComponent from "../../components/lookup/wine-details/WineDetailsComponent";
+import Spinner from "../../components/spinner/Spinner";
+import SearchIcon from "../../icons/SearchIcon";
 
 const loadingLabelCss = css`
   font-size: 22px;
@@ -103,67 +107,84 @@ const WineSuggesterPage: React.FC = () => {
             <p>Velg hvilken type mat du skal spise</p>
             <ButtonContainer>
               <button
+                type="button"
                 value="okse"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["bull"]} className="image" alt="okse" />
+                <img src={imageSources.bull} className="image" alt="okse" />
               </button>
               <button
+                type="button"
                 value="fugl"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["chicken"]} className="image" alt="kylling" />
+                <img
+                  src={imageSources.chicken}
+                  className="image"
+                  alt="kylling"
+                />
               </button>
               <button
+                type="button"
                 value="apetirif"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["apetirif"]} className="image" alt="pasta" />
+                <img
+                  src={imageSources.apetirif}
+                  className="image"
+                  alt="pasta"
+                />
               </button>
               <button
+                type="button"
                 value="skalldyr"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["seafood"]} className="image" alt="pizza" />
+                <img src={imageSources.seafood} className="image" alt="pizza" />
               </button>
               <button
+                type="button"
                 value="ost"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["cheese"]} className="image" alt="ost" />
+                <img src={imageSources.cheese} className="image" alt="ost" />
               </button>
               <button
+                type="button"
                 value="svin"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["pig"]} className="image" alt="svin" />
+                <img src={imageSources.pig} className="image" alt="svin" />
               </button>
               <button
+                type="button"
                 value="vilt"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["deer"]} className="image" alt="vilt" />
+                <img src={imageSources.deer} className="image" alt="vilt" />
               </button>
               <button
+                type="button"
                 value="fisk"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["fish"]} className="image" alt="fisk" />
+                <img src={imageSources.fish} className="image" alt="fisk" />
               </button>
               <button
+                type="button"
                 value="kake"
                 className={buttonCss}
                 onClick={handleSelectedFood}
               >
-                <img src={images["cake"]} className="image" alt="kake" />
+                <img src={imageSources.cake} className="image" alt="kake" />
               </button>
             </ButtonContainer>
             {isLoading && (
@@ -182,7 +203,11 @@ const WineSuggesterPage: React.FC = () => {
         {wineProduct && (
           <div className={styles["wine-details-component"]}>
             <WineDetailsComponent wineProduct={wineProduct} />{" "}
-            <button className="wine-search-form__button" onClick={handleReset}>
+            <button
+              type="button"
+              className="wine-search-form__button"
+              onClick={handleReset}
+            >
               <SearchIcon />
               Søk på nytt
             </button>

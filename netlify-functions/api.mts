@@ -16,8 +16,8 @@ const jsonResponse = (
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      ...Object.fromEntries(new Headers(additionalHeaders))
-    }
+      ...Object.fromEntries(new Headers(additionalHeaders)),
+    },
   });
 
 const parseJsonResponse = async (response: Response): Promise<unknown> => {
@@ -52,9 +52,9 @@ export default async (request: Request): Promise<Response> => {
       {
         headers: {
           Accept: "application/json",
-          "Ocp-Apim-Subscription-Key": apiSubscriptionKey
+          "Ocp-Apim-Subscription-Key": apiSubscriptionKey,
         },
-        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       }
     );
 
@@ -62,11 +62,11 @@ export default async (request: Request): Promise<Response> => {
       await response.body?.cancel().catch(() => undefined);
       console.error("Vinmonopolet API request failed", {
         status: response.status,
-        statusText: response.statusText
+        statusText: response.statusText,
       });
       return jsonResponse(response.status, {
         error: "Vinmonopolet API request failed",
-        upstreamStatus: response.status
+        upstreamStatus: response.status,
       });
     }
 
@@ -77,12 +77,12 @@ export default async (request: Request): Promise<Response> => {
       (error.name === "TimeoutError" || error.name === "AbortError");
     console.error("Vinmonopolet API request failed", {
       name: error instanceof Error ? error.name : undefined,
-      message: error instanceof Error ? error.message : String(error)
+      message: error instanceof Error ? error.message : String(error),
     });
     return jsonResponse(timedOut ? 504 : 502, {
       error: timedOut
         ? "Wine service request timed out"
-        : "Wine service is temporarily unavailable"
+        : "Wine service is temporarily unavailable",
     });
   }
 };

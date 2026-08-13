@@ -1,27 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
-import { push, ref } from "firebase/database";
-
 import { debouncedSearchProductsByNameItem } from "api";
-import validationSchema, { Errors } from "./validationSchema";
-import * as images from "images";
-import { imageKeys } from "images";
-import { Raastoff } from "data/raastoff";
-import ImageCheckbox from "./image-checkbox/image-checkbox";
-import { SearchDropDown } from "../search-dropdown/search-dropdown";
-import { convertVinmonopoletPictureSize } from "utils/string-utils";
-import styles from "./add-wine-form.module.css";
-import { pushOrRemoveToArray } from "utils/array-utils";
-import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { validateForm } from "components/add-wine/form-util";
-import Wine from "../../models/wine";
-import WineProduct from "../../models/product";
-import CroppedImageUploader from "../image-uploader/CroppedImageUploader";
-import PlusIcon from "../../icons/PlusIcon";
-import CrossIcon from "../../icons/CrossIcon";
+import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
+import { Raastoff } from "data/raastoff";
+import { push, ref } from "firebase/database";
+import { imageKeys, imageSources } from "images";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { pushOrRemoveToArray } from "utils/array-utils";
+import { convertVinmonopoletPictureSize } from "utils/string-utils";
 import { useFirebaseContext } from "../../firebase";
 import { INDICES } from "../../firebase/indices";
+import CrossIcon from "../../icons/CrossIcon";
+import PlusIcon from "../../icons/PlusIcon";
+import type WineProduct from "../../models/product";
+import type Wine from "../../models/wine";
+import CroppedImageUploader from "../image-uploader/CroppedImageUploader";
+import { SearchDropDown } from "../search-dropdown/search-dropdown";
+import styles from "./add-wine-form.module.css";
+import ImageCheckbox from "./image-checkbox/image-checkbox";
+import validationSchema, { type Errors } from "./validationSchema";
 
-const scrollToRef = ref => {
+const scrollToRef = (ref) => {
   window.scrollTo(0, ref.current.offsetTop);
 };
 // General scroll to element function
@@ -33,11 +32,11 @@ const AddWineForm: React.FC = () => {
     ineRating: useRef(null),
     wineYear: useRef(null),
     wineName: useRef(null),
-    wineType: useRef(null)
+    wineType: useRef(null),
   };
   const firebase = useFirebaseContext();
 
-  const executeErrorScroll = errors => {
+  const executeErrorScroll = (errors) => {
     scrollToRef(errorRefMap[Object.keys(errors)[0]]);
   };
 
@@ -59,7 +58,7 @@ const AddWineForm: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
 
-  const wineGrapeItems = Raastoff.values.map(value => value.code);
+  const wineGrapeItems = Raastoff.values.map((value) => value.code);
 
   useEffect(() => {
     setIsWineRegistered(false);
@@ -78,7 +77,7 @@ const AddWineForm: React.FC = () => {
     setManualRegistration(false);
   };
 
-  const handleSelectedWine = wine => {
+  const handleSelectedWine = (wine) => {
     setSelectedWine(true);
     fillFormFromWine(wine);
   };
@@ -96,11 +95,11 @@ const AddWineForm: React.FC = () => {
     setWineRegion(region);
     setWineYear(wine.basic.vintage);
     setWineType(wine.classification.productTypeName);
-    setWineGrapes(wine.ingredients.grapes.map(grape => grape.grapeDesc));
+    setWineGrapes(wine.ingredients.grapes.map((grape) => grape.grapeDesc));
     setProductId(wine.basic.productId);
   };
 
-  const onSubmitForm = async event => {
+  const onSubmitForm = async (event) => {
     event.preventDefault();
     const values: Wine = {
       wineName,
@@ -111,7 +110,7 @@ const AddWineForm: React.FC = () => {
       wineRegion,
       ineRating,
       sanderRating,
-      fitsTo
+      fitsTo,
     };
     if (productId) {
       values.apiId = productId;
@@ -160,7 +159,7 @@ const AddWineForm: React.FC = () => {
               selectedItems={{ label: wineName, value: wineName }}
               placeholder="Tast inn navnet på vinen"
               debouncedPromise={debouncedSearchProductsByNameItem}
-              onClick={value => {
+              onClick={(value) => {
                 handleSelectedWine(value);
               }}
               noOptionPlaceholder={noOptionText}
@@ -170,8 +169,9 @@ const AddWineForm: React.FC = () => {
           {manualRegistration && (
             <div className="wine-input-container" ref={errorRefMap.wineName}>
               <input
+                id="wineName"
                 value={wineName}
-                onChange={event => setWineName(event.target.value)}
+                onChange={(event) => setWineName(event.target.value)}
               />
             </div>
           )}
@@ -200,12 +200,13 @@ const AddWineForm: React.FC = () => {
         {selectedWine && (
           <div className={styles["add-wine-form__col-2"]}>
             <div className={styles["textfield-label"]}>
-              <label>Type</label>
+              <label htmlFor="wineType">Type</label>
             </div>
             <div className="wine-input-container" ref={errorRefMap.wineType}>
               <input
+                id="wineType"
                 value={wineType}
-                onChange={event => setWineType(event.target.value)}
+                onChange={(event) => setWineType(event.target.value)}
               />
             </div>
             {errors?.wineType && (
@@ -225,8 +226,9 @@ const AddWineForm: React.FC = () => {
             </div>
             <div className="wine-input-container">
               <input
+                id="wineYear"
                 value={wineYear}
-                onChange={event => setWineYear(event.target.value)}
+                onChange={(event) => setWineYear(event.target.value)}
               />
             </div>
             {errors?.wineYear && (
@@ -239,18 +241,18 @@ const AddWineForm: React.FC = () => {
         {selectedWine && (
           <div className={styles["add-wine-form__col-2"]}>
             <div className={styles["textfield-label"]}>
-              <label>Drue</label>
+              <span>Drue</span>
             </div>
             <SearchDropDown
               isDisabled={!manualRegistration}
               placeholder=""
               searchItems={wineGrapeItems}
-              onClick={grapeArray => {
+              onClick={(grapeArray) => {
                 setWineGrapes(grapeArray);
               }}
-              selectedItems={wineGrapes.map(grape => ({
+              selectedItems={wineGrapes.map((grape) => ({
                 label: grape,
-                value: grape
+                value: grape,
               }))}
             />
           </div>
@@ -258,12 +260,13 @@ const AddWineForm: React.FC = () => {
         {selectedWine && (
           <div className={styles["add-wine-form__col-1"]}>
             <div className={styles["textfield-label"]}>
-              <label htmlFor="sanderRating">Land</label>
+              <label htmlFor="wineCountry">Land</label>
             </div>
             <div className="wine-input-container">
               <input
+                id="wineCountry"
                 value={wineCountry}
-                onChange={event => setWineCountry(event.target.value)}
+                onChange={(event) => setWineCountry(event.target.value)}
               />
             </div>
             {errors?.wineCountry && (
@@ -276,12 +279,13 @@ const AddWineForm: React.FC = () => {
         {selectedWine && (
           <div className={styles["add-wine-form__col-2"]}>
             <div className={styles["textfield-label"]}>
-              <label htmlFor="sanderRating">Region</label>
+              <label htmlFor="wineRegion">Region</label>
             </div>
             <div className="wine-input-container">
               <input
+                id="wineRegion"
                 value={wineRegion}
-                onChange={event => setWineRegion(event.target.value)}
+                onChange={(event) => setWineRegion(event.target.value)}
               />
             </div>
             {errors?.wineRegion && (
@@ -301,8 +305,9 @@ const AddWineForm: React.FC = () => {
             </div>
             <div className="wine-input-container">
               <input
+                id="sanderRating"
                 value={sanderRating.toString()}
-                onChange={event => setSanderRating(event.target.value)}
+                onChange={(event) => setSanderRating(event.target.value)}
               />
             </div>
             {!!errors && errors.sanderRating && (
@@ -324,8 +329,9 @@ const AddWineForm: React.FC = () => {
             </div>
             <div className="wine-input-container">
               <input
+                id="ineRating"
                 value={ineRating.toString()}
-                onChange={event => setIneRating(event.target.value)}
+                onChange={(event) => setIneRating(event.target.value)}
               />
             </div>
             {!!errors && errors.ineRating && (
@@ -338,38 +344,36 @@ const AddWineForm: React.FC = () => {
           </div>
         )}
         {selectedWine && (
-          <>
-            <div className={styles["add-wine-form__col-1"]}>
-              <div className={styles["textfield-label"]}>
-                <label>Hva passer vinen til?</label>
-              </div>
-              <div className={styles["add-wine-form__fits-to-grid"]}>
-                {imageKeys.map((imageKey, index) => {
-                  if (imageKey === "fish" || imageKey === "cake") {
-                    return null;
-                  }
-                  return (
-                    <div
-                      className={styles["add-wine-form__fits-to-cell"]}
-                      key={index + imageKey}
-                    >
-                      <ImageCheckbox
-                        key={imageKey}
-                        image={images[imageKey]}
-                        htmlFor={imageKey}
-                        value={imageKey}
-                        name="fitsTo"
-                        checked={fitsTo.includes(imageKey)}
-                        onClick={value =>
-                          setFitsTo(pushOrRemoveToArray(fitsTo, value))
-                        }
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+          <div className={styles["add-wine-form__col-1"]}>
+            <div className={styles["textfield-label"]}>
+              <span>Hva passer vinen til?</span>
             </div>
-          </>
+            <div className={styles["add-wine-form__fits-to-grid"]}>
+              {imageKeys.map((imageKey) => {
+                if (imageKey === "fish" || imageKey === "cake") {
+                  return null;
+                }
+                return (
+                  <div
+                    className={styles["add-wine-form__fits-to-cell"]}
+                    key={imageKey}
+                  >
+                    <ImageCheckbox
+                      key={imageKey}
+                      image={imageSources[imageKey]}
+                      htmlFor={imageKey}
+                      value={imageKey}
+                      name="fitsTo"
+                      checked={fitsTo.includes(imageKey)}
+                      onClick={(value) =>
+                        setFitsTo(pushOrRemoveToArray(fitsTo, value))
+                      }
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         )}
         {selectedWine && (
           <div className={styles["add-wine-form__col-2"]}>
@@ -395,7 +399,7 @@ const AddWineForm: React.FC = () => {
             {showImageUploader && (
               <CroppedImageUploader
                 firebaseStorageRef={INDICES.WINE_PICTURES_INDEX}
-                handleUpdateComplete={fileUrl => {
+                handleUpdateComplete={(fileUrl) => {
                   setWinePicture(fileUrl);
                   setShowImageUploader(false);
                 }}

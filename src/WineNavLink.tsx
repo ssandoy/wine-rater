@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { NavLink } from "react-router";
 
 type Props = {
@@ -15,7 +15,7 @@ export const WineNavLink: React.FC<Props> = ({ route, title }: Props) => {
         color: "white",
         textDecoration: "none",
         marginTop: 8,
-        borderBottom: isActive ? "1px solid white" : undefined
+        borderBottom: isActive ? "1px solid white" : undefined,
       })}
     >
       {title}

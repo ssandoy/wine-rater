@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { DataSnapshot, get, ref } from "firebase/database";
-import { Squash as Hamburger } from "hamburger-react";
-import { BrowserRouter as Router, NavLink, Route, Routes } from "react-router";
-import styles from "./App.module.css";
 import AddWineForm from "components/add-wine/AddWineForm";
-import NotFoundComponent from "components/notfound/notfound";
 import LookUpComponent from "components/lookup/LookUpComponent";
-import Wine from "models/wine";
+import NotFoundComponent from "components/notfound/notfound";
+import { type DataSnapshot, get, ref } from "firebase/database";
+import { Squash as Hamburger } from "hamburger-react";
+import type Wine from "models/wine";
+import { useEffect, useState } from "react";
+import { NavLink, Route, BrowserRouter as Router, Routes } from "react-router";
+import styles from "./App.module.css";
 import LoginComponent from "./components/login";
-import PrivateRoute from "./routes";
 import { WineSearchPage } from "./components/search/WineSearchPage";
-import LogoIcon from "./icons/LogoIcon";
+import { useAppContext } from "./context/AppContext";
+import WineSuggesterPage from "./features/wine-suggester/WineSuggesterPage";
 import { useFirebaseContext } from "./firebase";
 import { snapshotToArray } from "./firebase/firebase-setup";
 import { INDICES } from "./firebase/indices";
-import { useAppContext } from "./context/AppContext";
+import LogoIcon from "./icons/LogoIcon";
+import PrivateRoute from "./routes";
 import {
   ADD_WINE_ROUTE,
   DETAILS_ROUTE,
   LOGIN_ROUTE,
   SEARCH_ROUTE,
-  SUGGESTER_ROUTE
+  SUGGESTER_ROUTE,
 } from "./routes/routes";
-import WineSuggesterPage from "./features/wine-suggester/WineSuggesterPage";
-import { WineNavLink } from "./WineNavLink";
 import { isNative } from "./utils/window-utils";
+import { WineNavLink } from "./WineNavLink";
 
 const WINE_FETCH_TIMEOUT_MS = 10_000;
 
@@ -34,13 +34,13 @@ const App = () => {
   const { setAllWines, setIsFetchingWines, setFilteredWines } = useAppContext();
   const firebase = useFirebaseContext();
   // todo isNative
-  const [shouldShowNavbar, setShouldShowNavbar] = useState(
-    isNative() ? false : true
-  );
+  const [shouldShowNavbar, setShouldShowNavbar] = useState(!isNative());
   const [wineFetchError, setWineFetchError] = useState(false);
   const [wineFetchAttempt, setWineFetchAttempt] = useState(0);
 
   useEffect(() => {
+    // Reading this value makes retry increments an explicit effect trigger.
+    void wineFetchAttempt;
     let isCurrentRequest = true;
     let hasFinished = false;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -74,16 +74,12 @@ const App = () => {
 
         hasFinished = true;
         clearTimeout(timeoutId);
-        const allWines = snapshotToArray<Wine>(wineItemsSnapshot).sort(function(
-          obj1: Wine,
-          obj2: Wine
-        ) {
-          return (
+        const allWines = snapshotToArray<Wine>(wineItemsSnapshot).sort(
+          (obj1: Wine, obj2: Wine) =>
             +obj2.sanderRating +
             +obj2.ineRating -
             (+obj1.sanderRating + +obj1.ineRating)
-          );
-        });
+        );
         setAllWines(allWines);
         setFilteredWines(allWines);
         setIsFetchingWines(false);
@@ -99,7 +95,7 @@ const App = () => {
     setAllWines,
     setFilteredWines,
     setIsFetchingWines,
-    wineFetchAttempt
+    wineFetchAttempt,
   ]);
 
   const wineSearchRoute = wineFetchError ? (
@@ -122,7 +118,7 @@ const App = () => {
         <button
           type="button"
           className={styles["app-request-error__retry"]}
-          onClick={() => setWineFetchAttempt(attempt => attempt + 1)}
+          onClick={() => setWineFetchAttempt((attempt) => attempt + 1)}
         >
           <svg
             width="22"

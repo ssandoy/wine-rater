@@ -2,11 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "noImplicitAny": false,
     "allowJs": true,
     "skipLibCheck": true,
@@ -23,8 +19,5 @@
     "downlevelIteration": true,
     "types": ["vite/client", "node"]
   },
-  "include": [
-    "src",
-    "netlify-functions"
-  ]
+  "include": ["src", "netlify-functions"]
 }

@@ -24,7 +24,7 @@ export default interface WineProduct {
       {
         gtin: string;
         isMainGtin: boolean;
-      }
+      },
     ];
     orderPack: string;
     minimumOrderQuantity: number;
@@ -81,7 +81,7 @@ export default interface WineProduct {
         grapeId: string;
         grapeDesc: string;
         grapePct: string;
-      }
+      },
     ];
     ingredients: string;
     sugar: string;
@@ -102,7 +102,7 @@ export default interface WineProduct {
       {
         foodId: string;
         foodDesc?: string;
-      }
+      },
     ];
   };
   assortment: {
@@ -118,7 +118,7 @@ export default interface WineProduct {
       salesPrice: number;
       salesPricePrLiter: number;
       bottleReturnValue: number;
-    }
+    },
   ];
   lastChanged: {
     date: string;

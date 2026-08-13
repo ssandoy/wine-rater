@@ -30,6 +30,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: transparent;
+  border: 0;
+  font: inherit;
 }
 .wine-search__filter-icon:hover {
   cursor: pointer;

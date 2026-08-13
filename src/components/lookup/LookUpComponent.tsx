@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { debouncedSearchProductsByNameItem } from "api";
-import styles from "./lookup.module.css";
-import WineProduct from "models/product";
-import WineDetailsComponent from "./wine-details/WineDetailsComponent";
+import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
+import type WineProduct from "models/product";
+import { useState } from "react";
 import SearchIcon from "../../icons/SearchIcon";
+import styles from "./lookup.module.css";
+import WineDetailsComponent from "./wine-details/WineDetailsComponent";
 
 const LookUpComponent = () => {
   const [wineName, setWineName] = useState("");
@@ -30,7 +30,7 @@ const LookUpComponent = () => {
               selectedItems={{ label: wineName, value: wineName }}
               placeholder="Tast inn navnet på vinen"
               debouncedPromise={debouncedSearchProductsByNameItem}
-              onClick={value => {
+              onClick={(value) => {
                 handleSelectedWine(value);
               }}
               noOptionPlaceholder={noOptionText}
@@ -42,6 +42,7 @@ const LookUpComponent = () => {
           <div className={styles["wine-details-component"]}>
             <WineDetailsComponent wineProduct={wineProduct} />{" "}
             <button
+              type="button"
               className="wine-search-form__button"
               onClick={() => handleSelectedWine(null)}
             >
