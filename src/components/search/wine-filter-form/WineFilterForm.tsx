@@ -169,10 +169,6 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
           </div>
         </div>
         <div className={styles["wine-search-form__buttons-container"]}>
-          <button type="submit" className="wine-search-form__button">
-            <SearchIcon />
-            Søk
-          </button>
           <button
             type="button"
             className="wine-search-form__button"
@@ -180,6 +176,10 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
           >
             <TrashIcon />
             Tøm søk
+          </button>
+          <button type="submit" className="wine-search-form__button">
+            <SearchIcon />
+            Søk
           </button>
         </div>
       </form>
