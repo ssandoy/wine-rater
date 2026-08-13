@@ -8,7 +8,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!**/*.svg", "!!src/data/raastoff.js"]
+    "includes": ["**", "!!**/*.svg", "!!src/data/raastoff.ts"]
   },
   "formatter": {
     "enabled": true,

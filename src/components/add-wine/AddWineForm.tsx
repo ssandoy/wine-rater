@@ -5,7 +5,7 @@ import { Raastoff } from "data/raastoff";
 import { push, ref } from "firebase/database";
 import { imageKeys, imageSources } from "images";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
 import { useFirebaseContext } from "../../firebase";
@@ -20,24 +20,38 @@ import styles from "./add-wine-form.module.css";
 import ImageCheckbox from "./image-checkbox/image-checkbox";
 import validationSchema, { type Errors } from "./validationSchema";
 
-const scrollToRef = (ref) => {
-  window.scrollTo(0, ref.current.offsetTop);
+const scrollToRef = (target: RefObject<HTMLDivElement | null>) => {
+  if (target.current) {
+    window.scrollTo(0, target.current.offsetTop);
+  }
 };
 // General scroll to element function
 
+type ErrorRefKey =
+  | "sanderRating"
+  | "ineRating"
+  | "wineYear"
+  | "wineName"
+  | "wineType";
+
 const AddWineForm: React.FC = () => {
   const [isWineRegistered, setIsWineRegistered] = useState<boolean>(false);
-  const errorRefMap = {
-    sanderRating: useRef(null),
-    ineRating: useRef(null),
-    wineYear: useRef(null),
-    wineName: useRef(null),
-    wineType: useRef(null),
+  const errorRefMap: Record<ErrorRefKey, RefObject<HTMLDivElement | null>> = {
+    sanderRating: useRef<HTMLDivElement>(null),
+    ineRating: useRef<HTMLDivElement>(null),
+    wineYear: useRef<HTMLDivElement>(null),
+    wineName: useRef<HTMLDivElement>(null),
+    wineType: useRef<HTMLDivElement>(null),
   };
   const firebase = useFirebaseContext();
 
-  const executeErrorScroll = (errors) => {
-    scrollToRef(errorRefMap[Object.keys(errors)[0]]);
+  const executeErrorScroll = (errors: Errors) => {
+    const firstErrorKey = Object.keys(errors).find(
+      (key): key is ErrorRefKey => key in errorRefMap
+    );
+    if (firstErrorKey) {
+      scrollToRef(errorRefMap[firstErrorKey]);
+    }
   };
 
   const [wineName, setWineName] = useState("");
@@ -77,12 +91,12 @@ const AddWineForm: React.FC = () => {
     setManualRegistration(false);
   };
 
-  const handleSelectedWine = (wine) => {
+  const handleSelectedWine = (wine: WineProduct) => {
     setSelectedWine(true);
     fillFormFromWine(wine);
   };
 
-  const fillFormFromWine = async (wine: WineProduct) => {
+  const fillFormFromWine = (wine: WineProduct) => {
     setWineName(wine.basic.productShortName);
     setWinePicture(
       convertVinmonopoletPictureSize(
@@ -99,7 +113,7 @@ const AddWineForm: React.FC = () => {
     setProductId(wine.basic.productId);
   };
 
-  const onSubmitForm = async (event) => {
+  const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const values: Wine = {
       wineName,

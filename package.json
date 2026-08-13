@@ -39,7 +39,7 @@
     "check:write": "biome check --write .",
     "check:ci": "biome ci .",
     "format": "biome format --write .",
-    "knip": "knip --cache",
+    "knip": "knip",
     "lint": "biome lint .",
     "prepare": "husky"
   }

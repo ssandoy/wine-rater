@@ -1,4 +1,5 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
+import type React from "react";
 import { useState } from "react";
 import { Navigate } from "react-router";
 import { useAppContext } from "../../context/AppContext";
@@ -13,7 +14,7 @@ const LoginComponent = () => {
   const [error, setError] = useState<string | null>(null);
   const { isAuthReady, isLoggedIn } = useAppContext();
   const { auth } = useFirebaseContext();
-  const login = async (event) => {
+  const login = async (event: React.FormEvent<HTMLFormElement>) => {
     setIsLoggingIn(true);
     setError(null);
     event.preventDefault();

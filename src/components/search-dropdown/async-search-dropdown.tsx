@@ -1,12 +1,22 @@
-// Pre-existing plain-JS component with no PropTypes/TS typing; unrelated to
-// the Vite migration. Surfaced now only because this rename (.js -> .jsx,
-// required for Vite to parse the JSX in this file) is the first time this
-// file has been staged since lint-staged was set up.
-/* eslint-disable react/prop-types */
-import { useRef, useState } from "react";
+import type WineProduct from "models/product";
+import { type Dispatch, type SetStateAction, useRef, useState } from "react";
 import AsyncSelect from "react-select/async";
 import styles from "./search-dropdown.module.css";
 import { colourStyles } from "./styles";
+
+type WineSearchOption = {
+  label: string;
+  value: WineProduct | string;
+};
+
+type Props = {
+  debouncedPromise: (inputValue: string) => Promise<WineSearchOption[]>;
+  selectedItems: WineSearchOption;
+  placeholder: string;
+  noOptionPlaceholder: string;
+  onClick: (value: WineProduct) => void;
+  setValue: Dispatch<SetStateAction<string>>;
+};
 
 export const AsyncSearchDropdown = ({
   debouncedPromise,
@@ -14,12 +24,12 @@ export const AsyncSearchDropdown = ({
   placeholder,
   noOptionPlaceholder,
   onClick,
-  setValue = (value) => value,
-}) => {
+  setValue,
+}: Props) => {
   const [hasRequestError, setHasRequestError] = useState(false);
   const latestRequest = useRef(0);
 
-  const loadOptions = (inputValue) => {
+  const loadOptions = (inputValue: string): Promise<WineSearchOption[]> => {
     const requestId = ++latestRequest.current;
     setValue(inputValue);
 
@@ -30,7 +40,7 @@ export const AsyncSearchDropdown = ({
         }
         return options;
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error("Wine search failed", error);
         if (requestId === latestRequest.current) {
           setHasRequestError(true);
@@ -41,7 +51,7 @@ export const AsyncSearchDropdown = ({
 
   return (
     <>
-      <AsyncSelect
+      <AsyncSelect<WineSearchOption, false>
         placeholder={placeholder}
         value={selectedItems}
         onChange={(opt) => {
@@ -49,7 +59,9 @@ export const AsyncSearchDropdown = ({
             setValue("");
             return;
           }
-          onClick(opt.value);
+          if (typeof opt.value !== "string") {
+            onClick(opt.value);
+          }
         }}
         loadingMessage={() => "Laster inn viner..."}
         isClearable={true}

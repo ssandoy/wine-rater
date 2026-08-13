@@ -1,4 +1,4 @@
-export const pushOrRemoveToArray = (array, item) => {
+export const pushOrRemoveToArray = <T>(array: readonly T[], item: T): T[] => {
   const tmp = [...array];
   const exists = tmp.includes(item);
   if (exists) {
@@ -9,7 +9,10 @@ export const pushOrRemoveToArray = (array, item) => {
   }
 };
 
-export const isObjectInArray = (object, array) => {
+export const isObjectInArray = (
+  object: string | string[] | null | undefined,
+  array: readonly string[]
+): boolean => {
   if (array.length) {
     if (Array.isArray(object)) {
       return array.some((data) => object?.includes(data));

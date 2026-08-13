@@ -24,7 +24,9 @@ export const imageSources = {
   pizza,
 };
 
-export const imageKeys = [
+export type ImageKey = keyof typeof imageSources;
+
+export const imageKeys: ImageKey[] = [
   "chicken",
   "cake",
   "seafood",
@@ -37,3 +39,6 @@ export const imageKeys = [
   "deer",
   "pig",
 ];
+
+export const isImageKey = (value: string): value is ImageKey =>
+  value in imageSources;

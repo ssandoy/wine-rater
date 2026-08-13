@@ -1,3 +1,15 @@
+import type Wine from "../../models/wine";
+
+type ValidationField = {
+  required: boolean;
+  validator?: {
+    regEx: RegExp;
+    error: string;
+  };
+};
+
+export type ValidationSchema = Partial<Record<keyof Wine, ValidationField>>;
+
 const validationSchema = {
   wineName: {
     required: true,
@@ -29,16 +41,8 @@ const validationSchema = {
       error: "Ratingen må være et tall mellom 0.0 og 10.0",
     },
   },
-};
+} satisfies ValidationSchema;
 
-export interface Errors {
-  wineName: string;
-  wineType: string;
-  wineRegion: string;
-  wineCountry: string;
-  wineYear: string;
-  sanderRating: string;
-  ineRating: string;
-}
+export type Errors = Partial<Record<keyof Wine, string>>;
 
 export default validationSchema;

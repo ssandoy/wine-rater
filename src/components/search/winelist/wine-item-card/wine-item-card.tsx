@@ -1,4 +1,4 @@
-import { imageSources } from "images";
+import { imageSources, isImageKey } from "images";
 import noIconRed from "images/no_icon_red.png";
 import type Wine from "models/wine";
 import type React from "react";
@@ -48,6 +48,10 @@ const WineItemCard: React.FunctionComponent<WineItemCardProps> = ({
         </div>
         <div className={styles["wine-item-card__card-body-wine-row"]}>
           {wine.fitsTo?.map((item) => {
+            if (!isImageKey(item)) {
+              return null;
+            }
+
             return (
               <img
                 key={imageSources[item]}

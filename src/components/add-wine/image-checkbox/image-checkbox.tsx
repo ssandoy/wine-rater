@@ -4,8 +4,8 @@ import "./image-checkbox.module.css";
 interface Props {
   htmlFor: string;
   name: string;
-  value: string | number;
-  onClick: (value: string | number) => void;
+  value: string;
+  onClick: (value: string) => void;
   image: string;
   checked: boolean;
 }

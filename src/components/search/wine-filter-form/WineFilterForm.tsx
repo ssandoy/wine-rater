@@ -1,9 +1,8 @@
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { Raastoff } from "data/raastoff";
-import { imageSources, imageKeys as imgKeys } from "images";
+import { type ImageKey, imageSources, imageKeys as imgKeys } from "images";
 import type React from "react";
-import { useState } from "react";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import { useAppContext } from "../../../context/AppContext";
 import { useWineFilterContext } from "../../../context/filter-context/WineFilterContext";
@@ -19,7 +18,7 @@ type Props = {
 
 const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
   const { allWines, setFilteredWines } = useAppContext();
-  const [imageKeys] = useState<string[]>(imgKeys);
+  const imageKeys: ImageKey[] = imgKeys;
 
   const {
     hasOpenedFilter,
@@ -42,7 +41,7 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
   } = useWineFilterContext();
   const wineGrapeItems = Raastoff.values.map((value) => value.code);
 
-  const onSubmit = (event) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onFilter();
     setHasOpenedFilter(false);
@@ -170,11 +169,7 @@ const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
           </div>
         </div>
         <div className={styles["wine-search-form__buttons-container"]}>
-          <button
-            type="submit"
-            className="wine-search-form__button"
-            onClick={(event) => onSubmit(event)}
-          >
+          <button type="submit" className="wine-search-form__button">
             <SearchIcon />
             Søk
           </button>
