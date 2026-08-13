@@ -1,5 +1,5 @@
 import type React from "react";
-import "./image-checkbox.module.css";
+import styles from "./image-checkbox.module.css";
 
 interface Props {
   htmlFor: string;
@@ -15,6 +15,7 @@ const ImageCheckbox: React.FunctionComponent<Props> = (props: Props) => {
     <div>
       <label htmlFor={`${props.htmlFor}`}>
         <input
+          className={styles.checkbox}
           type="checkbox"
           id={`${props.htmlFor}`}
           name={`${props.name}`}
@@ -22,7 +23,11 @@ const ImageCheckbox: React.FunctionComponent<Props> = (props: Props) => {
           checked={props.checked}
           onChange={() => props.onClick(props.value)}
         />
-        <img src={props.image} className="image" alt={`${props.htmlFor}`} />
+        <img
+          src={props.image}
+          className={styles.image}
+          alt={`${props.htmlFor}`}
+        />
       </label>
     </div>
   );
