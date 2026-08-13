@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 type Props = {
   width?: string;
@@ -8,7 +8,7 @@ type Props = {
 
 const LogoIcon: React.FC<Props> = ({
   height = "100",
-  width = "300"
+  width = "300",
 }: Props) => {
   return (
     <svg
@@ -16,6 +16,7 @@ const LogoIcon: React.FC<Props> = ({
       height={height}
       viewBox="0 0 377 107"
       fill="none"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g filter="url(#filter0_d)">

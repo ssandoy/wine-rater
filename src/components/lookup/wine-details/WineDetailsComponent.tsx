@@ -1,84 +1,105 @@
-import React, { useEffect, useState } from "react";
-import WineProduct from "models/product";
-import "./wine-details.scss";
 import { getWine } from "api/api";
+import type WineProduct from "models/product";
+import { useEffect, useState } from "react";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
+import styles from "./wine-details.module.css";
 
 const MAX_UNEXPANDED_ROWS = 2;
 
 const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
   const [winePicture, setWinePicture] = useState<string>("");
+  const [pictureError, setPictureError] = useState(false);
   const [isGrapesExpanded, setIsGrapesExpanded] = useState(false);
   const toggleOpen = (): void => {
     setIsGrapesExpanded(!isGrapesExpanded);
   };
 
-  const getWinePicture = async (wineId: string) => {
-    const wineDetails = await getWine(wineId);
-    setWinePicture(
-      convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
-    );
-  };
-
   useEffect(() => {
-    getWinePicture(wineProduct.basic.productId);
+    let isCurrent = true;
+    setWinePicture("");
+    setPictureError(false);
+
+    getWine(wineProduct.basic.productId)
+      .then((wineDetails) => {
+        if (!isCurrent) {
+          return;
+        }
+
+        setWinePicture(
+          convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
+        );
+      })
+      .catch((error) => {
+        console.error("Failed to fetch wine picture", error);
+        if (isCurrent) {
+          setPictureError(true);
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [wineProduct.basic.productId]);
 
   return (
-    <div className="wine-details-container">
-      <div className="wine-details-title">
+    <div className={styles["wine-details-container"]}>
+      <div className={styles["wine-details-title"]}>
         <p>{wineProduct.basic.productShortName}</p>
       </div>
-      <div className="wine-details-item-col-1">
-        <label>Type</label>
+      <div className={styles["wine-details-item-col-1"]}>
+        <span>Type</span>
         <p>{wineProduct.classification.productTypeName}</p>
       </div>
-      <div className="wine-details-item-col-2">
-        <label>Årgang</label>
+      <div className={styles["wine-details-item-col-2"]}>
+        <span>Årgang</span>
         <p>{wineProduct.basic.vintage}</p>
       </div>
-      <div className="wine-details-item-col-1">
-        <label>Land, region</label>
+      <div className={styles["wine-details-item-col-1"]}>
+        <span>Land, region</span>
         <p>
           {wineProduct.origins.origin.country},{" "}
           {wineProduct.origins.origin.region}
         </p>
       </div>
-      <div className="wine-details-item-col-2">
-        <label>Druer</label>
-        <div onClick={toggleOpen}>
+      <div className={styles["wine-details-item-col-2"]}>
+        <span>Druer</span>
+        <button
+          type="button"
+          className={styles["wine-details-grapes"]}
+          onClick={toggleOpen}
+        >
           {wineProduct.ingredients.grapes.map((grape, idx) => {
             if (!isGrapesExpanded && idx > MAX_UNEXPANDED_ROWS) {
               return null;
             }
             const styles = idx !== 0 ? { margin: 0 } : { marginBottom: 0 };
             return (
-              <p style={styles} key={grape.grapeId}>
+              <span style={styles} key={grape.grapeId}>
                 {grape.grapeDesc}
                 {idx === MAX_UNEXPANDED_ROWS && !isGrapesExpanded && "..."}
-              </p>
+              </span>
             );
           })}
-        </div>
+        </button>
       </div>
-      <div className="wine-details-row-item">
-        <label>Smak</label>
+      <div className={styles["wine-details-row-item"]}>
+        <span>Smak</span>
         <p>{wineProduct.description.characteristics.taste}</p>
       </div>
-      <div className="wine-details-row-item">
-        <label>Lukt</label>
+      <div className={styles["wine-details-row-item"]}>
+        <span>Lukt</span>
         <p>{wineProduct.description.characteristics.odour}</p>
       </div>
-      <div className="wine-details-item-col-1">
-        <label>Alkoholprosent</label>
+      <div className={styles["wine-details-item-col-1"]}>
+        <span>Alkoholprosent</span>
         <p>{wineProduct.basic.alcoholContent}%</p>
       </div>
-      <div className="wine-details-item-col-2">
-        <label>Pris</label>
+      <div className={styles["wine-details-item-col-2"]}>
+        <span>Pris</span>
         <p>{Math.ceil(wineProduct.prices[0]?.salesPrice)} kr</p>
       </div>
-      <div className="wine-details-row-item">
-        <label>Passer til</label>
+      <div className={styles["wine-details-row-item"]}>
+        <span>Passer til</span>
         <p>
           {wineProduct.description.recommendedFood
             .map((food, idx) =>
@@ -87,13 +108,18 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
             .join(", ")}
         </p>
       </div>
-      <div className="wine-details-row-item">
+      <div className={styles["wine-details-row-item"]}>
         {winePicture && (
           <img
             src={winePicture as string}
             className="wine-picture"
             alt="wine"
           />
+        )}
+        {pictureError && (
+          <p className={styles["wine-details-error"]} role="alert">
+            Kunne ikke laste vinbildet.
+          </p>
         )}
       </div>
     </div>

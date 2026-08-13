@@ -1,7 +1,8 @@
-import React from "react";
-import styled from "@emotion/styled";
-import WineItemCardInfoTextItem from "../wine-item-card/wine-item-card-info-text-item";
 import { keyframes } from "@emotion/css";
+import styled from "@emotion/styled";
+import type React from "react";
+import styles from "../wine-item-card/wine-item-card.module.css";
+import WineItemCardInfoTextItem from "../wine-item-card/wine-item-card-info-text-item";
 
 type ShimmerTextProps = {
   dropMargin?: boolean;
@@ -25,7 +26,7 @@ const ShimmerStyle = styled.div<ShimmerTextProps>`
 const ShimmerText = styled(ShimmerStyle)`
   width: 50px;
   height: 20px;
-  margin-bottom: ${props => (props.dropMargin ? `0` : `20px`)};
+  margin-bottom: ${(props) => (props.dropMargin ? `0` : `20px`)};
 `;
 
 const ShimmerIcon = styled(ShimmerStyle)`
@@ -44,15 +45,19 @@ const ShimmerTitle = styled.div`
 // todo generalize component
 const WineItemCardSkeleton: React.FC = () => {
   return (
-    <div className="wine-item-card">
-      <div className="wine-item-card__card-header">
+    <div className={styles["wine-item-card"]}>
+      <div className={styles["wine-item-card__card-header"]}>
         <ShimmerTitle />
       </div>
-      <div className="wine-item-card__card-body">
-        <div className="wine-item-card__card-body-col-1 wine-item-card__card-body-row-1">
+      <div className={styles["wine-item-card__card-body"]}>
+        <div
+          className={`${styles["wine-item-card__card-body-col-1"]} ${styles["wine-item-card__card-body-row-1"]}`}
+        >
           <ShimmerIcon />
         </div>
-        <div className="wine-item-card__card-body-col-2 wine-item-card__card-body-row-1">
+        <div
+          className={`${styles["wine-item-card__card-body-col-2"]} ${styles["wine-item-card__card-body-row-1"]}`}
+        >
           <WineItemCardInfoTextItem label="Type" />
           <ShimmerText />
           <WineItemCardInfoTextItem label="Årgang" />
@@ -66,27 +71,31 @@ const WineItemCardSkeleton: React.FC = () => {
           <WineItemCardInfoTextItem label="Pris" />
           <ShimmerText />
         </div>
-        <div className="wine-item-card__card-body-wine-row">
-          <p className="wine-item-card__label">Passer til</p>
+        <div className={styles["wine-item-card__card-body-wine-row"]}>
+          <p className={styles["wine-item-card__label"]}>Passer til</p>
         </div>
-        <div className="wine-item-card__card-body-wine-row">
+        <div className={styles["wine-item-card__card-body-wine-row"]}>
           <ShimmerText />
         </div>
-        <div className="wine-item-card__card-body-line-row">
+        <div className={styles["wine-item-card__card-body-line-row"]}>
           <hr />
         </div>
-        <div className="wine-item-card__card-body-wine-row">
-          <p className="wine-item-card__label">Rating</p>
+        <div className={styles["wine-item-card__card-body-wine-row"]}>
+          <p className={styles["wine-item-card__label"]}>Rating</p>
         </div>
-        <div className="wine-item-card__card-body-col-1 wine-item-card__card-body-rating-col">
-          <p className="wine-item-card__rating-label">Ine</p>
-          <div className="wine-item-card__rating-number">
+        <div
+          className={`${styles["wine-item-card__card-body-col-1"]} ${styles["wine-item-card__card-body-rating-col"]}`}
+        >
+          <p className={styles["wine-item-card__rating-label"]}>Ine</p>
+          <div className={styles["wine-item-card__rating-number"]}>
             <ShimmerText dropMargin={true} />
           </div>
         </div>
-        <div className="wine-item-card__card-body-col-2 wine-item-card__card-body-rating-col">
-          <p className="wine-item-card__rating-label">Sander</p>
-          <div className="wine-item-card__rating-number">
+        <div
+          className={`${styles["wine-item-card__card-body-col-2"]} ${styles["wine-item-card__card-body-rating-col"]}`}
+        >
+          <p className={styles["wine-item-card__rating-label"]}>Sander</p>
+          <div className={styles["wine-item-card__rating-number"]}>
             <ShimmerText dropMargin={true} />
           </div>
         </div>

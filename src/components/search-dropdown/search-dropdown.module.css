@@ -1,0 +1,10 @@
+.search-dropdown__select {
+  width: 100%;
+  background-color: #023950;
+  color: #ffffff;
+}
+
+.search-dropdown__error {
+  color: var(--form-error-color);
+  margin: 8px 0 0;
+}

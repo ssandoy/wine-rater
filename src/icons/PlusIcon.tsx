@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 type Props = {
   width?: string;
@@ -13,6 +13,7 @@ const PlusIcon: React.FC<Props> = ({ height = "24", width = "24" }: Props) => {
       height={height}
       viewBox="0 0 24 24"
       fill="none"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

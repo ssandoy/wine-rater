@@ -1,5 +1,5 @@
 // src/count-context.js
-import React, { useMemo, useState } from "react";
+import React, { type PropsWithChildren, useMemo, useState } from "react";
 
 type FilterValue<T> = {
   value: T;
@@ -22,11 +22,9 @@ type State = {
   };
 };
 
-export const WineFilterContext = React.createContext<State | undefined>(
-  undefined
-);
+const WineFilterContext = React.createContext<State | undefined>(undefined);
 
-const WineFilterProvider = props => {
+const WineFilterProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [hasOpenedFilter, setHasOpenedFilter] = useState(false);
   const [wineType, setWineType] = useState<WineType>("alle");
   const [wineName, setWineName] = useState<string>("");
@@ -44,37 +42,37 @@ const WineFilterProvider = props => {
       filters: {
         wineName: {
           value: wineName,
-          setValue: setWineName
+          setValue: setWineName,
         },
         wineType: {
           value: wineType,
-          setValue: setWineType
+          setValue: setWineType,
         },
         selectedWineGrapes: {
           value: selectedWineGrapes,
-          setValue: setSelectedWineGrapes
+          setValue: setSelectedWineGrapes,
         },
         selectedCountries: {
           value: selectedCountries,
-          setValue: setSelectedCountries
+          setValue: setSelectedCountries,
         },
         selectedFitsTo: {
           value: selectedFitsTo,
-          setValue: setSelectedFitsTo
+          setValue: setSelectedFitsTo,
         },
         selectedRegions: {
           value: selectedRegions,
-          setValue: setSelectedRegions
+          setValue: setSelectedRegions,
         },
         maxPrice: {
           value: maxPrice,
-          setValue: setMaxPrice
+          setValue: setMaxPrice,
         },
         minPrice: {
           value: minPrice,
-          setValue: setMinPrice
-        }
-      }
+          setValue: setMinPrice,
+        },
+      },
     };
     return val;
   }, [
@@ -86,9 +84,13 @@ const WineFilterProvider = props => {
     selectedFitsTo,
     selectedRegions,
     maxPrice,
-    minPrice
+    minPrice,
   ]);
-  return <WineFilterContext.Provider value={value} {...props} />;
+  return (
+    <WineFilterContext.Provider value={value}>
+      {children}
+    </WineFilterContext.Provider>
+  );
 };
 
 const useWineFilterContext = () => {
@@ -99,4 +101,4 @@ const useWineFilterContext = () => {
   return context;
 };
 
-export { WineFilterProvider, useWineFilterContext };
+export { useWineFilterContext, WineFilterProvider };

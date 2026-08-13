@@ -1,9 +1,17 @@
-import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
-import Wine from "../models/wine";
+import React, {
+  type Dispatch,
+  type PropsWithChildren,
+  type SetStateAction,
+  useMemo,
+  useState,
+} from "react";
+import type Wine from "../models/wine";
 
 type AppState = {
   isLoggedIn: boolean;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  isAuthReady: boolean;
+  setIsAuthReady: Dispatch<SetStateAction<boolean>>;
   allWines: Wine[];
   setAllWines: Dispatch<SetStateAction<Wine[]>>;
   filteredWines: Wine[];
@@ -12,10 +20,11 @@ type AppState = {
   setIsFetchingWines: Dispatch<SetStateAction<boolean>>;
 };
 
-export const AppContext = React.createContext<AppState | undefined>(undefined);
+const AppContext = React.createContext<AppState | undefined>(undefined);
 
-const AppProvider = props => {
+const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthReady, setIsAuthReady] = useState(false);
   const [allWines, setAllWines] = useState<Wine[]>([]);
   const [filteredWines, setFilteredWines] = useState<Wine[]>([]);
   const [isFetchingWines, setIsFetchingWines] = useState(false);
@@ -24,17 +33,19 @@ const AppProvider = props => {
     () => ({
       isLoggedIn,
       setIsLoggedIn,
+      isAuthReady,
+      setIsAuthReady,
       allWines,
       setAllWines,
       filteredWines,
       setFilteredWines,
       isFetchingWines,
-      setIsFetchingWines
+      setIsFetchingWines,
     }),
-    [allWines, filteredWines, isFetchingWines, isLoggedIn]
+    [allWines, filteredWines, isAuthReady, isFetchingWines, isLoggedIn]
   );
 
-  return <AppContext.Provider value={value} {...props} />;
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
 const useAppContext = () => {

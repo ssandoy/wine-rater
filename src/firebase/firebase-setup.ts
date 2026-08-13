@@ -1,37 +1,34 @@
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/database";
-import "firebase/storage";
+import { getApp, getApps, initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { type DataSnapshot, getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_DATABASE_URL,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_DATABASE_URL,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-  firebase.database();
-}
+const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
-export const db = firebase.database();
-export const storage = firebase.storage();
+export const auth = getAuth(firebaseApp);
+export const db = getDatabase(firebaseApp);
+export const storage = getStorage(firebaseApp);
 
-export const snapshotToArray = snapshot => {
-  const returnArr = [];
+export const snapshotToArray = <T extends object>(
+  snapshot: DataSnapshot
+): Array<T & { key: string }> => {
+  const returnArr: Array<T & { key: string }> = [];
 
-  snapshot.forEach(function(childSnapshot) {
-    const item = childSnapshot.val();
-    item.key = childSnapshot.key;
-    // fixme
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    returnArr.push(item);
+  snapshot.forEach((childSnapshot) => {
+    const item = childSnapshot.val() as T | null;
+    if (item && childSnapshot.key) {
+      returnArr.push({ ...item, key: childSnapshot.key });
+    }
   });
 
   return returnArr;

@@ -1,23 +1,21 @@
-import React from "react";
+import type React from "react";
 
 type Props = {
   width?: string;
   height?: string;
-  onClick?: () => void;
 };
 
 const SearchIcon: React.FC<Props> = ({
   width = "24",
   height = "24",
-  onClick
 }: Props) => {
   return (
     <svg
-      onClick={onClick}
       width={width}
       height={height}
       viewBox="0 0 24 24"
       fill="none"
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

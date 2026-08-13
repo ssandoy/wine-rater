@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
 import { debouncedSearchProductsByNameItem } from "api";
-import "./lookup.scss";
-import WineProduct from "models/product";
-import WineDetailsComponent from "./wine-details/WineDetailsComponent";
+import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dropdown";
+import type WineProduct from "models/product";
+import { useState } from "react";
 import SearchIcon from "../../icons/SearchIcon";
+import styles from "./lookup.module.css";
+import WineDetailsComponent from "./wine-details/WineDetailsComponent";
 
 const LookUpComponent = () => {
   const [wineName, setWineName] = useState("");
@@ -20,9 +20,9 @@ const LookUpComponent = () => {
   }
 
   return (
-    <div className="lookup-container">
+    <div className={styles["lookup-container"]}>
       <h1 className="page-title ">Vindetaljer</h1>
-      <div className="lookup-details-container">
+      <div className={styles["lookup-details-container"]}>
         {!wineProduct && (
           <div>
             <label htmlFor="wineName">Søk opp en vin</label>
@@ -30,7 +30,7 @@ const LookUpComponent = () => {
               selectedItems={{ label: wineName, value: wineName }}
               placeholder="Tast inn navnet på vinen"
               debouncedPromise={debouncedSearchProductsByNameItem}
-              onClick={value => {
+              onClick={(value) => {
                 handleSelectedWine(value);
               }}
               noOptionPlaceholder={noOptionText}
@@ -39,9 +39,10 @@ const LookUpComponent = () => {
           </div>
         )}
         {wineProduct && (
-          <div className="wine-details-component">
+          <div className={styles["wine-details-component"]}>
             <WineDetailsComponent wineProduct={wineProduct} />{" "}
             <button
+              type="button"
               className="wine-search-form__button"
               onClick={() => handleSelectedWine(null)}
             >

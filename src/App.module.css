@@ -1,0 +1,114 @@
+.App {
+  min-height: 100vh;
+  margin-bottom: 50px;
+}
+
+.App-logo {
+  height: 130px;
+}
+@media (max-width: 599px) {
+  .App-logo {
+    height: 130px;
+    width: 80vw;
+  }
+}
+
+.App-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-navbar {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+}
+@media (max-width: 599px) {
+  .app-navbar {
+    font-size: 18px;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.app-navbar a {
+  margin: 0 11px;
+}
+
+.app-header-text {
+  color: black;
+  font-size: 60px;
+}
+
+.app-request-error-page {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-request-error {
+  align-items: center;
+  background: var(--form-background-color);
+  border-radius: 14px;
+  box-shadow: 1px 0 2px black;
+  box-sizing: border-box;
+  color: var(--form-text-color);
+  display: flex;
+  flex-direction: column;
+  margin: 12px;
+  max-width: 500px;
+  padding: 24px 20px;
+  text-align: center;
+  width: var(--form-width);
+}
+
+.app-request-error__title {
+  color: var(--form-error-color);
+  font-size: 20px;
+  line-height: 1.2;
+  margin: 0 0 8px;
+}
+
+.app-request-error__message {
+  color: grey;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0 0 18px;
+  max-width: 340px;
+}
+
+.app-request-error__retry {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: var(--button-text-color);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 18px;
+  gap: 6px;
+  justify-content: center;
+  padding: 4px 16px;
+}
+
+.app-request-error__retry:hover {
+  color: black;
+}
+
+.app-request-error__retry:focus-visible {
+  outline: 2px solid var(--button-text-color);
+  outline-offset: 2px;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,16 +1,32 @@
-export { default as deer } from "./deer.svg";
-export { default as seafood } from "./crab.png";
-export { default as apetirif } from "./apetirif.png";
-export { default as cheese } from "./cheese.png";
-export { default as chicken } from "./chicken.png";
-export { default as cake } from "./cake.png";
-export { default as fish } from "./fish.png";
-export { default as pasta } from "./pasta.png";
-export { default as pizza } from "./pizza.png";
-export { default as pig } from "./pig.png";
-export { default as bull } from "./bull.png";
+import apetirif from "./apetirif.png";
+import bull from "./bull.png";
+import cake from "./cake.png";
+import cheese from "./cheese.png";
+import chicken from "./chicken.png";
+import seafood from "./crab.png";
+import deer from "./deer.svg";
+import fish from "./fish.png";
+import pasta from "./pasta.png";
+import pig from "./pig.png";
+import pizza from "./pizza.png";
 
-export const imageKeys = [
+export const imageSources = {
+  apetirif,
+  bull,
+  cake,
+  cheese,
+  chicken,
+  seafood,
+  deer,
+  fish,
+  pasta,
+  pig,
+  pizza,
+};
+
+export type ImageKey = keyof typeof imageSources;
+
+export const imageKeys: ImageKey[] = [
   "chicken",
   "cake",
   "seafood",
@@ -21,5 +37,8 @@ export const imageKeys = [
   "apetirif",
   "bull",
   "deer",
-  "pig"
+  "pig",
 ];
+
+export const isImageKey = (value: string): value is ImageKey =>
+  value in imageSources;

@@ -1,27 +1,39 @@
-import { Crop } from "react-image-crop";
+import type { PixelCrop } from "react-image-crop";
 
-export function getCroppedImg(image: HTMLImageElement, crop: Crop, fileName: string) : Promise<Blob> {
+export function getCroppedImg(
+  image: HTMLImageElement,
+  crop: PixelCrop,
+  fileName: string
+): Promise<Blob> {
   const canvas = document.createElement("canvas");
   const scaleX = image.naturalWidth / image.width;
   const scaleY = image.naturalHeight / image.height;
-  // @ts-ignore
-  canvas.width = crop.width;
-  // @ts-ignore
-  canvas.height = crop.height;
+  const cropWidth = Number(crop.width);
+  const cropHeight = Number(crop.height);
+  canvas.width = cropWidth;
+  canvas.height = cropHeight;
   const ctx = canvas.getContext("2d");
-  if (ctx && crop && crop.x && crop.y && crop.width && crop.height) {
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width,
-      crop.height,
-    );
+  if (
+    !ctx ||
+    crop.x === undefined ||
+    crop.y === undefined ||
+    !cropWidth ||
+    !cropHeight
+  ) {
+    return Promise.reject(new Error("Invalid image crop"));
   }
+
+  ctx.drawImage(
+    image,
+    Number(crop.x) * scaleX,
+    Number(crop.y) * scaleY,
+    cropWidth * scaleX,
+    cropHeight * scaleY,
+    0,
+    0,
+    cropWidth,
+    cropHeight
+  );
 
   // As Base64 string
   // const base64Image = canvas.toDataURL('image/jpeg');
@@ -32,13 +44,13 @@ export function getCroppedImg(image: HTMLImageElement, crop: Crop, fileName: str
       canvas.toBlob(
         (blob) => {
           if (blob) {
-            // @ts-ignore
-            blob.name = fileName; // eslint-disable-line no-param-reassign
-            resolve(blob);
+            resolve(new File([blob], fileName, { type: blob.type }));
+          } else {
+            reject(new Error("Could not create cropped image"));
           }
         },
         "image/jpeg",
-        1,
+        1
       );
     } catch (err) {
       reject(err);
