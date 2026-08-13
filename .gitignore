@@ -5,6 +5,7 @@
 
 # Netlify local state
 /.netlify
+/netlify-functions-build
 /deno.lock
 
 # testing

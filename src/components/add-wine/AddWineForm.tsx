@@ -65,6 +65,7 @@ const AddWineForm: React.FC = () => {
   const [fitsTo, setFitsTo] = useState<string[]>([]);
   const [winePicture, setWinePicture] = useState<string | undefined>(undefined);
   const [productId, setProductId] = useState<string | undefined>(undefined);
+  const [winePrice, setWinePrice] = useState<number | undefined>(undefined);
   const [selectedWine, setSelectedWine] = useState(false);
   const [showImageUploader, setShowImageUploader] = useState(false);
   const [manualRegistration, setManualRegistration] = useState(false);
@@ -87,6 +88,8 @@ const AddWineForm: React.FC = () => {
     setSanderRating("");
     setIneRating("");
     setWineYear("");
+    setProductId(undefined);
+    setWinePrice(undefined);
     setSelectedWine(false);
     setManualRegistration(false);
   };
@@ -111,6 +114,7 @@ const AddWineForm: React.FC = () => {
     setWineType(wine.classification.productTypeName);
     setWineGrapes(wine.ingredients.grapes.map((grape) => grape.grapeDesc));
     setProductId(wine.basic.productId);
+    setWinePrice(wine.prices[0]?.salesPrice);
   };
 
   const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -128,6 +132,9 @@ const AddWineForm: React.FC = () => {
     };
     if (productId) {
       values.apiId = productId;
+      if (winePrice !== undefined) {
+        values.price = winePrice;
+      }
     }
     if (winePicture) {
       values.winePicture = winePicture;
