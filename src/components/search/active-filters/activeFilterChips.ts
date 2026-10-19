@@ -1,4 +1,6 @@
 import {
+  LIST_FILTER_KEYS,
+  type ListFilterKey,
   PRICE_MAX,
   PRICE_MIN,
   WINE_TYPE_VALUES,
@@ -19,6 +21,13 @@ const FITS_TO_LABELS: Record<string, string> = {
   seafood: "Sjømat",
 };
 
+const LIST_FILTER_LABELS: Record<ListFilterKey, (value: string) => string> = {
+  grape: (value) => value,
+  country: (value) => value,
+  region: (value) => value,
+  fitsTo: (value) => FITS_TO_LABELS[value] ?? value,
+};
+
 export type ActiveFilterChip = {
   id: string;
   label: string;
@@ -26,54 +35,37 @@ export type ActiveFilterChip = {
   remove: Partial<WineFilters>;
 };
 
-const without = (values: string[], value: string) =>
-  values.filter((v) => v !== value);
-
 export const getActiveFilterChips = (
   filters: WineFilters
 ): ActiveFilterChip[] => {
-  const chips: ActiveFilterChip[] = [];
+  const q = filters.q.trim();
+  const listChips = LIST_FILTER_KEYS.flatMap((key) =>
+    filters[key].map((value) => ({
+      id: `${key}-${value}`,
+      label: LIST_FILTER_LABELS[key](value),
+      remove: { [key]: filters[key].filter((v) => v !== value) },
+    }))
+  );
 
-  if (filters.q.trim()) {
-    chips.push({ id: "q", label: `«${filters.q.trim()}»`, remove: { q: "" } });
-  }
-  if (filters.type) {
-    chips.push({
+  const chips: Array<ActiveFilterChip | false | "" | undefined> = [
+    q && { id: "q", label: `«${q}»`, remove: { q: "" } },
+    filters.type && {
       id: "type",
       label: WINE_TYPE_VALUES[filters.type],
       remove: { type: undefined },
-    });
-  }
-  for (const key of ["grape", "country", "region"] as const) {
-    for (const value of filters[key]) {
-      chips.push({
-        id: `${key}-${value}`,
-        label: value,
-        remove: { [key]: without(filters[key], value) },
-      });
-    }
-  }
-  for (const value of filters.fitsTo) {
-    chips.push({
-      id: `fitsTo-${value}`,
-      label: FITS_TO_LABELS[value] ?? value,
-      remove: { fitsTo: without(filters.fitsTo, value) },
-    });
-  }
-  if (filters.minPrice > PRICE_MIN) {
-    chips.push({
+    },
+    ...listChips,
+    filters.minPrice > PRICE_MIN && {
       id: "minPrice",
       label: `Over ${filters.minPrice} kr`,
       remove: { minPrice: PRICE_MIN },
-    });
-  }
-  if (filters.maxPrice < PRICE_MAX) {
-    chips.push({
+    },
+    filters.maxPrice < PRICE_MAX && {
       id: "maxPrice",
       label: `Under ${filters.maxPrice} kr`,
       remove: { maxPrice: PRICE_MAX },
-    });
-  }
+    },
+  ];
 
-  return chips;
+  return chips.filter((chip): chip is ActiveFilterChip => Boolean(chip));
 };

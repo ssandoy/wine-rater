@@ -1,9 +1,8 @@
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
-import { Raastoff } from "data/raastoff";
 import { type ImageKey, imageSources, imageKeys as imgKeys } from "images";
 import { useEffect } from "react";
-import { pushOrRemoveToArray } from "utils/array-utils";
+import { pushOrRemoveToArray, uniqueSorted } from "utils/array-utils";
 import { useAppContext } from "../../../context/AppContext";
 import ExitIcon from "../../../icons/ExitIcon";
 import TrashIcon from "../../../icons/TrashIcon";
@@ -33,7 +32,12 @@ const WineFilterForm = ({
 }: Props) => {
   const { allWines } = useAppContext();
   const imageKeys: ImageKey[] = imgKeys;
-  const wineGrapeItems = Raastoff.values.map((value) => value.code);
+  // Only offer values that at least one saved wine has.
+  const grapeOptions = uniqueSorted(
+    allWines.flatMap((wine) => wine.wineGrapes)
+  );
+  const countryOptions = uniqueSorted(allWines.map((wine) => wine.wineCountry));
+  const regionOptions = uniqueSorted(allWines.map((wine) => wine.wineRegion));
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -66,7 +70,7 @@ const WineFilterForm = ({
           <span className={styles.label}>Drue</span>
           <SearchDropDown
             placeholder="Vindrue"
-            searchItems={wineGrapeItems}
+            searchItems={grapeOptions}
             selectedItems={toOptions(filters.grape)}
             onClick={(grape) => onChange({ grape })}
           />
@@ -76,7 +80,7 @@ const WineFilterForm = ({
           <SearchDropDown
             placeholder="Land"
             selectedItems={toOptions(filters.country)}
-            searchItems={[...new Set(allWines.map((wine) => wine.wineCountry))]}
+            searchItems={countryOptions}
             onClick={(country) => onChange({ country })}
           />
         </div>
@@ -85,13 +89,7 @@ const WineFilterForm = ({
           <SearchDropDown
             placeholder="Region"
             selectedItems={toOptions(filters.region)}
-            searchItems={[
-              ...new Set(
-                allWines
-                  .map((wine) => wine.wineRegion)
-                  .filter((region) => region !== null)
-              ),
-            ]}
+            searchItems={regionOptions}
             onClick={(region) => onChange({ region })}
           />
         </div>
@@ -99,28 +97,23 @@ const WineFilterForm = ({
         <div className={styles["wine-search-form__row"]}>
           <span className={styles.label}>Hva passer vinen til?</span>
           <div className={styles["wine-search-form__fits-to-grid"]}>
-            {imageKeys.map((imageKey) => {
-              if (imageKey === "fish" || imageKey === "cake") {
-                return null;
-              }
-              return (
-                <div key={imageKey} className={styles["fits-to-cell"]}>
-                  <ImageCheckbox
-                    key={`${imageKey}searchForm`}
-                    image={imageSources[imageKey]}
-                    htmlFor={`${imageKey}searchForm`}
-                    value={imageKey}
-                    name="wineSearchForm"
-                    checked={filters.fitsTo.includes(imageKey)}
-                    onClick={(value) =>
-                      onChange({
-                        fitsTo: pushOrRemoveToArray(filters.fitsTo, value),
-                      })
-                    }
-                  />
-                </div>
-              );
-            })}
+            {imageKeys.map((imageKey) => (
+              <div key={imageKey} className={styles["fits-to-cell"]}>
+                <ImageCheckbox
+                  key={`${imageKey}searchForm`}
+                  image={imageSources[imageKey]}
+                  htmlFor={`${imageKey}searchForm`}
+                  value={imageKey}
+                  name="wineSearchForm"
+                  checked={filters.fitsTo.includes(imageKey)}
+                  onClick={(value) =>
+                    onChange({
+                      fitsTo: pushOrRemoveToArray(filters.fitsTo, value),
+                    })
+                  }
+                />
+              </div>
+            ))}
           </div>
         </div>
         <div className={styles["wine-search-form__row"]}>

@@ -1,5 +1,5 @@
 import type Wine from "../models/wine";
-import { isObjectInArray } from "./array-utils";
+import { matchesAny } from "./array-utils";
 
 export const PRICE_MIN = 0;
 export const PRICE_MAX = 1000;
@@ -11,6 +11,15 @@ export const WINE_TYPE_VALUES: Record<WineTypeFilter, string> = {
   rod: "Rødvin",
   hvit: "Hvitvin",
 };
+
+export const LIST_FILTER_KEYS = [
+  "grape",
+  "country",
+  "region",
+  "fitsTo",
+] as const;
+
+export type ListFilterKey = (typeof LIST_FILTER_KEYS)[number];
 
 export type WineFilters = {
   q: string;
@@ -72,7 +81,7 @@ export const serializeWineFilters = (filters: WineFilters): URLSearchParams => {
   if (filters.type) {
     params.set("type", filters.type);
   }
-  for (const key of ["grape", "country", "region", "fitsTo"] as const) {
+  for (const key of LIST_FILTER_KEYS) {
     for (const value of filters[key]) {
       params.append(key, value);
     }
@@ -97,10 +106,10 @@ export const filterWines = (
     (wine) =>
       wine.wineName.toLowerCase().includes(query) &&
       (!wineType || wine.wineType === wineType) &&
-      isObjectInArray(wine.fitsTo, filters.fitsTo) &&
-      isObjectInArray(wine.wineGrapes, filters.grape) &&
-      isObjectInArray(wine.wineCountry, filters.country) &&
-      isObjectInArray(wine.wineRegion, filters.region) &&
+      matchesAny(wine.fitsTo, filters.fitsTo) &&
+      matchesAny(wine.wineGrapes, filters.grape) &&
+      matchesAny(wine.wineCountry, filters.country) &&
+      matchesAny(wine.wineRegion, filters.region) &&
       // Wines without a price are never excluded, and PRICE_MAX means "no upper limit".
       (!wine.price ||
         (wine.price >= filters.minPrice &&

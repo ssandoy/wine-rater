@@ -96,7 +96,10 @@ const WineSearch = () => {
           onClose={closeFilter}
         />
       )}
-      <WineList wines={wines} />
+      <WineList
+        wines={wines}
+        onClear={chips.length ? clearFilters : undefined}
+      />
     </div>
   );
 };

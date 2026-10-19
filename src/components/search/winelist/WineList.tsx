@@ -7,27 +7,40 @@ import styles from "./winelist.module.css";
 
 type Props = {
   wines: Wine[];
+  /** Shown in the empty state when filters are active. */
+  onClear?: () => void;
 };
 
-const WineList = ({ wines }: Props) => {
+const WineList = ({ wines, onClear }: Props) => {
   const { isFetchingWines } = useAppContext();
 
   return (
     <div className="wine-list__container">
-      {!isFetchingWines && !wines?.length && (
-        <h3 className={winesearchStyles["wine-search__no-hits"]}>
-          Ingen viner matcher søket.
-        </h3>
-      )}
       {!isFetchingWines ? (
         <>
-          <div className={styles["wine-list__hits-container"]}>
-            <p
-              className={styles["wine-list__hits-paragraph"]}
-              aria-live="polite"
-            >
-              FANT {wines.length} {wines.length === 1 ? "VIN" : "VINER"} I SØKET
-            </p>
+          <div
+            className={styles["wine-list__hits-container"]}
+            aria-live="polite"
+          >
+            {wines.length ? (
+              <p className={styles["wine-list__hits-paragraph"]}>
+                FANT {wines.length} {wines.length === 1 ? "VIN" : "VINER"} I
+                SØKET
+              </p>
+            ) : (
+              <div className={winesearchStyles["wine-search__no-hits"]}>
+                <h3>Ingen viner matcher søket.</h3>
+                {onClear && (
+                  <button
+                    type="button"
+                    className={winesearchStyles["wine-search__no-hits-clear"]}
+                    onClick={onClear}
+                  >
+                    Tøm søk
+                  </button>
+                )}
+              </div>
+            )}
           </div>
           <div className={styles["wine-item-list"]}>
             {wines?.map((wine: Wine) => (
