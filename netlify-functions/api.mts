@@ -1,5 +1,19 @@
 const vinmonopoletBaseUrl = "https://apis.vinmonopolet.no";
 const REQUEST_TIMEOUT_MS = 10_000;
+const MAX_RESULTS_LIMIT = 500;
+const MAX_TEXT_LENGTH = 200;
+
+// Only the lookups the app performs are forwarded, so the endpoint can't be
+// used as a general-purpose proxy for our Vinmonopolet subscription.
+const SEARCH_PARAMS = ["productShortNameContains", "freeText", "productId"];
+
+export const config = {
+  rateLimit: {
+    windowLimit: 60,
+    windowSize: 60,
+    aggregateBy: ["ip", "domain"],
+  },
+};
 
 const getApiSubscriptionKey = (): string | undefined =>
   process.env.VINMONOPOLET_API_SUBSCRIPTION_KEY2 ||
@@ -33,6 +47,40 @@ const parseJsonResponse = async (response: Response): Promise<unknown> => {
   }
 };
 
+const buildUpstreamQuery = (
+  params: URLSearchParams
+): URLSearchParams | null => {
+  const upstream = new URLSearchParams();
+
+  for (const [key, value] of params) {
+    if (key === "maxResults") {
+      const maxResults = Number(value);
+      if (
+        !Number.isInteger(maxResults) ||
+        maxResults < 1 ||
+        maxResults > MAX_RESULTS_LIMIT
+      ) {
+        return null;
+      }
+      upstream.set(key, String(maxResults));
+    } else if (key === "productId") {
+      if (!/^\d{1,20}$/.test(value)) {
+        return null;
+      }
+      upstream.set(key, value);
+    } else if (SEARCH_PARAMS.includes(key)) {
+      if (!value || value.length > MAX_TEXT_LENGTH) {
+        return null;
+      }
+      upstream.set(key, value);
+    } else {
+      return null;
+    }
+  }
+
+  return SEARCH_PARAMS.some((key) => upstream.has(key)) ? upstream : null;
+};
+
 export default async (request: Request): Promise<Response> => {
   if (request.method !== "GET") {
     return jsonResponse(405, { error: "Method not allowed" }, { Allow: "GET" });
@@ -44,7 +92,10 @@ export default async (request: Request): Promise<Response> => {
     return jsonResponse(500, { error: "Wine service is not configured" });
   }
 
-  const query = new URL(request.url).searchParams;
+  const query = buildUpstreamQuery(new URL(request.url).searchParams);
+  if (!query) {
+    return jsonResponse(400, { error: "Invalid query" });
+  }
 
   try {
     const response = await fetch(
