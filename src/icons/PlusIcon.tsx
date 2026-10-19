@@ -1,12 +1,10 @@
-import type React from "react";
-
 type Props = {
   width?: string;
   height?: string;
   onClick?: () => void;
 };
 
-const PlusIcon: React.FC<Props> = ({ height = "24", width = "24" }: Props) => {
+const PlusIcon = ({ height = "24", width = "24" }: Props) => {
   return (
     <svg
       width={width}

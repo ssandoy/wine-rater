@@ -4,8 +4,8 @@ import { AsyncSearchDropdown } from "components/search-dropdown/async-search-dro
 import { Raastoff } from "data/raastoff";
 import { push, ref } from "firebase/database";
 import { imageKeys, imageSources } from "images";
-import type React from "react";
-import { type RefObject, useEffect, useRef, useState } from "react";
+import { type RefObject, useActionState, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
 import { useFirebaseContext } from "../../firebase";
@@ -34,8 +34,38 @@ type ErrorRefKey =
   | "wineName"
   | "wineType";
 
-const AddWineForm: React.FC = () => {
-  const [isWineRegistered, setIsWineRegistered] = useState<boolean>(false);
+type SaveState = {
+  errors: Errors | null;
+  status: "idle" | "saved" | "failed";
+};
+
+const initialSaveState: SaveState = { errors: null, status: "idle" };
+
+const SaveWineButton = ({
+  isWineRegistered,
+}: {
+  isWineRegistered: boolean;
+}) => {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      disabled={isWineRegistered || pending}
+      type="submit"
+      className={`${styles["add-wine-form__button"]} ${styles["add-wine-form__button-add"]}`}
+    >
+      <PlusIcon />{" "}
+      <span className={styles["add-wine-form__button-label"]}>
+        {pending ? "Lagrer..." : "Registrer"}
+      </span>
+    </button>
+  );
+};
+
+type AddWineFormContentProps = {
+  onStartOver: () => void;
+};
+
+const AddWineFormContent = ({ onStartOver }: AddWineFormContentProps) => {
   const errorRefMap: Record<ErrorRefKey, RefObject<HTMLDivElement | null>> = {
     sanderRating: useRef<HTMLDivElement>(null),
     ineRating: useRef<HTMLDivElement>(null),
@@ -69,30 +99,8 @@ const AddWineForm: React.FC = () => {
   const [selectedWine, setSelectedWine] = useState(false);
   const [showImageUploader, setShowImageUploader] = useState(false);
   const [manualRegistration, setManualRegistration] = useState(false);
-  const [errors, setErrors] = useState<Errors | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveError, setSaveError] = useState(false);
 
   const wineGrapeItems = Raastoff.values.map((value) => value.code);
-
-  useEffect(() => {
-    setIsWineRegistered(false);
-  }, []);
-
-  const resetSearch = () => {
-    setIsWineRegistered(false);
-    setWineName("");
-    setErrors(null);
-    setSaveError(false);
-    setSelectedWine(false);
-    setSanderRating("");
-    setIneRating("");
-    setWineYear("");
-    setProductId(undefined);
-    setWinePrice(undefined);
-    setSelectedWine(false);
-    setManualRegistration(false);
-  };
 
   const handleSelectedWine = (wine: WineProduct) => {
     setSelectedWine(true);
@@ -117,8 +125,7 @@ const AddWineForm: React.FC = () => {
     setWinePrice(wine.prices[0]?.salesPrice);
   };
 
-  const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const saveWine = async (): Promise<SaveState> => {
     const values: Wine = {
       wineName,
       wineType,
@@ -143,34 +150,39 @@ const AddWineForm: React.FC = () => {
       validationSchema,
       values
     );
-    setErrors(validatedErrors);
-    if (!validatedErrors) {
-      setIsSaving(true);
-      setSaveError(false);
-      try {
-        await push(ref(firebase.database, INDICES.WINES_INDEX), values);
-        setIsWineRegistered(true);
-      } catch (error) {
-        console.error("Failed to save wine", error);
-        setSaveError(true);
-      } finally {
-        setIsSaving(false);
-      }
-    } else {
+    if (validatedErrors) {
       executeErrorScroll(validatedErrors);
+      return { errors: validatedErrors, status: "idle" };
+    }
+    try {
+      await push(ref(firebase.database, INDICES.WINES_INDEX), values);
+      return { errors: null, status: "saved" };
+    } catch (error) {
+      console.error("Failed to save wine", error);
+      return { errors: null, status: "failed" };
     }
   };
+  const [{ errors, status }, saveWineAction] = useActionState(
+    saveWine,
+    initialSaveState
+  );
+  const isWineRegistered = status === "saved";
+
   const nameContainerWidth = selectedWine
     ? styles["add-wine-form__col-1"]
     : styles["add-wine-form__row"];
-  let noOptionText = "Tast inn navnet på vinen";
-  if (wineName) {
-    noOptionText = "Fant ingen treff på dette navnet";
-  }
+  const noOptionText = wineName
+    ? "Fant ingen treff på dette navnet"
+    : "Tast inn navnet på vinen";
   return (
     <div className={styles["add-wine"]}>
       <h1 className="page-title">Legg til ny vin</h1>
-      <form onSubmit={onSubmitForm} className={styles["add-wine-form"]}>
+      <form
+        action={saveWineAction}
+        // Every field is controlled, so skip React's reset after the action.
+        onReset={(event) => event.preventDefault()}
+        className={styles["add-wine-form"]}
+      >
         <div className={nameContainerWidth}>
           <div className={styles["textfield-label"]}>
             <label htmlFor="wineName">Navn</label>
@@ -431,19 +443,10 @@ const AddWineForm: React.FC = () => {
         {selectedWine && (
           <div className={styles["add-wine-form__row"]}>
             <div className={styles["add-wine-form__buttons"]}>
-              <button
-                disabled={isWineRegistered || isSaving}
-                type="submit"
-                className={`${styles["add-wine-form__button"]} ${styles["add-wine-form__button-add"]}`}
-              >
-                <PlusIcon />{" "}
-                <span className={styles["add-wine-form__button-label"]}>
-                  {isSaving ? "Lagrer..." : "Registrer"}
-                </span>
-              </button>
+              <SaveWineButton isWineRegistered={isWineRegistered} />
               <button
                 type="button"
-                onClick={resetSearch}
+                onClick={onStartOver}
                 className={`${styles["add-wine-form__button"]} ${styles["add-wine-form__button-reset"]}`}
               >
                 <CrossIcon />{" "}
@@ -461,7 +464,7 @@ const AddWineForm: React.FC = () => {
             </div>
           </div>
         )}
-        {saveError && (
+        {status === "failed" && (
           <p
             className={`${styles["add-wine-form__row"]} ${styles["add-wine-error-request"]}`}
             role="alert"
@@ -472,6 +475,16 @@ const AddWineForm: React.FC = () => {
         )}
       </form>
     </div>
+  );
+};
+
+const AddWineForm = () => {
+  const [formKey, setFormKey] = useState(0);
+  return (
+    <AddWineFormContent
+      key={formKey}
+      onStartOver={() => setFormKey((key) => key + 1)}
+    />
   );
 };
 

@@ -33,7 +33,7 @@ const buttonCss = css`
   //border: 1px solid black;
 `;
 
-const WineSuggesterPage: React.FC = () => {
+const WineSuggesterPage = () => {
   const [wineProduct, setWineProduct] = useState<WineProduct | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [requestError, setRequestError] = useState<string | null>(null);

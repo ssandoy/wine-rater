@@ -1,5 +1,4 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import ReactCrop, {
   centerCrop,
@@ -22,7 +21,7 @@ type Props = {
   cropAspectRatio?: number;
 };
 
-const CroppedImageUploader: React.FC<Props> = ({
+const CroppedImageUploader = ({
   firebaseStorageRef,
   handleUpdateComplete,
   title,

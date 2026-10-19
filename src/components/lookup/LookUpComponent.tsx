@@ -14,10 +14,9 @@ const LookUpComponent = () => {
     return setWineProduct(value);
   };
 
-  let noOptionText = "Tast inn navnet på vinen";
-  if (wineName) {
-    noOptionText = "Fant ingen treff på dette navnet";
-  }
+  const noOptionText = wineName
+    ? "Fant ingen treff på dette navnet"
+    : "Tast inn navnet på vinen";
 
   return (
     <div className={styles["lookup-container"]}>

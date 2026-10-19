@@ -1,6 +1,5 @@
 import { keyframes } from "@emotion/css";
 import styled from "@emotion/styled";
-import type React from "react";
 import styles from "../wine-item-card/wine-item-card.module.css";
 import WineItemCardInfoTextItem from "../wine-item-card/wine-item-card-info-text-item";
 
@@ -43,7 +42,7 @@ const ShimmerTitle = styled.div`
 `;
 
 // todo generalize component
-const WineItemCardSkeleton: React.FC = () => {
+const WineItemCardSkeleton = () => {
   return (
     <div className={styles["wine-item-card"]}>
       <div className={styles["wine-item-card__card-header"]}>

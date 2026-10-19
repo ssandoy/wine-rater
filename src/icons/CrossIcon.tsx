@@ -1,5 +1,3 @@
-import type React from "react";
-
 // todo move to types
 type Props = {
   width?: string;
@@ -7,7 +5,7 @@ type Props = {
   onClick?: () => void;
 };
 
-const CrossIcon: React.FC<Props> = ({ height = "24", width = "24" }: Props) => {
+const CrossIcon = ({ height = "24", width = "24" }: Props) => {
   return (
     <svg
       width={width}

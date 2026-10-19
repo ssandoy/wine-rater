@@ -1,4 +1,3 @@
-import type React from "react";
 import { NavLink } from "react-router";
 
 type Props = {
@@ -6,7 +5,7 @@ type Props = {
   title: string;
 };
 
-export const WineNavLink: React.FC<Props> = ({ route, title }: Props) => {
+export const WineNavLink = ({ route, title }: Props) => {
   return (
     <NavLink
       end

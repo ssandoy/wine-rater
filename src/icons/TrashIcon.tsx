@@ -1,11 +1,9 @@
-import type React from "react";
-
 type Props = {
   width?: string;
   height?: string;
 };
 
-const TrashIcon: React.FC<Props> = ({ width = "24", height = "24" }: Props) => {
+const TrashIcon = ({ width = "24", height = "24" }: Props) => {
   return (
     <svg
       width={width}

@@ -5,35 +5,27 @@ export const validateForm = (
   validationSchema: ValidationSchema,
   values: Wine
 ): Errors | null => {
-  const errors: Errors = {};
-  for (const key of Object.keys(validationSchema) as (keyof Wine)[]) {
-    const field = validationSchema[key];
-    if (!field) {
-      continue;
-    }
-
-    const error = checkError(field, values[key]);
-    if (error) {
-      errors[key] = error;
-    }
-  }
+  const errors: Errors = Object.fromEntries(
+    (Object.keys(validationSchema) as (keyof Wine)[]).flatMap((key) => {
+      const field = validationSchema[key];
+      const error = field && checkError(field, values[key]);
+      return error ? [[key, error]] : [];
+    })
+  );
 
   // Return null if empty.
-  return Object.entries(errors).length === 0 ? null : errors;
+  return Object.keys(errors).length === 0 ? null : errors;
 };
 
 const checkError = (
   field: NonNullable<ValidationSchema[keyof Wine]>,
   value: Wine[keyof Wine]
 ): string | undefined => {
-  let error: string | undefined;
-  if (field.required && !value) {
-    error = "Dette feltet må fylles inn.";
+  if (!value) {
+    return field.required ? "Dette feltet må fylles inn." : undefined;
   }
 
-  if (field.validator && value && !field.validator.regEx.test(String(value))) {
-    error = field.validator.error;
-  }
-
-  return error;
+  return field.validator && !field.validator.regEx.test(String(value))
+    ? field.validator.error
+    : undefined;
 };
