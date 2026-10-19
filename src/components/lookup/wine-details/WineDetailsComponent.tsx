@@ -12,16 +12,16 @@ const MAX_UNEXPANDED_ROWS = 2;
 // retries.
 const winePictureRequests = new Map<string, Promise<string>>();
 
-const fetchWinePicture = (productId: string) => {
-  let request = winePictureRequests.get(productId);
-  if (!request) {
-    request = getWine(productId).then((wineDetails) =>
-      convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
-    );
-    winePictureRequests.set(productId, request);
-  }
+const requestWinePicture = (productId: string) => {
+  const request = getWine(productId).then((wineDetails) =>
+    convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
+  );
+  winePictureRequests.set(productId, request);
   return request;
 };
+
+const fetchWinePicture = (productId: string) =>
+  winePictureRequests.get(productId) ?? requestWinePicture(productId);
 
 const WinePicture = ({ productId }: { productId: string }) => {
   const winePicture = use(fetchWinePicture(productId));
