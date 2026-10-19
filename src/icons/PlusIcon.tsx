@@ -1,10 +1,6 @@
-type Props = {
-  width?: string;
-  height?: string;
-  onClick?: () => void;
-};
+import type { IconProps } from "./types";
 
-const PlusIcon = ({ height = "24", width = "24" }: Props) => {
+const PlusIcon = ({ height = "24", width = "24" }: IconProps) => {
   return (
     <svg
       width={width}

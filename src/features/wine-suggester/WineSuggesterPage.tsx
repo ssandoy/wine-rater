@@ -46,7 +46,7 @@ const WineSuggesterPage = () => {
         return { foodId: "B", foodDescription: "Skalldyr" };
       case "fugl":
         return { foodId: "G", foodDescription: "Småvilt og fugl" };
-      case "bull":
+      case "okse":
         return { foodId: "E", foodDescription: "Storfe" };
       case "ost":
         return { foodId: "L", foodDescription: "Ost" };
@@ -66,7 +66,6 @@ const WineSuggesterPage = () => {
   const handleSelectedFood = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    // todo hook with loadingState and isFetching so that we can render a spinner
     setIsLoading(true);
     setRequestError(null);
 
@@ -110,6 +109,7 @@ const WineSuggesterPage = () => {
                 type="button"
                 value="okse"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
                 <img src={imageSources.bull} className="image" alt="okse" />
@@ -118,6 +118,7 @@ const WineSuggesterPage = () => {
                 type="button"
                 value="fugl"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
                 <img
@@ -130,26 +131,33 @@ const WineSuggesterPage = () => {
                 type="button"
                 value="apetirif"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
                 <img
                   src={imageSources.apetirif}
                   className="image"
-                  alt="pasta"
+                  alt="aperitiff"
                 />
               </button>
               <button
                 type="button"
                 value="skalldyr"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
-                <img src={imageSources.seafood} className="image" alt="pizza" />
+                <img
+                  src={imageSources.seafood}
+                  className="image"
+                  alt="skalldyr"
+                />
               </button>
               <button
                 type="button"
                 value="ost"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
                 <img src={imageSources.cheese} className="image" alt="ost" />
@@ -158,6 +166,7 @@ const WineSuggesterPage = () => {
                 type="button"
                 value="svin"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
                 <img src={imageSources.pig} className="image" alt="svin" />
@@ -166,6 +175,7 @@ const WineSuggesterPage = () => {
                 type="button"
                 value="vilt"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
                 <img src={imageSources.deer} className="image" alt="vilt" />
@@ -174,6 +184,7 @@ const WineSuggesterPage = () => {
                 type="button"
                 value="fisk"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
                 <img src={imageSources.fish} className="image" alt="fisk" />
@@ -182,6 +193,7 @@ const WineSuggesterPage = () => {
                 type="button"
                 value="kake"
                 className={buttonCss}
+                disabled={isLoading}
                 onClick={handleSelectedFood}
               >
                 <img src={imageSources.cake} className="image" alt="kake" />
