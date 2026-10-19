@@ -41,39 +41,27 @@ const App = () => {
   useEffect(() => {
     // Reading this value makes retry increments an explicit effect trigger.
     void wineFetchAttempt;
-    let isCurrentRequest = true;
-    let hasFinished = false;
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
-
-    const finishWithError = (error: unknown) => {
-      if (!isCurrentRequest || hasFinished) {
-        return;
-      }
-
-      hasFinished = true;
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      console.error("Failed to fetch saved wines", error);
-      setWineFetchError(true);
-      setIsFetchingWines(false);
-    };
+    // Aborted when the request settles or the effect is cleaned up.
+    const controller = new AbortController();
+    const timeout = new Promise<never>((_, reject) => {
+      const timeoutId = setTimeout(
+        () => reject(new Error("Wine request timed out")),
+        WINE_FETCH_TIMEOUT_MS
+      );
+      controller.signal.addEventListener("abort", () =>
+        clearTimeout(timeoutId)
+      );
+    });
 
     setIsFetchingWines(true);
     setWineFetchError(false);
-    timeoutId = setTimeout(
-      () => finishWithError(new Error("Wine request timed out")),
-      WINE_FETCH_TIMEOUT_MS
-    );
 
-    get(ref(firebase.database, INDICES.WINES_INDEX))
+    Promise.race([get(ref(firebase.database, INDICES.WINES_INDEX)), timeout])
       .then((wineItemsSnapshot: DataSnapshot) => {
-        if (!isCurrentRequest || hasFinished) {
+        if (controller.signal.aborted) {
           return;
         }
 
-        hasFinished = true;
-        clearTimeout(timeoutId);
         const allWines = snapshotToArray<Wine>(wineItemsSnapshot).sort(
           (obj1: Wine, obj2: Wine) =>
             +obj2.sanderRating +
@@ -84,12 +72,18 @@ const App = () => {
         setFilteredWines(allWines);
         setIsFetchingWines(false);
       })
-      .catch(finishWithError);
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) {
+          return;
+        }
 
-    return () => {
-      isCurrentRequest = false;
-      clearTimeout(timeoutId);
-    };
+        console.error("Failed to fetch saved wines", error);
+        setWineFetchError(true);
+        setIsFetchingWines(false);
+      })
+      .finally(() => controller.abort());
+
+    return () => controller.abort();
   }, [
     firebase,
     setAllWines,
