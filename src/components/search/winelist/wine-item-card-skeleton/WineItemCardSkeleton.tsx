@@ -41,7 +41,6 @@ const ShimmerTitle = styled.div`
   animation: ${shimmer} 0.9s infinite linear alternate;
 `;
 
-// todo generalize component
 const WineItemCardSkeleton = () => {
   return (
     <div className={styles["wine-item-card"]}>
