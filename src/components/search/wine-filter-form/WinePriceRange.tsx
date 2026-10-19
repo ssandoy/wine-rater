@@ -30,7 +30,7 @@ const getLefAlignment = (value: number): number => {
   return -6;
 };
 
-export const WinePriceRange: React.FC = () => {
+export const WinePriceRange = () => {
   const {
     filters: {
       maxPrice: { value: maxPrice, setValue: setMaxPrice },

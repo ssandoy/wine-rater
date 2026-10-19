@@ -1,4 +1,3 @@
-import type React from "react";
 import { useState } from "react";
 import styles from "./wine-item-card.module.css";
 
@@ -7,10 +6,7 @@ interface Props {
   value?: string | number;
 }
 
-const WineItemCardInfoTextItem: React.FunctionComponent<Props> = ({
-  label,
-  value,
-}: Props) => {
+const WineItemCardInfoTextItem = ({ label, value }: Props) => {
   const [isInfoTextOpen, setIsInfoTextOpen] = useState(false);
   const toggleOpen = (): void => {
     setIsInfoTextOpen(!isInfoTextOpen);

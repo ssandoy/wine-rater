@@ -1,8 +1,9 @@
-import React, {
+import {
+  createContext,
   type Dispatch,
   type PropsWithChildren,
   type SetStateAction,
-  useMemo,
+  use,
   useState,
 } from "react";
 import type Wine from "../models/wine";
@@ -20,36 +21,33 @@ type AppState = {
   setIsFetchingWines: Dispatch<SetStateAction<boolean>>;
 };
 
-const AppContext = React.createContext<AppState | undefined>(undefined);
+const AppContext = createContext<AppState | undefined>(undefined);
 
-const AppProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const AppProvider = ({ children }: PropsWithChildren) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [allWines, setAllWines] = useState<Wine[]>([]);
   const [filteredWines, setFilteredWines] = useState<Wine[]>([]);
   const [isFetchingWines, setIsFetchingWines] = useState(false);
 
-  const value: AppState = useMemo(
-    () => ({
-      isLoggedIn,
-      setIsLoggedIn,
-      isAuthReady,
-      setIsAuthReady,
-      allWines,
-      setAllWines,
-      filteredWines,
-      setFilteredWines,
-      isFetchingWines,
-      setIsFetchingWines,
-    }),
-    [allWines, filteredWines, isAuthReady, isFetchingWines, isLoggedIn]
-  );
+  const value: AppState = {
+    isLoggedIn,
+    setIsLoggedIn,
+    isAuthReady,
+    setIsAuthReady,
+    allWines,
+    setAllWines,
+    filteredWines,
+    setFilteredWines,
+    isFetchingWines,
+    setIsFetchingWines,
+  };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return <AppContext value={value}>{children}</AppContext>;
 };
 
 const useAppContext = () => {
-  const context = React.useContext(AppContext);
+  const context = use(AppContext);
   if (!context) {
     throw new Error(`useAppContext must be used within a AppProvider`);
   }

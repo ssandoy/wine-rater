@@ -1,45 +1,40 @@
 import { getWine } from "api/api";
+import ErrorBoundary from "components/error-boundary/ErrorBoundary";
 import type WineProduct from "models/product";
-import { useEffect, useState } from "react";
+import { Suspense, use, useState } from "react";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
 import styles from "./wine-details.module.css";
 
 const MAX_UNEXPANDED_ROWS = 2;
 
+// use() needs the same promise across renders, so requests are cached per
+// product. Failed requests are evicted by the error boundary so the next visit
+// retries.
+const winePictureRequests = new Map<string, Promise<string>>();
+
+const fetchWinePicture = (productId: string) => {
+  let request = winePictureRequests.get(productId);
+  if (!request) {
+    request = getWine(productId).then((wineDetails) =>
+      convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
+    );
+    winePictureRequests.set(productId, request);
+  }
+  return request;
+};
+
+const WinePicture = ({ productId }: { productId: string }) => {
+  const winePicture = use(fetchWinePicture(productId));
+  return winePicture ? (
+    <img src={winePicture} className="wine-picture" alt="wine" />
+  ) : null;
+};
+
 const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
-  const [winePicture, setWinePicture] = useState<string>("");
-  const [pictureError, setPictureError] = useState(false);
   const [isGrapesExpanded, setIsGrapesExpanded] = useState(false);
   const toggleOpen = (): void => {
     setIsGrapesExpanded(!isGrapesExpanded);
   };
-
-  useEffect(() => {
-    let isCurrent = true;
-    setWinePicture("");
-    setPictureError(false);
-
-    getWine(wineProduct.basic.productId)
-      .then((wineDetails) => {
-        if (!isCurrent) {
-          return;
-        }
-
-        setWinePicture(
-          convertVinmonopoletPictureSize(wineDetails.images[1]?.url, 800)
-        );
-      })
-      .catch((error) => {
-        console.error("Failed to fetch wine picture", error);
-        if (isCurrent) {
-          setPictureError(true);
-        }
-      });
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [wineProduct.basic.productId]);
 
   return (
     <div className={styles["wine-details-container"]}>
@@ -109,18 +104,22 @@ const WineDetailsComponent = ({ wineProduct }: WineDetailsProps) => {
         </p>
       </div>
       <div className={styles["wine-details-row-item"]}>
-        {winePicture && (
-          <img
-            src={winePicture as string}
-            className="wine-picture"
-            alt="wine"
-          />
-        )}
-        {pictureError && (
-          <p className={styles["wine-details-error"]} role="alert">
-            Kunne ikke laste vinbildet.
-          </p>
-        )}
+        <ErrorBoundary
+          key={wineProduct.basic.productId}
+          fallback={
+            <p className={styles["wine-details-error"]} role="alert">
+              Kunne ikke laste vinbildet.
+            </p>
+          }
+          onError={(error) => {
+            console.error("Failed to fetch wine picture", error);
+            winePictureRequests.delete(wineProduct.basic.productId);
+          }}
+        >
+          <Suspense fallback={null}>
+            <WinePicture productId={wineProduct.basic.productId} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </div>
   );

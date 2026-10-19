@@ -1,7 +1,7 @@
 import { type Auth, onAuthStateChanged } from "firebase/auth";
 import type { Database } from "firebase/database";
 import type { FirebaseStorage } from "firebase/storage";
-import React, { type PropsWithChildren, useEffect } from "react";
+import { createContext, type PropsWithChildren, use, useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
 import { auth, db, storage } from "./firebase-setup";
 
@@ -11,10 +11,10 @@ type State = {
   auth: Auth;
 };
 
-const FirebaseContext = React.createContext<State | undefined>(undefined);
+const FirebaseContext = createContext<State | undefined>(undefined);
 const firebaseServices: State = { database: db, storage, auth };
 
-const FirebaseProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const FirebaseProvider = ({ children }: PropsWithChildren) => {
   const { setIsAuthReady, setIsLoggedIn } = useAppContext();
 
   useEffect(
@@ -34,15 +34,11 @@ const FirebaseProvider: React.FC<PropsWithChildren> = ({ children }) => {
     [setIsAuthReady, setIsLoggedIn]
   );
 
-  return (
-    <FirebaseContext.Provider value={firebaseServices}>
-      {children}
-    </FirebaseContext.Provider>
-  );
+  return <FirebaseContext value={firebaseServices}>{children}</FirebaseContext>;
 };
 
 const useFirebaseContext = () => {
-  const context = React.useContext(FirebaseContext);
+  const context = use(FirebaseContext);
   if (!context) {
     throw new Error(
       "useFirebaseContext must be used within a FirebaseProvider"

@@ -1,7 +1,6 @@
 import { imageSources, isImageKey } from "images";
 import noIconRed from "images/no_icon_red.png";
 import type Wine from "models/wine";
-import type React from "react";
 import { formatAmount } from "../../../../utils/formatAmount";
 import styles from "./wine-item-card.module.css";
 import WineItemCardInfoTextItem from "./wine-item-card-info-text-item";
@@ -10,9 +9,7 @@ interface WineItemCardProps {
   wine: Wine;
 }
 
-const WineItemCard: React.FunctionComponent<WineItemCardProps> = ({
-  wine,
-}: WineItemCardProps) => {
+const WineItemCard = ({ wine }: WineItemCardProps) => {
   const image = wine.winePicture ? wine.winePicture : noIconRed;
   return (
     <div className={styles["wine-item-card"]}>

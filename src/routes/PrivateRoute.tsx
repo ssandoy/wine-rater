@@ -7,7 +7,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const PrivateRoute: React.FC<Props> = ({ children }) => {
+const PrivateRoute = ({ children }: Props) => {
   const { isAuthReady, isLoggedIn } = useAppContext();
 
   if (!isAuthReady) {

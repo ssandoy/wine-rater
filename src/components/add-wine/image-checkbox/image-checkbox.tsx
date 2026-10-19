@@ -1,4 +1,3 @@
-import type React from "react";
 import styles from "./image-checkbox.module.css";
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
   checked: boolean;
 }
 
-const ImageCheckbox: React.FunctionComponent<Props> = (props: Props) => {
+const ImageCheckbox = (props: Props) => {
   return (
     <div>
       <label htmlFor={`${props.htmlFor}`}>
