@@ -1,19 +1,14 @@
 import AddWineForm from "components/add-wine/AddWineForm";
 import LookUpComponent from "components/lookup/LookUpComponent";
 import NotFoundComponent from "components/notfound/notfound";
-import { type DataSnapshot, get, ref } from "firebase/database";
 import { Squash as Hamburger } from "hamburger-react";
-import type Wine from "models/wine";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink, Route, BrowserRouter as Router, Routes } from "react-router";
 import styles from "./App.module.css";
 import LoginComponent from "./components/login";
 import { WineSearchPage } from "./components/search/WineSearchPage";
-import { useAppContext } from "./context/AppContext";
+import { useWines } from "./context/WinesContext";
 import WineSuggesterPage from "./features/wine-suggester/WineSuggesterPage";
-import { useFirebaseContext } from "./firebase";
-import { snapshotToArray } from "./firebase/firebase-setup";
-import { INDICES } from "./firebase/indices";
 import LogoIcon from "./icons/LogoIcon";
 import PrivateRoute from "./routes";
 import {
@@ -26,109 +21,58 @@ import {
 import { isNative } from "./utils/window-utils";
 import { WineNavLink } from "./WineNavLink";
 
-const WINE_FETCH_TIMEOUT_MS = 10_000;
-
 const App = () => {
   document.title = "Vinolini";
 
-  const { setAllWines, setIsFetchingWines } = useAppContext();
-  const firebase = useFirebaseContext();
+  const { status: winesStatus, retry: retryWines } = useWines();
   // todo isNative
   const [shouldShowNavbar, setShouldShowNavbar] = useState(!isNative());
-  const [wineFetchError, setWineFetchError] = useState(false);
-  const [wineFetchAttempt, setWineFetchAttempt] = useState(0);
 
-  useEffect(() => {
-    // Reading this value makes retry increments an explicit effect trigger.
-    void wineFetchAttempt;
-    // Aborted when the request settles or the effect is cleaned up.
-    const controller = new AbortController();
-    const timeout = new Promise<never>((_, reject) => {
-      const timeoutId = setTimeout(
-        () => reject(new Error("Wine request timed out")),
-        WINE_FETCH_TIMEOUT_MS
-      );
-      controller.signal.addEventListener("abort", () =>
-        clearTimeout(timeoutId)
-      );
-    });
-
-    setIsFetchingWines(true);
-    setWineFetchError(false);
-
-    Promise.race([get(ref(firebase.database, INDICES.WINES_INDEX)), timeout])
-      .then((wineItemsSnapshot: DataSnapshot) => {
-        if (controller.signal.aborted) {
-          return;
-        }
-
-        const allWines = snapshotToArray<Wine>(wineItemsSnapshot).sort(
-          (obj1: Wine, obj2: Wine) =>
-            +obj2.sanderRating +
-            +obj2.ineRating -
-            (+obj1.sanderRating + +obj1.ineRating)
-        );
-        setAllWines(allWines);
-        setIsFetchingWines(false);
-      })
-      .catch((error: unknown) => {
-        if (controller.signal.aborted) {
-          return;
-        }
-
-        console.error("Failed to fetch saved wines", error);
-        setWineFetchError(true);
-        setIsFetchingWines(false);
-      })
-      .finally(() => controller.abort());
-
-    return () => controller.abort();
-  }, [firebase, setAllWines, setIsFetchingWines, wineFetchAttempt]);
-
-  const wineSearchRoute = wineFetchError ? (
-    <div className={styles["app-request-error-page"]}>
-      <h1 className="page-title">Lagrede viner</h1>
-      <section
-        className={styles["app-request-error"]}
-        role="alert"
-        aria-labelledby="wine-fetch-error-title"
-      >
-        <h2
-          id="wine-fetch-error-title"
-          className={styles["app-request-error__title"]}
+  const wineSearchRoute =
+    winesStatus === "error" ? (
+      <div className={styles["app-request-error-page"]}>
+        <h1 className="page-title">Lagrede viner</h1>
+        <section
+          className={styles["app-request-error"]}
+          role="alert"
+          aria-labelledby="wine-fetch-error-title"
         >
-          Kunne ikke hente vinene
-        </h2>
-        <p className={styles["app-request-error__message"]}>
-          Sjekk nettverkstilkoblingen din og prøv på nytt.
-        </p>
-        <button
-          type="button"
-          className={styles["app-request-error__retry"]}
-          onClick={() => setWineFetchAttempt((attempt) => attempt + 1)}
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
+          <h2
+            id="wine-fetch-error-title"
+            className={styles["app-request-error__title"]}
           >
-            <path
-              d="M20 11a8 8 0 1 0-2.34 5.66M20 5v6h-6"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Prøv igjen
-        </button>
-      </section>
-    </div>
-  ) : (
-    <WineSearchPage />
-  );
+            Kunne ikke hente vinene
+          </h2>
+          <p className={styles["app-request-error__message"]}>
+            Sjekk nettverkstilkoblingen din og prøv på nytt.
+          </p>
+          <button
+            type="button"
+            className={styles["app-request-error__retry"]}
+            onClick={retryWines}
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M20 11a8 8 0 1 0-2.34 5.66M20 5v6h-6"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Prøv igjen
+          </button>
+        </section>
+      </div>
+    ) : (
+      <WineSearchPage />
+    );
 
   return (
     <Router>

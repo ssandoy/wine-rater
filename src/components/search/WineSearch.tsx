@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState } from "react";
-import { useAppContext } from "../../context/AppContext";
+import { useWines } from "../../context/WinesContext";
 import FilterIcon from "../../icons/FilterIcon";
 import { filterWines, type WineTypeFilter } from "../../utils/wine-filters";
 import { ActiveFilters } from "./active-filters/ActiveFilters";
@@ -24,7 +24,7 @@ const WINE_TYPE_OPTIONS: Array<{
 ];
 
 const WineSearch = () => {
-  const { allWines } = useAppContext();
+  const { wines: allWines, status } = useWines();
   const { filters, updateFilters, clearFilters } = useWineFilters();
   const [hasOpenedFilter, setHasOpenedFilter] = useState(false);
   const closeFilter = () => setHasOpenedFilter(false);
@@ -89,6 +89,7 @@ const WineSearch = () => {
       {hasOpenedFilter && (
         <WineFilterForm
           id={FILTER_PANEL_ID}
+          allWines={allWines}
           filters={filters}
           resultCount={wines.length}
           onChange={updateFilters}
@@ -98,6 +99,7 @@ const WineSearch = () => {
       )}
       <WineList
         wines={wines}
+        isLoading={status === "loading"}
         onClear={chips.length ? clearFilters : undefined}
       />
     </div>

@@ -3,15 +3,16 @@ import { SearchDropDown } from "components/search-dropdown/search-dropdown";
 import { type ImageKey, imageSources, imageKeys as imgKeys } from "images";
 import { useEffect } from "react";
 import { pushOrRemoveToArray, uniqueSorted } from "utils/array-utils";
-import { useAppContext } from "../../../context/AppContext";
 import ExitIcon from "../../../icons/ExitIcon";
 import TrashIcon from "../../../icons/TrashIcon";
+import type Wine from "../../../models/wine";
 import type { WineFilters } from "../../../utils/wine-filters";
 import { WinePriceRange } from "./WinePriceRange";
 import styles from "./wineform.module.css";
 
 type Props = {
   id: string;
+  allWines: Wine[];
   filters: WineFilters;
   resultCount: number;
   onChange: (patch: Partial<WineFilters>) => void;
@@ -24,13 +25,13 @@ const toOptions = (values: string[]) =>
 
 const WineFilterForm = ({
   id,
+  allWines,
   filters,
   resultCount,
   onChange,
   onClear,
   onClose,
 }: Props) => {
-  const { allWines } = useAppContext();
   const imageKeys: ImageKey[] = imgKeys;
   // Only offer values that at least one saved wine has.
   const grapeOptions = uniqueSorted(

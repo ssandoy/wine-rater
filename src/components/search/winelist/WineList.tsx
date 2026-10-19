@@ -1,5 +1,4 @@
 import WineItemCard from "components/search/winelist/wine-item-card/wine-item-card";
-import { useAppContext } from "../../../context/AppContext";
 import type Wine from "../../../models/wine";
 import winesearchStyles from "../winesearch.module.css";
 import { WineItemCardSkeleton } from "./wine-item-card-skeleton";
@@ -7,16 +6,15 @@ import styles from "./winelist.module.css";
 
 type Props = {
   wines: Wine[];
+  isLoading: boolean;
   /** Shown in the empty state when filters are active. */
   onClear?: () => void;
 };
 
-const WineList = ({ wines, onClear }: Props) => {
-  const { isFetchingWines } = useAppContext();
-
+const WineList = ({ wines, isLoading, onClear }: Props) => {
   return (
     <div className="wine-list__container">
-      {!isFetchingWines ? (
+      {!isLoading ? (
         <>
           <div
             className={styles["wine-list__hits-container"]}
@@ -53,7 +51,7 @@ const WineList = ({ wines, onClear }: Props) => {
           <p className={styles["wine-list__hits-paragraph"]}>LASTER...</p>
         </div>
       )}
-      {isFetchingWines && (
+      {isLoading && (
         <div className={styles["wine-list__hits-container"]}>
           <div className={styles["wine-item-list"]}>
             {[1, 2, 3, 4, 5, 6, 7, 8].map((val) => {

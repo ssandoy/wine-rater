@@ -1,3 +1,7 @@
-import { FirebaseProvider, useFirebaseContext } from "./firebase-context";
+import {
+  FirebaseProvider,
+  useAuth,
+  useFirebaseContext,
+} from "./firebase-context";
 
-export { FirebaseProvider, useFirebaseContext };
+export { FirebaseProvider, useAuth, useFirebaseContext };
