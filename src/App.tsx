@@ -18,15 +18,15 @@ import {
   SEARCH_ROUTE,
   SUGGESTER_ROUTE,
 } from "./routes/routes";
-import { isNative } from "./utils/window-utils";
+import { useIsNative } from "./utils/window-utils";
 import { WineNavLink } from "./WineNavLink";
 
 const App = () => {
   document.title = "Vinolini";
 
   const { status: winesStatus, retry: retryWines } = useWines();
-  // todo isNative
-  const [shouldShowNavbar, setShouldShowNavbar] = useState(!isNative());
+  const isNative = useIsNative();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const wineSearchRoute =
     winesStatus === "error" ? (
@@ -84,14 +84,14 @@ const App = () => {
             </NavLink>
           </div>
           <div className={styles["app-navbar"]}>
-            {isNative() && (
+            {isNative && (
               <Hamburger
                 color="white"
-                toggled={shouldShowNavbar}
-                toggle={setShouldShowNavbar}
+                toggled={isMenuOpen}
+                toggle={setIsMenuOpen}
               />
             )}
-            {shouldShowNavbar ? (
+            {!isNative || isMenuOpen ? (
               <>
                 <WineNavLink route={SEARCH_ROUTE} title="Våre viner" />
                 <WineNavLink route={DETAILS_ROUTE} title="Søk" />
