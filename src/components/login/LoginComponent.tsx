@@ -2,8 +2,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Navigate } from "react-router";
-import { useAppContext } from "../../context/AppContext";
-import { useFirebaseContext } from "../../firebase";
+import { useAuth, useFirebaseContext } from "../../firebase";
 import { ADD_WINE_ROUTE } from "../../routes/routes";
 import Spinner from "../spinner/Spinner";
 import styles from "./login.module.css";
@@ -29,7 +28,7 @@ const LoginButton = () => {
 };
 
 const LoginComponent = () => {
-  const { isAuthReady, isLoggedIn } = useAppContext();
+  const { status: authStatus } = useAuth();
   const { auth } = useFirebaseContext();
   const login = async (
     _previousError: string | null,
@@ -53,7 +52,7 @@ const LoginComponent = () => {
   };
   const [error, loginAction, isLoggingIn] = useActionState(login, null);
 
-  if (!isAuthReady) {
+  if (authStatus === "loading") {
     return (
       <div className={styles["login-spinner-container"]} role="status">
         Sjekker innlogging... <Spinner />
@@ -61,7 +60,7 @@ const LoginComponent = () => {
     );
   }
 
-  return isLoggedIn ? (
+  return authStatus === "signedIn" ? (
     <Navigate to={ADD_WINE_ROUTE} replace />
   ) : (
     <div className={styles["login-container"]}>

@@ -1,6 +1,6 @@
 import type React from "react";
 import { Navigate } from "react-router";
-import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../firebase";
 import { LOGIN_ROUTE } from "./routes";
 
 interface Props {
@@ -8,13 +8,17 @@ interface Props {
 }
 
 const PrivateRoute = ({ children }: Props) => {
-  const { isAuthReady, isLoggedIn } = useAppContext();
+  const { status } = useAuth();
 
-  if (!isAuthReady) {
+  if (status === "loading") {
     return null;
   }
 
-  return isLoggedIn ? children : <Navigate to={LOGIN_ROUTE} replace />;
+  return status === "signedIn" ? (
+    children
+  ) : (
+    <Navigate to={LOGIN_ROUTE} replace />
+  );
 };
 
 export default PrivateRoute;

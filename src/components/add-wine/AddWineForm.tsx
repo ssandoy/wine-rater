@@ -8,6 +8,7 @@ import { type RefObject, useActionState, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { pushOrRemoveToArray } from "utils/array-utils";
 import { convertVinmonopoletPictureSize } from "utils/string-utils";
+import { useWines } from "../../context/WinesContext";
 import { useFirebaseContext } from "../../firebase";
 import { INDICES } from "../../firebase/indices";
 import CrossIcon from "../../icons/CrossIcon";
@@ -74,6 +75,7 @@ const AddWineFormContent = ({ onStartOver }: AddWineFormContentProps) => {
     wineType: useRef<HTMLDivElement>(null),
   };
   const firebase = useFirebaseContext();
+  const { refresh: refreshWines } = useWines();
 
   const executeErrorScroll = (errors: Errors) => {
     const firstErrorKey = Object.keys(errors).find(
@@ -156,6 +158,7 @@ const AddWineFormContent = ({ onStartOver }: AddWineFormContentProps) => {
     }
     try {
       await push(ref(firebase.database, INDICES.WINES_INDEX), values);
+      refreshWines();
       return { errors: null, status: "saved" };
     } catch (error) {
       console.error("Failed to save wine", error);
