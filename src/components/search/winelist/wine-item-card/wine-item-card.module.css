@@ -7,8 +7,10 @@
   }
 }
 @media (max-width: 599px) {
+  /* The list is exactly the card width on phones, so side margins push the card off-centre. */
   .wine-item-card {
     width: var(--wine-item-card-width__phone);
+    margin: 1em 0;
   }
 }
 
