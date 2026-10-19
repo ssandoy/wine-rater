@@ -1,0 +1,48 @@
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  list-style: none;
+  margin: 8px auto 0;
+  padding: 0 16px;
+  max-width: 85vw;
+}
+
+.active-filters__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px 4px 12px;
+  border: 0;
+  border-radius: 24px;
+  background-color: var(--form-background-color);
+  color: var(--form-text-color);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.active-filters__chip svg {
+  width: 18px;
+  height: 18px;
+}
+.active-filters__chip:hover {
+  background-color: var(--image-checkbox-checked-background-color);
+}
+
+.active-filters__clear {
+  padding: 4px 12px;
+  border: 1px solid var(--form-background-color);
+  border-radius: 24px;
+  background: transparent;
+  color: var(--form-background-color);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.active-filters__chip:focus-visible,
+.active-filters__clear:focus-visible {
+  outline: 2px solid var(--image-checkbox-checked-background-color);
+  outline-offset: 2px;
+}

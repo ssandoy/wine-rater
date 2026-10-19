@@ -15,8 +15,6 @@ type AppState = {
   setIsAuthReady: Dispatch<SetStateAction<boolean>>;
   allWines: Wine[];
   setAllWines: Dispatch<SetStateAction<Wine[]>>;
-  filteredWines: Wine[];
-  setFilteredWines: Dispatch<SetStateAction<Wine[]>>;
   isFetchingWines: boolean;
   setIsFetchingWines: Dispatch<SetStateAction<boolean>>;
 };
@@ -27,7 +25,6 @@ const AppProvider = ({ children }: PropsWithChildren) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [allWines, setAllWines] = useState<Wine[]>([]);
-  const [filteredWines, setFilteredWines] = useState<Wine[]>([]);
   const [isFetchingWines, setIsFetchingWines] = useState(false);
 
   const value: AppState = {
@@ -37,8 +34,6 @@ const AppProvider = ({ children }: PropsWithChildren) => {
     setIsAuthReady,
     allWines,
     setAllWines,
-    filteredWines,
-    setFilteredWines,
     isFetchingWines,
     setIsFetchingWines,
   };

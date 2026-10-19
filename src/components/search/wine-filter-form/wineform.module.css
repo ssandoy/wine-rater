@@ -1,36 +1,15 @@
-@keyframes fade-in-native {
+@keyframes slide-in {
   from {
     opacity: 0;
-    top: 1000px;
+    transform: translateY(100%);
   }
   to {
     opacity: 1;
-    top: 200px;
+    transform: translateY(0);
   }
 }
 
-@keyframes fade-in-tablet {
-  from {
-    opacity: 0;
-    top: 1000px;
-  }
-  to {
-    opacity: 1;
-    top: 300px;
-  }
-}
-
-@keyframes fade-in-desktop {
-  from {
-    opacity: 0;
-    top: 1000px;
-  }
-  to {
-    opacity: 1;
-    top: 350px;
-  }
-}
-
+/* Overlays the list instead of replacing it, so changes are visible live. */
 .wine-search-form__container {
   position: fixed;
   left: 0;
@@ -38,21 +17,23 @@
   z-index: 1;
   background-color: var(--form-background-color);
   width: 280px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-top-right-radius: 24px;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
+  animation: slide-in 0.3s ease-out;
 }
 @media (max-width: 599px) {
   .wine-search-form__container {
     width: 100%;
-    animation: fade-in-native 0.3s linear;
+    max-height: 75vh;
+    border-top-left-radius: 24px;
   }
 }
-@media (min-width: 600px) and (max-width: 1200px) {
+@media (prefers-reduced-motion: reduce) {
   .wine-search-form__container {
-    animation: fade-in-tablet 0.3s linear;
-  }
-}
-@media (min-width: 1200px) {
-  .wine-search-form__container {
-    animation: fade-in-desktop 0.3s linear;
+    animation: none;
   }
 }
 
@@ -69,9 +50,29 @@
 }
 
 .wine-search-form__buttons-container {
+  position: sticky;
+  bottom: 0;
   display: flex;
   justify-content: space-around;
+  align-items: center;
   margin-top: 20px;
+  padding: 12px 0;
+  background-color: var(--form-background-color);
+}
+
+.wine-search-form__show-button {
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 24px;
+  background-color: var(--button-confirm-color);
+  color: var(--form-text-color);
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+.wine-search-form__show-button:focus-visible {
+  outline: 2px solid var(--button-reset-color);
+  outline-offset: 2px;
 }
 
 .wine-search-form__row {
@@ -94,13 +95,12 @@
   width: 100%;
   height: 100%;
   display: inline-grid;
-  grid-template-columns: 33% 33% 30%;
-  grid-template-rows: 33% 33% 30%;
+  grid-template-columns: repeat(3, 1fr);
   margin-top: 16px;
 }
 
 .wine-search-form__range-container {
-  margin: 5px 10px;
+  margin: 5px 10px 40px;
 }
 
 .label {

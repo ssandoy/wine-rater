@@ -1,189 +1,152 @@
 import ImageCheckbox from "components/add-wine/image-checkbox/image-checkbox";
 import { SearchDropDown } from "components/search-dropdown/search-dropdown";
-import { Raastoff } from "data/raastoff";
 import { type ImageKey, imageSources, imageKeys as imgKeys } from "images";
-import type React from "react";
-import { pushOrRemoveToArray } from "utils/array-utils";
+import { useEffect } from "react";
+import { pushOrRemoveToArray, uniqueSorted } from "utils/array-utils";
 import { useAppContext } from "../../../context/AppContext";
-import { useWineFilterContext } from "../../../context/filter-context/WineFilterContext";
 import ExitIcon from "../../../icons/ExitIcon";
-import SearchIcon from "../../../icons/SearchIcon";
 import TrashIcon from "../../../icons/TrashIcon";
+import type { WineFilters } from "../../../utils/wine-filters";
 import { WinePriceRange } from "./WinePriceRange";
 import styles from "./wineform.module.css";
 
 type Props = {
-  onFilter: () => void;
+  id: string;
+  filters: WineFilters;
+  resultCount: number;
+  onChange: (patch: Partial<WineFilters>) => void;
+  onClear: () => void;
+  onClose: () => void;
 };
 
-const WineFilterForm: React.FC<Props> = ({ onFilter }: Props) => {
-  const { allWines, setFilteredWines } = useAppContext();
+const toOptions = (values: string[]) =>
+  values.map((value) => ({ label: value, value }));
+
+const WineFilterForm = ({
+  id,
+  filters,
+  resultCount,
+  onChange,
+  onClear,
+  onClose,
+}: Props) => {
+  const { allWines } = useAppContext();
   const imageKeys: ImageKey[] = imgKeys;
+  // Only offer values that at least one saved wine has.
+  const grapeOptions = uniqueSorted(
+    allWines.flatMap((wine) => wine.wineGrapes)
+  );
+  const countryOptions = uniqueSorted(allWines.map((wine) => wine.wineCountry));
+  const regionOptions = uniqueSorted(allWines.map((wine) => wine.wineRegion));
 
-  const {
-    hasOpenedFilter,
-    setHasOpenedFilter,
-    filters: {
-      wineName: { value: wineName, setValue: setWineName },
-      selectedWineGrapes: {
-        value: selectedWineGrapes,
-        setValue: setSelectedWineGrapes,
-      },
-      selectedRegions: { value: selectedRegions, setValue: setSelectedRegions },
-      selectedFitsTo: { value: selectedFitsTo, setValue: setSelectedFitsTo },
-      selectedCountries: {
-        value: selectedCountries,
-        setValue: setSelectedCountries,
-      },
-      maxPrice: { setValue: setMaxPrice },
-      minPrice: { setValue: setMinPrice },
-    },
-  } = useWineFilterContext();
-  const wineGrapeItems = Raastoff.values.map((value) => value.code);
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onFilter();
-    setHasOpenedFilter(false);
-  };
-
-  const onClear: () => void = () => {
-    setSelectedFitsTo([]);
-    setSelectedRegions([]);
-    setSelectedWineGrapes([]);
-    setSelectedCountries([]);
-    setWineName("");
-    setFilteredWines(allWines);
-    setMaxPrice(1000);
-    setMinPrice(0);
-    setHasOpenedFilter(false);
-  };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   return (
-    <div className={styles["wine-search-form__container"]}>
+    <section
+      id={id}
+      aria-label="Filter"
+      className={styles["wine-search-form__container"]}
+    >
       <div className={styles["wine-search-form__exit-icon"]}>
         <button
           type="button"
           className={styles["wine-search-form__exit-button"]}
           aria-label="Lukk filter"
-          onClick={() => setHasOpenedFilter(!hasOpenedFilter)}
+          onClick={onClose}
         >
           <ExitIcon />
         </button>
       </div>
-      <form
-        className={styles["wine-search-form"]}
-        onSubmit={(e) => onSubmit(e)}
-      >
-        <div className={styles["wine-search-form__row"]}>
-          <label className={styles.label} htmlFor="wineName">
-            Navn
-          </label>
-          <div className="wine-input-container">
-            <input
-              type="text"
-              autoComplete="off"
-              name="wineName"
-              value={wineName}
-              onChange={(e) => setWineName(e.target.value)}
-            />
-          </div>
-        </div>
-
+      <div className={styles["wine-search-form"]}>
         <div className={styles["wine-search-form__row"]}>
           <span className={styles.label}>Drue</span>
           <SearchDropDown
             placeholder="Vindrue"
-            searchItems={wineGrapeItems}
-            selectedItems={selectedWineGrapes.map((grape) => ({
-              label: grape,
-              value: grape,
-            }))}
-            onClick={(grapeArray) => setSelectedWineGrapes(grapeArray)}
+            searchItems={grapeOptions}
+            selectedItems={toOptions(filters.grape)}
+            onClick={(grape) => onChange({ grape })}
           />
         </div>
         <div className={styles["wine-search-form__row"]}>
-          <label className={styles.label} htmlFor="country">
-            Land
-          </label>
+          <span className={styles.label}>Land</span>
           <SearchDropDown
             placeholder="Land"
-            selectedItems={selectedCountries.map((country) => ({
-              label: country,
-              value: country,
-            }))}
-            searchItems={[...new Set(allWines.map((wine) => wine.wineCountry))]}
-            onClick={(countryArray) => setSelectedCountries(countryArray)}
+            selectedItems={toOptions(filters.country)}
+            searchItems={countryOptions}
+            onClick={(country) => onChange({ country })}
           />
         </div>
         <div className={styles["wine-search-form__row"]}>
           <span className={styles.label}>Region</span>
           <SearchDropDown
             placeholder="Region"
-            selectedItems={selectedRegions.map((region) => ({
-              label: region,
-              value: region,
-            }))}
-            searchItems={[
-              ...new Set(
-                allWines
-                  .map((wine) => wine.wineRegion)
-                  .filter((region) => region !== null)
-              ),
-            ]}
-            onClick={(regionArray) => setSelectedRegions(regionArray)}
+            selectedItems={toOptions(filters.region)}
+            searchItems={regionOptions}
+            onClick={(region) => onChange({ region })}
           />
         </div>
 
         <div className={styles["wine-search-form__row"]}>
           <span className={styles.label}>Hva passer vinen til?</span>
           <div className={styles["wine-search-form__fits-to-grid"]}>
-            {imageKeys.map((imageKey) => {
-              if (imageKey === "fish" || imageKey === "cake") {
-                return null;
-              }
-              return (
-                <div key={imageKey} className={styles["fits-to-cell"]}>
-                  <ImageCheckbox
-                    key={`${imageKey}searchForm`}
-                    image={imageSources[imageKey]}
-                    htmlFor={`${imageKey}searchForm`}
-                    value={imageKey}
-                    name="wineSearchForm"
-                    checked={selectedFitsTo.includes(imageKey)}
-                    onClick={(value) => {
-                      setSelectedFitsTo(
-                        pushOrRemoveToArray(selectedFitsTo, value)
-                      );
-                    }}
-                  />
-                </div>
-              );
-            })}
+            {imageKeys.map((imageKey) => (
+              <div key={imageKey} className={styles["fits-to-cell"]}>
+                <ImageCheckbox
+                  key={`${imageKey}searchForm`}
+                  image={imageSources[imageKey]}
+                  htmlFor={`${imageKey}searchForm`}
+                  value={imageKey}
+                  name="wineSearchForm"
+                  checked={filters.fitsTo.includes(imageKey)}
+                  onClick={(value) =>
+                    onChange({
+                      fitsTo: pushOrRemoveToArray(filters.fitsTo, value),
+                    })
+                  }
+                />
+              </div>
+            ))}
           </div>
         </div>
         <div className={styles["wine-search-form__row"]}>
           <span className={styles.label}>Pris</span>
           <div className={styles["wine-search-form__range-container"]}>
-            <WinePriceRange />
+            <WinePriceRange
+              minPrice={filters.minPrice}
+              maxPrice={filters.maxPrice}
+              onChange={(minPrice, maxPrice) =>
+                onChange({ minPrice, maxPrice })
+              }
+            />
           </div>
         </div>
         <div className={styles["wine-search-form__buttons-container"]}>
           <button
             type="button"
             className="wine-search-form__button"
-            onClick={() => onClear()}
+            onClick={onClear}
           >
             <TrashIcon />
             Tøm søk
           </button>
-          <button type="submit" className="wine-search-form__button">
-            <SearchIcon />
-            Søk
+          <button
+            type="button"
+            className={styles["wine-search-form__show-button"]}
+            onClick={onClose}
+          >
+            Vis {resultCount} {resultCount === 1 ? "vin" : "viner"}
           </button>
         </div>
-      </form>
-    </div>
+      </div>
+    </section>
   );
 };
 
