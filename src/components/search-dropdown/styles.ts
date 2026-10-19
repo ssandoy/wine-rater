@@ -7,32 +7,39 @@ type OptionState = {
 export const colourStyles = {
   option: (provided: CSSObjectWithLabel, state: OptionState) => ({
     ...provided,
-    borderBottom: "1px solid #023950",
-    color: state.isSelected ? "#98FB98" : "#023950",
+    borderBottom: "1px solid var(--dropdown-option-color)",
+    color: state.isSelected
+      ? "var(--dropdown-option-selected-color)"
+      : "var(--dropdown-option-color)",
   }),
-  // TODO ATTEMPT TO IMPORT FROM COLOR SCSS
   control: (styles: CSSObjectWithLabel) => ({
     ...styles,
-    backgroundColor: "#f4f3f6",
+    backgroundColor: "var(--form-input-color)",
     border: "1px solid grey",
     borderRadius: "24px",
   }),
   multiValue: (provided: CSSObjectWithLabel) => {
     const transition = "opacity 300ms";
 
-    return { ...provided, backgroundColor: "#add8e6", transition };
+    return {
+      ...provided,
+      backgroundColor: "var(--dropdown-chip-background-color)",
+      transition,
+    };
   },
 };
 
 export const dropdownDisabledColourStyles = {
   option: (provided: CSSObjectWithLabel, state: OptionState) => ({
     ...provided,
-    borderBottom: "1px solid #023950",
-    color: state.isSelected ? "#98FB98" : "#023950",
+    borderBottom: "1px solid var(--dropdown-option-color)",
+    color: state.isSelected
+      ? "var(--dropdown-option-selected-color)"
+      : "var(--dropdown-option-color)",
   }),
   control: (styles: CSSObjectWithLabel) => ({
     ...styles,
-    backgroundColor: "#f4f3f6",
+    backgroundColor: "var(--form-input-color)",
     border: "1px solid grey",
     borderRadius: "24px",
   }),
@@ -48,7 +55,7 @@ export const dropdownDisabledColourStyles = {
     const transition = "opacity 300ms";
     return {
       ...provided,
-      backgroundColor: "#add8e6",
+      backgroundColor: "var(--dropdown-chip-background-color)",
       paddingRight: "5px",
       transition,
     };
