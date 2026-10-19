@@ -171,10 +171,9 @@ const AddWineFormContent = ({ onStartOver }: AddWineFormContentProps) => {
   const nameContainerWidth = selectedWine
     ? styles["add-wine-form__col-1"]
     : styles["add-wine-form__row"];
-  let noOptionText = "Tast inn navnet på vinen";
-  if (wineName) {
-    noOptionText = "Fant ingen treff på dette navnet";
-  }
+  const noOptionText = wineName
+    ? "Fant ingen treff på dette navnet"
+    : "Tast inn navnet på vinen";
   return (
     <div className={styles["add-wine"]}>
       <h1 className="page-title">Legg til ny vin</h1>
