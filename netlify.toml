@@ -10,3 +10,10 @@
   from = "/wine-api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+# SPA fallback so deep links (/sok?type=rod, /vin-detaljer) survive a reload.
+# Must stay after the API redirect.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
