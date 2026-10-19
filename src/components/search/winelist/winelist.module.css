@@ -30,10 +30,19 @@
   min-width: 270px;
   max-width: 300px;
   padding: 16px;
-  border: 0;
+  gap: 12px;
   box-sizing: border-box;
 }
-.wine-list__filter-container > legend {
+
+.wine-list__type-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wine-list__type-fieldset > legend {
   float: left;
   width: 100%;
   margin-bottom: 8px;

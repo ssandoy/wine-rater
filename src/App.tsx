@@ -31,7 +31,7 @@ const WINE_FETCH_TIMEOUT_MS = 10_000;
 const App = () => {
   document.title = "Vinolini";
 
-  const { setAllWines, setIsFetchingWines, setFilteredWines } = useAppContext();
+  const { setAllWines, setIsFetchingWines } = useAppContext();
   const firebase = useFirebaseContext();
   // todo isNative
   const [shouldShowNavbar, setShouldShowNavbar] = useState(!isNative());
@@ -69,7 +69,6 @@ const App = () => {
             (+obj1.sanderRating + +obj1.ineRating)
         );
         setAllWines(allWines);
-        setFilteredWines(allWines);
         setIsFetchingWines(false);
       })
       .catch((error: unknown) => {
@@ -84,13 +83,7 @@ const App = () => {
       .finally(() => controller.abort());
 
     return () => controller.abort();
-  }, [
-    firebase,
-    setAllWines,
-    setFilteredWines,
-    setIsFetchingWines,
-    wineFetchAttempt,
-  ]);
+  }, [firebase, setAllWines, setIsFetchingWines, wineFetchAttempt]);
 
   const wineSearchRoute = wineFetchError ? (
     <div className={styles["app-request-error-page"]}>

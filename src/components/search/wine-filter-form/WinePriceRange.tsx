@@ -1,7 +1,7 @@
 import Slider from "rc-slider";
-import React from "react";
-import { useWineFilterContext } from "../../../context/filter-context/WineFilterContext";
+import React, { useState } from "react";
 import { formatAmount } from "../../../utils/formatAmount";
+import { PRICE_MAX, PRICE_MIN, PRICE_STEP } from "../../../utils/wine-filters";
 import "rc-slider/assets/index.css";
 
 const BAR_HEIGHT = 16;
@@ -30,20 +30,23 @@ const getLefAlignment = (value: number): number => {
   return -6;
 };
 
-export const WinePriceRange = () => {
-  const {
-    filters: {
-      maxPrice: { value: maxPrice, setValue: setMaxPrice },
-      minPrice: { value: minPrice, setValue: setMinPrice },
-    },
-  } = useWineFilterContext();
+type Props = {
+  minPrice: number;
+  maxPrice: number;
+  onChange: (minPrice: number, maxPrice: number) => void;
+};
+
+export const WinePriceRange = ({ minPrice, maxPrice, onChange }: Props) => {
+  // Shown while dragging; the filter is only applied when the handle is released.
+  const [draft, setDraft] = useState<[number, number] | null>(null);
+
   return (
     <Slider
       range
-      value={[minPrice, maxPrice]}
-      max={1000}
-      min={0}
-      step={20}
+      value={draft ?? [minPrice, maxPrice]}
+      max={PRICE_MAX}
+      min={PRICE_MIN}
+      step={PRICE_STEP}
       style={{ marginTop: 16 }}
       ariaLabelForHandle={["Minimumspris", "Maksimumspris"]}
       onChange={(values) => {
@@ -52,8 +55,16 @@ export const WinePriceRange = () => {
         }
 
         const [min, max] = values;
-        setMinPrice(min);
-        setMaxPrice(max);
+        setDraft([min, max]);
+      }}
+      onChangeComplete={(values) => {
+        setDraft(null);
+        if (!Array.isArray(values)) {
+          return;
+        }
+
+        const [min, max] = values;
+        onChange(min, max);
       }}
       handleRender={(handle, handleProps) =>
         React.cloneElement(
@@ -66,7 +77,9 @@ export const WinePriceRange = () => {
               left: getLefAlignment(handleProps.value),
             }}
           >
-            {formatAmount(handleProps.value)}
+            {handleProps.value >= PRICE_MAX
+              ? `${PRICE_MAX}+`
+              : formatAmount(handleProps.value)}
           </p>
         )
       }

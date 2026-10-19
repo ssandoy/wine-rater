@@ -38,6 +38,17 @@
   cursor: pointer;
 }
 
+.wine-search__name-input {
+  margin-top: 0;
+}
+.wine-search__name-input svg {
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+.wine-search__name-input input {
+  padding-left: 8px;
+}
+
 .wine-search__paragraph {
   color: white;
   font-size: 12px;

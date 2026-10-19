@@ -5,8 +5,12 @@ import winesearchStyles from "../winesearch.module.css";
 import { WineItemCardSkeleton } from "./wine-item-card-skeleton";
 import styles from "./winelist.module.css";
 
-const WineList = () => {
-  const { filteredWines: wines, isFetchingWines } = useAppContext();
+type Props = {
+  wines: Wine[];
+};
+
+const WineList = ({ wines }: Props) => {
+  const { isFetchingWines } = useAppContext();
 
   return (
     <div className="wine-list__container">
@@ -18,7 +22,10 @@ const WineList = () => {
       {!isFetchingWines ? (
         <>
           <div className={styles["wine-list__hits-container"]}>
-            <p className={styles["wine-list__hits-paragraph"]}>
+            <p
+              className={styles["wine-list__hits-paragraph"]}
+              aria-live="polite"
+            >
               FANT {wines.length} {wines.length === 1 ? "VIN" : "VINER"} I SØKET
             </p>
           </div>
